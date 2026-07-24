@@ -170,7 +170,6 @@
       border-color: var(--accent-emerald);
       color: var(--accent-emerald);
     }
-
     /* ANALYTICS DASHBOARD DECK */
     .dashboard-deck {
       display: grid;
@@ -323,27 +322,29 @@
   </div>
   <!-- NAVBAR -->
   <header class="navbar">
-    <div class="brand" id="tour-step-1-target">
-      <i class="fa-solid fa-microchip"></i> Labaid trading PLC inventory
-    </div>
-    <div class="nav-actions">
-      <button class="btn-action" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan);" onclick="startInteractiveTour()">
-        <i class="fa-solid fa-compass"></i> Tour Guide
-      </button>
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <div class="brand" id="tour-step-1-target">
+        <i class="fa-solid fa-microchip"></i> Labaid trading PLC inventory
+      </div>
       <button class="btn-action" onclick="toggleSalesDrawer()" id="tour-step-4-target">
         <i class="fa-solid fa-receipt"></i> Sales History
       </button>
       <button class="btn-action" onclick="openExportModal()" id="tour-step-5-target">
         <i class="fa-solid fa-file-csv"></i> Export Data
       </button>
+      <button class="btn-action" style="background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); border-color: var(--accent-rose);" onclick="logoutSystem()">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-action" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan);" onclick="startInteractiveTour()">
+        <i class="fa-solid fa-compass"></i> Tour Guide
+      </button>
       <button class="btn-action" onclick="toggleAuditDrawer()" id="tour-step-6-target">
         <i class="fa-solid fa-list-check"></i> Audit Logs
       </button>
       <button class="btn-action" style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border-color: var(--accent-purple);" onclick="openPasswordModal()" id="tour-step-7-target">
         <i class="fa-solid fa-key"></i> Change Password
-      </button>
-      <button class="btn-action" style="background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); border-color: var(--accent-rose);" onclick="logoutSystem()">
-        <i class="fa-solid fa-right-from-bracket"></i> Logout
       </button>
     </div>
   </header>
@@ -422,7 +423,6 @@
           <div style="font-size: 12px; color: var(--text-muted);" id="table-record-count">Showing 0 records</div>
         </div>
       </div>
-
       <!-- PAGE CONTAINER 1: EQUIPMENT -->
       <div id="page-equipment" class="page-section" style="display: flex; flex-direction: column; gap: 12px;">
         <!-- EQUIPMENT / SUPPLIES QUICK FILTER BAR -->
@@ -435,7 +435,6 @@
           <button class="filter-pill" id="eq-filter-agri" onclick="setEquipmentFilter('Agricultural Equipment')">Agricultural Equipment</button>
           <button class="filter-pill" id="eq-filter-ind" onclick="setEquipmentFilter('Industrial Machinery')">Industrial Machinery</button>
         </div>
-
         <div class="table-container" id="tour-step-12-target">
           <table>
             <thead id="ent-table-head"></thead>
@@ -443,7 +442,6 @@
           </table>
         </div>
       </div>
-
       <!-- PAGE CONTAINER 2: CHEMICALS -->
       <div id="page-chemicals" class="page-section" style="display: none; flex-direction: column; gap: 12px;">
         <!-- CHEMICAL EXPIRY STATUS QUICK FILTER BAR -->
@@ -454,7 +452,6 @@
           <button class="filter-pill amber" id="chem-filter-less1yr" onclick="setChemicalExpiryFilter('less_than_year')">< 1 Year Remaining</button>
           <button class="filter-pill rose" id="chem-filter-expired" onclick="setChemicalExpiryFilter('expired')">Expired</button>
         </div>
-
         <div class="table-container">
           <table>
             <thead id="chem-table-head"></thead>
@@ -462,7 +459,6 @@
           </table>
         </div>
       </div>
-
       <!-- PAGE CONTAINER 3: VISUALS & EXPIRY TIMELINES -->
       <div id="page-visuals-expiry" class="page-section" style="display: none; flex-direction: column; gap: 15px;">
         <div class="dashboard-deck" id="tour-step-8-target">
@@ -488,7 +484,6 @@
             <div class="chart-wrapper"><canvas id="categoryChart"></canvas></div>
           </div>
         </div>
-
         <!-- NEW CHEMICAL EXPIRY TIMELINE DIAGRAMS WITH STATUS FILTERS & EXPORT BUTTONS -->
         <div class="expiry-visual-container">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
@@ -509,7 +504,6 @@
               </button>
             </div>
           </div>
-
           <!-- VISUAL STATUS FILTER BAR -->
           <div class="filter-bar" style="margin-top: 4px;">
             <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;"><i class="fa-solid fa-sliders"></i> Visual Filter Status:</span>
@@ -518,13 +512,11 @@
             <button class="filter-pill amber" id="vis-filter-less1yr" onclick="setVisualExpiryFilter('less_than_year')">Expiring Within 1 Year</button>
             <button class="filter-pill emerald" id="vis-filter-more1yr" onclick="setVisualExpiryFilter('more_than_year')">> 1 Year Remaining</button>
           </div>
-
           <div id="expiry-timeline-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
             <!-- Rendered dynamically -->
           </div>
         </div>
       </div>
-
       <!-- PAGE CONTAINER 4: INTELLIGENCE HUB REPLENISHMENT PAGE -->
       <div id="page-hub" class="page-section" style="display: none; flex-direction: column; gap: 15px;">
         <div class="dashboard-deck">
@@ -705,7 +697,6 @@
     let currentView = 'equipment';
     let currentTourIndex = 0;
     let categoryChartInstance = null;
-
     // ACTIVE FILTER STATES
     let equipmentCategoryFilter = 'all';
     let chemicalExpiryFilter = 'all';
@@ -845,7 +836,6 @@
       document.getElementById('stat-categories-count').textContent = `${cats} Active`;
       document.getElementById('stat-expiry-alert').textContent = `${expiringSoon} Items`;
     }
-
     // HELPER FUNCTION: GET EXPIRY STATUS KEY
     function getChemExpiryStatus(expireDateStr) {
       if (!expireDateStr) return 'none';
@@ -858,7 +848,6 @@
       if (diffDays <= 365) return 'less_than_year';
       return 'more_than_year';
     }
-
     // EQUIPMENT SUB-FILTER SWITCHER
     function setEquipmentFilter(catKey) {
       equipmentCategoryFilter = catKey;
@@ -872,7 +861,6 @@
       if (btn) btn.classList.add('active');
       renderEnterpriseTable(enterpriseItems, document.getElementById('global-search-input').value);
     }
-
     // CHEMICAL EXPIRY SUB-FILTER SWITCHER
     function setChemicalExpiryFilter(statusKey) {
       chemicalExpiryFilter = statusKey;
@@ -884,7 +872,6 @@
       if (btn) btn.classList.add('active');
       renderEnterpriseTable(enterpriseItems, document.getElementById('global-search-input').value);
     }
-
     // VISUAL EXPIRY FILTER SWITCHER
     function setVisualExpiryFilter(statusKey) {
       visualExpiryFilter = statusKey;
@@ -896,7 +883,6 @@
       if (btn) btn.classList.add('active');
       renderExpiryTimelines();
     }
-
     // RENDER INTERPISRE-STYLE CHEMICAL EXPIRY TIMELINE DIAGRAMS WITH VISUAL FILTER
     function renderExpiryTimelines() {
       const container = document.getElementById('expiry-timeline-list');
@@ -905,14 +891,12 @@
       if (visualExpiryFilter !== 'all') {
         chemicals = chemicals.filter(chem => getChemExpiryStatus(chem.expire_date) === visualExpiryFilter);
       }
-
       if (!chemicals.length) {
         container.innerHTML = `<div style="text-align:center; color: var(--text-muted); font-size:12px; padding:20px; background: rgba(0,0,0,0.2); border-radius: 8px;">No chemical assets match the selected expiry status filter ("${visualExpiryFilter}").</div>`;
         return;
       }
       const now = new Date();
       now.setHours(0,0,0,0);
-
       container.innerHTML = chemicals.map(chem => {
         const expDate = new Date(chem.expire_date);
         expDate.setHours(0,0,0,0);
@@ -953,12 +937,10 @@
         `;
       }).join('');
     }
-
     // EXPORT FUNCTION FOR VISUALS DASHBOARD (EXPORTS FILTERED OR EXPIRED CHEMICALS)
     function exportVisualChemicals(mode) {
       let targetChems = enterpriseItems.filter(i => i.category === "Chemicals & Reagents");
       let exportFileName = "chemical_expiry_report.csv";
-
       if (mode === 'expired') {
         targetChems = targetChems.filter(c => getChemExpiryStatus(c.expire_date) === 'expired');
         exportFileName = "expired_chemicals_report.csv";
@@ -966,21 +948,17 @@
         targetChems = targetChems.filter(c => getChemExpiryStatus(c.expire_date) === visualExpiryFilter);
         exportFileName = `chemicals_${visualExpiryFilter}_report.csv`;
       }
-
       if (!targetChems.length) {
         alert("No chemical items match the selected export criteria.");
         return;
       }
-
       let csv = "data:text/csv;charset=utf-8,";
       csv += "Chemical Name,CAS Number,Stock Qty,Unit Price (ETB),Expiry Date,Expiry Status\r\n";
-
       targetChems.forEach(c => {
         const st = getChemExpiryStatus(c.expire_date);
         const statusText = st === 'expired' ? 'EXPIRED' : st === 'less_than_year' ? 'Expires within 1 year' : st === 'more_than_year' ? 'Stable (> 1 year)' : 'N/A';
         csv += `"${c.item_name}","${c.cas_number || ''}",${c.quantity},${c.price},"${c.expire_date || ''}","${statusText}"\r\n`;
       });
-
       const link = document.createElement("a");
       link.setAttribute("href", encodeURI(csv));
       link.setAttribute("download", exportFileName);
@@ -989,7 +967,6 @@
       document.body.removeChild(link);
       addAuditEntry("Export Generated", `Downloaded chemical expiry CSV (${mode})`);
     }
-
     function renderHubData() {
       let totalVal = enterpriseItems.reduce((acc, i) => acc + ((parseInt(i.quantity) || 0) * (parseFloat(i.price) || 0)), 0);
       document.getElementById('stat-total-valuation').textContent = totalVal.toLocaleString() + " ETB";
@@ -1089,12 +1066,10 @@
         const cas = (item.cas_number || '').toLowerCase();
         return name.includes(query) || cat.includes(query) || brand.includes(query) || model.includes(query) || cas.includes(query);
       });
-
       const thead = document.getElementById('ent-table-head');
       const tbody = document.getElementById('ent-table-body');
       const chemThead = document.getElementById('chem-table-head');
       const chemTbody = document.getElementById('chem-table-body');
-
       let equipmentItems = filteredItems.filter(item => item.category !== "Chemicals & Reagents");
       let chemicalItems = filteredItems.filter(item => item.category === "Chemicals & Reagents");
       
@@ -1102,12 +1077,10 @@
       if (equipmentCategoryFilter !== 'all') {
         equipmentItems = equipmentItems.filter(i => i.category === equipmentCategoryFilter);
       }
-
       // APPLY CHEMICAL EXPIRY STATUS FILTER
       if (chemicalExpiryFilter !== 'all') {
         chemicalItems = chemicalItems.filter(c => getChemExpiryStatus(c.expire_date) === chemicalExpiryFilter);
       }
-
       if (currentView === 'equipment') {
         document.getElementById('table-record-count').textContent = `Showing ${equipmentItems.length} records`;
         thead.innerHTML = `<tr><th>#</th><th>Item Description</th><th>Category</th><th>Brand / Model</th><th>Stock Qty</th><th>Unit Price</th><th>Catalogue Spec</th><th>Actions</th></tr>`;
