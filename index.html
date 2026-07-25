@@ -98,7 +98,7 @@
       background: var(--panel-bg);
       border-bottom: 1px solid var(--border-light);
       padding: 14px 25px;
-      display: flex; justify-space-between: space-between; align-items: center;
+      display: flex; justify-content: space-between; align-items: center;
       position: sticky; top: 0; z-index: 100;
     }
     .brand { font-size: 18px; font-weight: 800; color: var(--accent-cyan); display: flex; align-items: center; gap: 10px; letter-spacing: 0.5px; }
@@ -322,10 +322,10 @@
   </div>
   <!-- NAVBAR -->
   <header class="navbar">
-    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-      <div class="brand" id="tour-step-1-target">
-        <i class="fa-solid fa-microchip"></i> Labaid trading PLC inventory
-      </div>
+    <div class="brand" id="tour-step-1-target">
+      <i class="fa-solid fa-microchip"></i> Labaid trading PLC inventory
+    </div>
+    <div class="nav-actions">
       <button class="btn-action" onclick="toggleSalesDrawer()" id="tour-step-4-target">
         <i class="fa-solid fa-receipt"></i> Sales History
       </button>
@@ -335,8 +335,6 @@
       <button class="btn-action" style="background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); border-color: var(--accent-rose);" onclick="logoutSystem()">
         <i class="fa-solid fa-right-from-bracket"></i> Logout
       </button>
-    </div>
-    <div class="nav-actions">
       <button class="btn-action" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan);" onclick="startInteractiveTour()">
         <i class="fa-solid fa-compass"></i> Tour Guide
       </button>
