@@ -24,14 +24,12 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
     
-    /* HIGHLIGHT PULSE FOR TOUR GUIDE */
     .tour-highlight-active {
       position: relative;
       z-index: 210 !important;
       box-shadow: 0 0 0 4px var(--accent-cyan), 0 0 25px rgba(56, 189, 248, 0.6) !important;
       transition: all 0.3s ease;
     }
-    /* ULTRA-MODERN FANCY AUTH OVERLAY */
     #auth-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, #090d16 60%, #030508 100%);
@@ -93,7 +91,7 @@
       letter-spacing: 0.5px;
     }
     .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(56, 189, 248, 0.5); background: linear-gradient(135deg, #7dd3fc, #0284c7); }
-    /* NAVBAR */
+    
     .navbar {
       background: var(--panel-bg);
       border-bottom: 1px solid var(--border-light);
@@ -122,12 +120,10 @@
     .btn-primary { background: var(--accent-cyan); color: #020617; border: none; }
     .btn-primary:hover { background: #0284c7; color: #fff; }
     
-    /* MAIN APP GRID */
     .app-container { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 61px); }
     .sidebar { width: 340px; background: var(--panel-bg); border-right: 1px solid var(--border-light); padding: 20px; overflow-y: auto; }
     .content-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
     
-    /* SUB FILTER BAR */
     .filter-bar {
       display: flex;
       gap: 8px;
@@ -170,7 +166,7 @@
       border-color: var(--accent-emerald);
       color: var(--accent-emerald);
     }
-    /* ANALYTICS DASHBOARD DECK */
+    
     .dashboard-deck {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -191,7 +187,7 @@
     .analytics-card.amber::before { background: var(--accent-amber); }
     .analytics-card.emerald::before { background: var(--accent-emerald); }
     .analytics-card.purple::before { background: var(--accent-purple); }
-    /* CHARTS & VISUAL TIMELINE STYLES */
+    
     .charts-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -207,7 +203,7 @@
       flex-direction: column;
     }
     .chart-wrapper { position: relative; flex: 1; width: 100%; height: 100%; }
-    /* EXPIRY INTERPISRE-STYLE TIMELINE CARDS */
+    
     .expiry-visual-container {
       background: var(--panel-bg);
       border: 1px solid var(--border-light);
@@ -240,7 +236,7 @@
       border-radius: 5px;
       transition: width 0.6s ease;
     }
-    /* FORM STYLES */
+    
     .form-group { margin-bottom: 12px; text-align: left; }
     .form-group label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; text-transform: uppercase; }
     .form-control {
@@ -250,20 +246,17 @@
     }
     .form-control:focus { outline: none; border-color: var(--accent-cyan); }
     
-    /* TABS */
     .view-tabs { display: flex; gap: 10px; border-bottom: 1px solid var(--border-light); padding-bottom: 8px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
     .tab-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .tab-btn { background: none; border: none; color: var(--text-muted); padding: 7px 14px; font-size: 13px; font-weight: 700; cursor: pointer; border-radius: 6px; }
     .tab-btn.active { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); }
     
-    /* TABLE */
     .table-container { background: var(--panel-bg); border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; }
     table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
     th { background: rgba(0, 0, 0, 0.35); padding: 12px 14px; color: var(--text-muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
     td { padding: 12px 14px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
     tr:hover { background: rgba(255, 255, 255, 0.02); }
     
-    /* MODALS & DRAWERS */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(0, 0, 0, 0.75); display: none; justify-content: center; align-items: center; z-index: 200;
@@ -286,7 +279,7 @@
     .sale-msg-card:hover { background: rgba(255, 255, 255, 0.07); border-color: var(--accent-emerald); }
     .sale-msg-body { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-light); font-size: 12px; color: var(--text-muted); }
     .sale-msg-card.expanded .sale-msg-body { display: block; }
-    /* FLOATING TOUR GUIDE BANNER */
+    
     #tour-floating-box {
       position: fixed; bottom: 25px; right: 25px; width: 340px;
       background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px);
@@ -320,6 +313,7 @@
       </form>
     </div>
   </div>
+
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="brand" id="tour-step-1-target">
@@ -346,9 +340,9 @@
       </button>
     </div>
   </header>
+
   <!-- APP CONTAINER -->
   <div class="app-container">
-    
     <!-- SIDEBAR FORM -->
     <aside class="sidebar" id="tour-step-2-target">
       <h3 style="margin-bottom: 15px; color: var(--accent-cyan); font-size: 15px;">
@@ -377,6 +371,7 @@
         </div>
         <div id="standard-spec-fields">
           <div class="form-group"><label>Upload Catalogue Spec PDF</label><input type="file" class="form-control" id="ent-pdf-file" accept=".pdf"></div>
+          <div class="form-group"><label>Catalog / Website Link (URL)</label><input type="url" class="form-control" id="ent-catalog-link" placeholder="https://example.com/catalog"></div>
         </div>
         <div id="chem-special-fields" style="display: none;">
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
@@ -394,9 +389,9 @@
         </button>
       </form>
     </aside>
+
     <!-- CONTENT AREA -->
     <main class="content-area">
-      
       <!-- VIEW TABS SWITCHER -->
       <div class="view-tabs" id="tour-step-10-target">
         <div class="tab-group" id="tour-step-11-target">
@@ -421,9 +416,9 @@
           <div style="font-size: 12px; color: var(--text-muted);" id="table-record-count">Showing 0 records</div>
         </div>
       </div>
+
       <!-- PAGE CONTAINER 1: EQUIPMENT -->
       <div id="page-equipment" class="page-section" style="display: flex; flex-direction: column; gap: 12px;">
-        <!-- EQUIPMENT / SUPPLIES QUICK FILTER BAR -->
         <div class="filter-bar">
           <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;"><i class="fa-solid fa-filter"></i> Category Filter:</span>
           <button class="filter-pill active" id="eq-filter-all" onclick="setEquipmentFilter('all')">Show All</button>
@@ -440,9 +435,9 @@
           </table>
         </div>
       </div>
+
       <!-- PAGE CONTAINER 2: CHEMICALS -->
       <div id="page-chemicals" class="page-section" style="display: none; flex-direction: column; gap: 12px;">
-        <!-- CHEMICAL EXPIRY STATUS QUICK FILTER BAR -->
         <div class="filter-bar">
           <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;"><i class="fa-solid fa-clock"></i> Expiry Status Filter:</span>
           <button class="filter-pill active" id="chem-filter-all" onclick="setChemicalExpiryFilter('all')">Show All</button>
@@ -457,6 +452,7 @@
           </table>
         </div>
       </div>
+
       <!-- PAGE CONTAINER 3: VISUALS & EXPIRY TIMELINES -->
       <div id="page-visuals-expiry" class="page-section" style="display: none; flex-direction: column; gap: 15px;">
         <div class="dashboard-deck" id="tour-step-8-target">
@@ -482,17 +478,14 @@
             <div class="chart-wrapper"><canvas id="categoryChart"></canvas></div>
           </div>
         </div>
-        <!-- NEW CHEMICAL EXPIRY TIMELINE DIAGRAMS WITH STATUS FILTERS & EXPORT BUTTONS -->
         <div class="expiry-visual-container">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div>
               <h4 style="font-size: 14px; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-timeline"></i> Chemical & Reagent Expiry Lifecycle Diagrams (Interpsire Style)
+                <i class="fa-solid fa-timeline"></i> Chemical & Reagent Expiry Lifecycle Diagrams
               </h4>
               <p style="font-size: 12px; color: var(--text-muted);">Visual bar timelines showing remaining shelf-life stability per chemical asset.</p>
             </div>
-            
-            <!-- EXPORT ACTION BUTTONS BELOW CHARTS / ABOVE STATUS TIMELINES -->
             <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
               <button class="btn-action" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); border-color: var(--accent-emerald);" onclick="exportVisualChemicals('filtered')">
                 <i class="fa-solid fa-file-export"></i> Export Active View CSV
@@ -502,7 +495,6 @@
               </button>
             </div>
           </div>
-          <!-- VISUAL STATUS FILTER BAR -->
           <div class="filter-bar" style="margin-top: 4px;">
             <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;"><i class="fa-solid fa-sliders"></i> Visual Filter Status:</span>
             <button class="filter-pill active" id="vis-filter-all" onclick="setVisualExpiryFilter('all')">Show All Statuses</button>
@@ -510,11 +502,10 @@
             <button class="filter-pill amber" id="vis-filter-less1yr" onclick="setVisualExpiryFilter('less_than_year')">Expiring Within 1 Year</button>
             <button class="filter-pill emerald" id="vis-filter-more1yr" onclick="setVisualExpiryFilter('more_than_year')">> 1 Year Remaining</button>
           </div>
-          <div id="expiry-timeline-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
-            <!-- Rendered dynamically -->
-          </div>
+          <div id="expiry-timeline-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;"></div>
         </div>
       </div>
+
       <!-- PAGE CONTAINER 4: INTELLIGENCE HUB REPLENISHMENT PAGE -->
       <div id="page-hub" class="page-section" style="display: none; flex-direction: column; gap: 15px;">
         <div class="dashboard-deck">
@@ -545,6 +536,7 @@
       </div>
     </main>
   </div>
+
   <!-- FLOATING TOUR GUIDE BOX -->
   <div id="tour-floating-box">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -558,6 +550,7 @@
       <button class="btn-action btn-primary" id="tour-next-btn" onclick="travelTourStep(1)">Next <i class="fa-solid fa-arrow-right"></i></button>
     </div>
   </div>
+
   <!-- PASSWORD MODAL -->
   <div class="modal-overlay" id="password-modal">
     <div class="modal-box" style="max-width: 400px;">
@@ -573,6 +566,7 @@
       </form>
     </div>
   </div>
+
   <!-- EDIT MODAL -->
   <div class="modal-overlay" id="edit-modal">
     <div class="modal-box">
@@ -601,6 +595,7 @@
           </div>
         </div>
         <div class="form-group" id="edit-pdf-group"><label>Update PDF Catalog</label><input type="file" class="form-control" id="edit-pdf-file" accept=".pdf"></div>
+        <div class="form-group" id="edit-link-group"><label>Update Catalog / Website Link (URL)</label><input type="url" class="form-control" id="edit-catalog-link" placeholder="https://example.com/catalog"></div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
           <div class="form-group"><label>Stock Qty</label><input type="number" class="form-control" id="edit-qty" required></div>
           <div class="form-group"><label>Unit Price</label><input type="number" step="0.01" class="form-control" id="edit-price" required></div>
@@ -612,6 +607,7 @@
       </form>
     </div>
   </div>
+
   <!-- SALE MODAL -->
   <div class="modal-overlay" id="sale-modal">
     <div class="modal-box">
@@ -640,6 +636,7 @@
       </form>
     </div>
   </div>
+
   <!-- EXPORT MODAL -->
   <div class="modal-overlay" id="export-modal">
     <div class="modal-box">
@@ -665,6 +662,7 @@
       </div>
     </div>
   </div>
+
   <!-- AUDIT LOG DRAWER -->
   <div id="audit-drawer" class="side-drawer">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
@@ -673,6 +671,7 @@
     </div>
     <div id="audit-log-container"></div>
   </div>
+
   <!-- SALES HISTORY DRAWER -->
   <div id="sales-drawer" class="side-drawer">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
@@ -681,6 +680,7 @@
     </div>
     <div id="sales-history-container"></div>
   </div>
+
   <!-- JAVASCRIPT ENGINE -->
   <script>
     const SUPABASE_URL = "https://cbmvbbfbgauqusibdnup.supabase.co";
@@ -695,7 +695,6 @@
     let currentView = 'equipment';
     let currentTourIndex = 0;
     let categoryChartInstance = null;
-    // ACTIVE FILTER STATES
     let equipmentCategoryFilter = 'all';
     let chemicalExpiryFilter = 'all';
     let visualExpiryFilter = 'all';
@@ -821,7 +820,6 @@
     function updateAnalyticsDeck() {
       let totalQty = enterpriseItems.reduce((acc, i) => acc + (parseInt(i.quantity) || 0), 0);
       let cats = new Set(enterpriseItems.map(i => i.category)).size;
-      
       let now = new Date();
       let oneYearFromNow = new Date();
       oneYearFromNow.setFullYear(now.getFullYear() + 1);
@@ -834,7 +832,6 @@
       document.getElementById('stat-categories-count').textContent = `${cats} Active`;
       document.getElementById('stat-expiry-alert').textContent = `${expiringSoon} Items`;
     }
-    // HELPER FUNCTION: GET EXPIRY STATUS KEY
     function getChemExpiryStatus(expireDateStr) {
       if (!expireDateStr) return 'none';
       const now = new Date();
@@ -846,7 +843,6 @@
       if (diffDays <= 365) return 'less_than_year';
       return 'more_than_year';
     }
-    // EQUIPMENT SUB-FILTER SWITCHER
     function setEquipmentFilter(catKey) {
       equipmentCategoryFilter = catKey;
       document.querySelectorAll('#page-equipment .filter-pill').forEach(btn => btn.classList.remove('active'));
@@ -859,7 +855,6 @@
       if (btn) btn.classList.add('active');
       renderEnterpriseTable(enterpriseItems, document.getElementById('global-search-input').value);
     }
-    // CHEMICAL EXPIRY SUB-FILTER SWITCHER
     function setChemicalExpiryFilter(statusKey) {
       chemicalExpiryFilter = statusKey;
       document.querySelectorAll('#page-chemicals .filter-pill').forEach(btn => btn.classList.remove('active'));
@@ -870,7 +865,6 @@
       if (btn) btn.classList.add('active');
       renderEnterpriseTable(enterpriseItems, document.getElementById('global-search-input').value);
     }
-    // VISUAL EXPIRY FILTER SWITCHER
     function setVisualExpiryFilter(statusKey) {
       visualExpiryFilter = statusKey;
       document.querySelectorAll('#page-visuals-expiry .filter-pill').forEach(btn => btn.classList.remove('active'));
@@ -881,11 +875,9 @@
       if (btn) btn.classList.add('active');
       renderExpiryTimelines();
     }
-    // RENDER INTERPISRE-STYLE CHEMICAL EXPIRY TIMELINE DIAGRAMS WITH VISUAL FILTER
     function renderExpiryTimelines() {
       const container = document.getElementById('expiry-timeline-list');
       let chemicals = enterpriseItems.filter(i => i.category === "Chemicals & Reagents" && i.expire_date);
-      
       if (visualExpiryFilter !== 'all') {
         chemicals = chemicals.filter(chem => getChemExpiryStatus(chem.expire_date) === visualExpiryFilter);
       }
@@ -900,13 +892,10 @@
         expDate.setHours(0,0,0,0);
         const diffTime = expDate - now;
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
         let maxScaleDays = 730;
         let percentage = Math.max(0, Math.min(100, (diffDays / maxScaleDays) * 100));
-        
         let barColor = 'var(--accent-emerald)';
         let statusBadge = '<span style="color:var(--accent-emerald); font-weight:700;"><i class="fa-solid fa-circle-check"></i> Stable Shelf Life (> 1 Year)</span>';
-        
         if (diffDays < 0) {
           percentage = 0;
           barColor = 'var(--accent-rose)';
@@ -935,7 +924,6 @@
         `;
       }).join('');
     }
-    // EXPORT FUNCTION FOR VISUALS DASHBOARD (EXPORTS FILTERED OR EXPIRED CHEMICALS)
     function exportVisualChemicals(mode) {
       let targetChems = enterpriseItems.filter(i => i.category === "Chemicals & Reagents");
       let exportFileName = "chemical_expiry_report.csv";
@@ -968,10 +956,8 @@
     function renderHubData() {
       let totalVal = enterpriseItems.reduce((acc, i) => acc + ((parseInt(i.quantity) || 0) * (parseFloat(i.price) || 0)), 0);
       document.getElementById('stat-total-valuation').textContent = totalVal.toLocaleString() + " ETB";
-      
       let lowStockItems = enterpriseItems.filter(i => (parseInt(i.quantity) || 0) <= 5);
       document.getElementById('stat-low-stock').textContent = `${lowStockItems.length} Items`;
-      
       const tbody = document.getElementById('hub-recommendations-body');
       if (!enterpriseItems.length) {
         tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding:20px;">No inventory records available for analysis.</td></tr>`;
@@ -1025,6 +1011,7 @@
       document.getElementById('edit-chem-fields').style.display = isChem ? 'block' : 'none';
       document.getElementById('edit-brand-model-group').style.display = isChem ? 'none' : 'grid';
       document.getElementById('edit-pdf-group').style.display = isChem ? 'none' : 'block';
+      document.getElementById('edit-link-group').style.display = isChem ? 'none' : 'block';
     }
     function switchEnterpriseView(mode) {
       currentView = mode;
@@ -1032,12 +1019,10 @@
       document.getElementById('tab-chemicals').classList.toggle('active', mode === 'chemicals');
       document.getElementById('tab-visuals').classList.toggle('active', mode === 'visuals');
       document.getElementById('tab-hub').classList.toggle('active', mode === 'hub');
-      
       document.getElementById('page-equipment').style.display = mode === 'equipment' ? 'flex' : 'none';
       document.getElementById('page-chemicals').style.display = mode === 'chemicals' ? 'flex' : 'none';
       document.getElementById('page-visuals-expiry').style.display = mode === 'visuals' ? 'flex' : 'none';
       document.getElementById('page-hub').style.display = mode === 'hub' ? 'flex' : 'none';
-      
       if (mode === 'visuals') {
         renderCharts();
         renderExpiryTimelines();
@@ -1053,6 +1038,27 @@
     function handleGlobalSearch(query) {
       renderEnterpriseTable(enterpriseItems, query);
     }
+
+    // PDF HELPER: Open Base64 PDFs via Blob URLs to fix display issue
+    function openPdfDocument(base64Data) {
+      try {
+        const parts = base64Data.split(';');
+        const contentType = parts[0].split(':')[1];
+        const raw = window.atob(parts[1].split(',')[1]);
+        const rawLength = raw.length;
+        const uInt8Array = new Uint8Array(rawLength);
+        for (let i = 0; i < rawLength; ++i) {
+          uInt8Array[i] = raw.charCodeAt(i);
+        }
+        const blob = new Blob([uInt8Array], { type: contentType });
+        const blobUrl = URL.createObjectURL(blob);
+        window.open(blobUrl, '_blank');
+      } catch (err) {
+        // Fallback direct open if base64 parsing fails
+        window.open(base64Data, '_blank');
+      }
+    }
+
     function renderEnterpriseTable(items, searchQuery = '') {
       const query = searchQuery.toLowerCase().trim();
       const filteredItems = items.filter(item => {
@@ -1071,11 +1077,9 @@
       let equipmentItems = filteredItems.filter(item => item.category !== "Chemicals & Reagents");
       let chemicalItems = filteredItems.filter(item => item.category === "Chemicals & Reagents");
       
-      // APPLY EQUIPMENT SUB-CATEGORY FILTER
       if (equipmentCategoryFilter !== 'all') {
         equipmentItems = equipmentItems.filter(i => i.category === equipmentCategoryFilter);
       }
-      // APPLY CHEMICAL EXPIRY STATUS FILTER
       if (chemicalExpiryFilter !== 'all') {
         chemicalItems = chemicalItems.filter(c => getChemExpiryStatus(c.expire_date) === chemicalExpiryFilter);
       }
@@ -1088,7 +1092,22 @@
           tbody.innerHTML = equipmentItems.map((item, index) => {
             const qty = parseInt(item.quantity) || 0;
             const pdfUrl = item.pdf_url;
+            const catalogLink = item.catalog_link;
             const recordId = item.id || index;
+            
+            let catalogActionsHtml = `<span style="color:var(--text-muted); font-size:11px;">None</span>`;
+            let actionsList = [];
+            if (pdfUrl) {
+              actionsList.push(`<button onclick="openPdfDocument('${pdfUrl}')" class="btn-action" style="padding:4px 7px; font-size:11px;"><i class="fa-solid fa-file-pdf"></i> View PDF</button>`);
+              actionsList.push(`<button class="btn-action" style="padding:4px 7px; background:rgba(244,63,94,0.15); color:var(--accent-rose); border-color:var(--accent-rose);" onclick="deleteItemPdf(${recordId})" title="Delete PDF"><i class="fa-solid fa-trash"></i></button>`);
+            }
+            if (catalogLink) {
+              actionsList.push(`<a href="${catalogLink}" target="_blank" class="btn-action" style="padding:4px 7px; font-size:11px; background:rgba(168,85,247,0.15); color:var(--accent-purple); border-color:var(--accent-purple);"><i class="fa-solid fa-link"></i> Catalog Link</a>`);
+            }
+            if (actionsList.length > 0) {
+              catalogActionsHtml = `<div style="display:flex; gap:4px; align-items:center; flex-wrap:wrap;">${actionsList.join('')}</div>`;
+            }
+
             return `
               <tr>
                 <td><strong>${index + 1}</strong></td>
@@ -1097,7 +1116,7 @@
                 <td><span style="font-size:12px; color:var(--text-muted);">${item.brand || '-'} / ${item.model || '-'}</span></td>
                 <td><strong>${qty}</strong> ${item.unit_of_measure || ''}</td>
                 <td><strong style="color:var(--accent-cyan);">${item.price} ETB</strong></td>
-                <td>${pdfUrl ? `<div style="display:flex; gap:4px; align-items:center;"><a href="${pdfUrl}" target="_blank" class="btn-action" style="padding:4px 7px; font-size:11px;"><i class="fa-solid fa-file-pdf"></i> View</a><button class="btn-action" style="padding:4px 7px; background:rgba(244,63,94,0.15); color:var(--accent-rose); border-color:var(--accent-rose);" onclick="deleteItemPdf(${recordId})"><i class="fa-solid fa-trash"></i></button></div>` : `<span style="color:var(--text-muted); font-size:11px;">None</span>`}</td>
+                <td>${catalogActionsHtml}</td>
                 <td>
                   <div style="display:flex; gap:5px;">
                     <button class="btn-action" style="padding:4px 7px; background:var(--accent-amber); color:#020617;" onclick="openEditModal(${recordId})"><i class="fa-solid fa-pen"></i></button>
@@ -1161,6 +1180,7 @@
       e.preventDefault();
       const pdfFile = document.getElementById('ent-pdf-file').files[0];
       let catalogUrl = pdfFile ? await convertFileToBase64(pdfFile) : null;
+      let catalogLinkVal = document.getElementById('ent-catalog-link').value.trim() || null;
       
       const payload = {
         id: Date.now(),
@@ -1169,6 +1189,7 @@
         brand: document.getElementById('ent-brand').value,
         model: document.getElementById('ent-model').value,
         pdf_url: catalogUrl,
+        catalog_link: catalogLinkVal,
         unit_of_measure: document.getElementById('ent-unit').value,
         quantity: parseInt(document.getElementById('ent-qty').value) || 0,
         price: parseFloat(document.getElementById('ent-price').value) || 0,
@@ -1195,6 +1216,7 @@
       document.getElementById('edit-model').value = item.model || '';
       document.getElementById('edit-cas').value = item.cas_number || '';
       document.getElementById('edit-expire').value = item.expire_date || '';
+      document.getElementById('edit-catalog-link').value = item.catalog_link || '';
       document.getElementById('edit-qty').value = item.quantity;
       document.getElementById('edit-price').value = item.price;
       toggleEditCategoryFields();
@@ -1207,18 +1229,21 @@
       const category = document.getElementById('edit-category').value;
       const pdfFile = document.getElementById('edit-pdf-file').files[0];
       let catalogUrl = pdfFile ? await convertFileToBase64(pdfFile) : undefined;
+      let catalogLinkVal = document.getElementById('edit-catalog-link').value.trim() || null;
       
       const updated = {
         category: category,
         item_name: document.getElementById('edit-name').value,
         quantity: parseInt(document.getElementById('edit-qty').value) || 0,
-        price: parseFloat(document.getElementById('edit-price').value) || 0
+        price: parseFloat(document.getElementById('edit-price').value) || 0,
+        catalog_link: catalogLinkVal
       };
       if (category === "Chemicals & Reagents") {
         updated.cas_number = document.getElementById('edit-cas').value || null;
         updated.expire_date = document.getElementById('edit-expire').value || null;
         updated.brand = null;
         updated.model = null;
+        updated.catalog_link = null;
       } else {
         updated.brand = document.getElementById('edit-brand').value;
         updated.model = document.getElementById('edit-model').value;
@@ -1251,7 +1276,6 @@
       const itemId = parseInt(document.getElementById('sale-item-id').value);
       const qtySold = parseInt(document.getElementById('sale-qty').value);
       const item = enterpriseItems.find(i => i.id === itemId || i.id == itemId);
-      
       if (!item || item.quantity < qtySold) { alert("Insufficient stock quantity!"); return; }
       const saleRecord = {
         id: Date.now(),
@@ -1314,14 +1338,12 @@
       const target = document.getElementById('export-target').value;
       let csv = "data:text/csv;charset=utf-8,";
       let filename = target === 'inventory' ? "inventory_export.csv" : "sales_export.csv";
-      
       if (target === 'inventory') {
-        csv += "Category,Item Name,Brand,Model,Quantity,Price (ETB)\r\n";
-        enterpriseItems.forEach(i => { csv += `"${i.category}","${i.item_name}","${i.brand || ''}","${i.model || ''}",${i.quantity},${i.price}\r\n`; });
+        csv += "Category,Item Name,Brand,Model,Quantity,Price (ETB),Catalog Link\r\n";
+        enterpriseItems.forEach(i => { csv += `"${i.category}","${i.item_name}","${i.brand || ''}","${i.model || ''}",${i.quantity},${i.price},"${i.catalog_link || ''}"\r\n`; });
       } else {
         const timeframe = document.getElementById('export-sales-timeframe').value;
         const now = new Date();
-        
         let filteredSales = salesHistory.filter(s => {
           if (!s.sale_date) return timeframe === 'all';
           const sDate = new Date(s.sale_date);
@@ -1331,7 +1353,6 @@
           if (timeframe === 'year') return diffDays <= 365;
           return true;
         });
-        
         filename = `sales_export_${timeframe}.csv`;
         csv += "Item Name,Sale Type,Client Name,Quantity,Unit Price,Total,Date\r\n";
         filteredSales.forEach(s => { csv += `"${s.item_name}","${s.sale_type}","${s.client_name}",${s.quantity},${s.unit_price},${s.total_price},"${s.sale_date}"\r\n`; });
