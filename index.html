@@ -313,7 +313,6 @@
       </form>
     </div>
   </div>
-
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="brand" id="tour-step-1-target">
@@ -340,7 +339,6 @@
       </button>
     </div>
   </header>
-
   <!-- APP CONTAINER -->
   <div class="app-container">
     <!-- SIDEBAR FORM -->
@@ -389,7 +387,6 @@
         </button>
       </form>
     </aside>
-
     <!-- CONTENT AREA -->
     <main class="content-area">
       <!-- VIEW TABS SWITCHER -->
@@ -416,7 +413,6 @@
           <div style="font-size: 12px; color: var(--text-muted);" id="table-record-count">Showing 0 records</div>
         </div>
       </div>
-
       <!-- PAGE CONTAINER 1: EQUIPMENT -->
       <div id="page-equipment" class="page-section" style="display: flex; flex-direction: column; gap: 12px;">
         <div class="filter-bar">
@@ -435,7 +431,6 @@
           </table>
         </div>
       </div>
-
       <!-- PAGE CONTAINER 2: CHEMICALS -->
       <div id="page-chemicals" class="page-section" style="display: none; flex-direction: column; gap: 12px;">
         <div class="filter-bar">
@@ -452,7 +447,6 @@
           </table>
         </div>
       </div>
-
       <!-- PAGE CONTAINER 3: VISUALS & EXPIRY TIMELINES -->
       <div id="page-visuals-expiry" class="page-section" style="display: none; flex-direction: column; gap: 15px;">
         <div class="dashboard-deck" id="tour-step-8-target">
@@ -467,7 +461,7 @@
             <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;"><i class="fa-solid fa-layer-group"></i> Multi-Sector Tenders Ready</div>
           </div>
           <div class="analytics-card emerald">
-            <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Chemicals Expiry Alert (< 1 Year)</div>
+            <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Chemicals Expiry Alert (&lt; 1 Year)</div>
             <div style="font-size: 26px; font-weight: 800; color: var(--accent-rose); margin-top: 4px;" id="stat-expiry-alert">0 Items</div>
             <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> Real-time shelf-life intelligence</div>
           </div>
@@ -500,12 +494,11 @@
             <button class="filter-pill active" id="vis-filter-all" onclick="setVisualExpiryFilter('all')">Show All Statuses</button>
             <button class="filter-pill rose" id="vis-filter-expired" onclick="setVisualExpiryFilter('expired')">Expired Only</button>
             <button class="filter-pill amber" id="vis-filter-less1yr" onclick="setVisualExpiryFilter('less_than_year')">Expiring Within 1 Year</button>
-            <button class="filter-pill emerald" id="vis-filter-more1yr" onclick="setVisualExpiryFilter('more_than_year')">> 1 Year Remaining</button>
+            <button class="filter-pill emerald" id="vis-filter-more1yr" onclick="setVisualExpiryFilter('more_than_year')">&gt; 1 Year Remaining</button>
           </div>
           <div id="expiry-timeline-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;"></div>
         </div>
       </div>
-
       <!-- PAGE CONTAINER 4: INTELLIGENCE HUB REPLENISHMENT PAGE -->
       <div id="page-hub" class="page-section" style="display: none; flex-direction: column; gap: 15px;">
         <div class="dashboard-deck">
@@ -517,7 +510,7 @@
           <div class="analytics-card amber">
             <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Low Stock Replenishment Needed</div>
             <div style="font-size: 26px; font-weight: 800; color: var(--accent-amber); margin-top: 4px;" id="stat-low-stock">0 Items</div>
-            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> Items with stock count $\le 5$</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> Items with stock count &le; 5</div>
           </div>
         </div>
         <div class="table-container">
@@ -536,7 +529,6 @@
       </div>
     </main>
   </div>
-
   <!-- FLOATING TOUR GUIDE BOX -->
   <div id="tour-floating-box">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -550,7 +542,6 @@
       <button class="btn-action btn-primary" id="tour-next-btn" onclick="travelTourStep(1)">Next <i class="fa-solid fa-arrow-right"></i></button>
     </div>
   </div>
-
   <!-- PASSWORD MODAL -->
   <div class="modal-overlay" id="password-modal">
     <div class="modal-box" style="max-width: 400px;">
@@ -566,7 +557,6 @@
       </form>
     </div>
   </div>
-
   <!-- EDIT MODAL -->
   <div class="modal-overlay" id="edit-modal">
     <div class="modal-box">
@@ -607,7 +597,6 @@
       </form>
     </div>
   </div>
-
   <!-- SALE MODAL -->
   <div class="modal-overlay" id="sale-modal">
     <div class="modal-box">
@@ -636,7 +625,6 @@
       </form>
     </div>
   </div>
-
   <!-- EXPORT MODAL -->
   <div class="modal-overlay" id="export-modal">
     <div class="modal-box">
@@ -662,7 +650,6 @@
       </div>
     </div>
   </div>
-
   <!-- AUDIT LOG DRAWER -->
   <div id="audit-drawer" class="side-drawer">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
@@ -671,7 +658,6 @@
     </div>
     <div id="audit-log-container"></div>
   </div>
-
   <!-- SALES HISTORY DRAWER -->
   <div id="sales-drawer" class="side-drawer">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
@@ -680,7 +666,6 @@
     </div>
     <div id="sales-history-container"></div>
   </div>
-
   <!-- JAVASCRIPT ENGINE -->
   <script>
     const SUPABASE_URL = "https://cbmvbbfbgauqusibdnup.supabase.co";
@@ -895,7 +880,7 @@
         let maxScaleDays = 730;
         let percentage = Math.max(0, Math.min(100, (diffDays / maxScaleDays) * 100));
         let barColor = 'var(--accent-emerald)';
-        let statusBadge = '<span style="color:var(--accent-emerald); font-weight:700;"><i class="fa-solid fa-circle-check"></i> Stable Shelf Life (> 1 Year)</span>';
+        let statusBadge = '<span style="color:var(--accent-emerald); font-weight:700;"><i class="fa-solid fa-circle-check"></i> Stable Shelf Life (&gt; 1 Year)</span>';
         if (diffDays < 0) {
           percentage = 0;
           barColor = 'var(--accent-rose)';
@@ -942,7 +927,7 @@
       csv += "Chemical Name,CAS Number,Stock Qty,Unit Price (ETB),Expiry Date,Expiry Status\r\n";
       targetChems.forEach(c => {
         const st = getChemExpiryStatus(c.expire_date);
-        const statusText = st === 'expired' ? 'EXPIRED' : st === 'less_than_year' ? 'Expires within 1 year' : st === 'more_than_year' ? 'Stable (> 1 year)' : 'N/A';
+        const statusText = st === 'expired' ? 'EXPIRED' : st === 'less_than_year' ? 'Expires within 1 year' : st === 'more_than_year' ? 'Stable (&gt; 1 year)' : 'N/A';
         csv += `"${c.item_name}","${c.cas_number || ''}",${c.quantity},${c.price},"${c.expire_date || ''}","${statusText}"\r\n`;
       });
       const link = document.createElement("a");
@@ -1038,8 +1023,6 @@
     function handleGlobalSearch(query) {
       renderEnterpriseTable(enterpriseItems, query);
     }
-
-    // PDF HELPER: Open Base64 PDFs via Blob URLs to fix display issue
     function openPdfDocument(base64Data) {
       try {
         const parts = base64Data.split(';');
@@ -1054,11 +1037,9 @@
         const blobUrl = URL.createObjectURL(blob);
         window.open(blobUrl, '_blank');
       } catch (err) {
-        // Fallback direct open if base64 parsing fails
         window.open(base64Data, '_blank');
       }
     }
-
     function renderEnterpriseTable(items, searchQuery = '') {
       const query = searchQuery.toLowerCase().trim();
       const filteredItems = items.filter(item => {
@@ -1107,7 +1088,6 @@
             if (actionsList.length > 0) {
               catalogActionsHtml = `<div style="display:flex; gap:4px; align-items:center; flex-wrap:wrap;">${actionsList.join('')}</div>`;
             }
-
             return `
               <tr>
                 <td><strong>${index + 1}</strong></td>
