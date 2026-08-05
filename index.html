@@ -1023,7 +1023,6 @@
     function handleGlobalSearch(query) {
       renderEnterpriseTable(enterpriseItems, query);
     }
-    // PDF HELPER: Open Base64 PDFs via Blob URLs to fix display issue
     function openPdfDocument(base64Data) {
       try {
         const parts = base64Data.split(';');
@@ -1038,7 +1037,6 @@
         const blobUrl = URL.createObjectURL(blob);
         window.open(blobUrl, '_blank');
       } catch (err) {
-        // Fallback direct open if base64 parsing fails
         window.open(base64Data, '_blank');
       }
     }
@@ -1102,8 +1100,8 @@
                 <td>
                   <div style="display:flex; gap:5px; align-items:center;">
                     <button class="btn-action" style="padding:4px 7px; background:var(--accent-amber); color:#020617;" onclick="openEditModal(${recordId})" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                    <a href="${catalogLink || '#'}" target="_blank" class="btn-action" style="padding:4px 7px; background:rgba(56,189,248,0.2); color:var(--accent-cyan); border-color:var(--accent-cyan); text-decoration:none; ${!catalogLink ? 'opacity:0.4; pointer-events:none;' : ''}" title="${catalogLink ? 'Open Website Link' : 'No link provided'}"><i class="fa-solid fa-link"></i> Link</a>
                     <button class="btn-action" style="padding:4px 7px; background:var(--accent-emerald); color:#020617;" onclick="openSaleModal(${recordId})" ${qty <= 0 ? 'disabled' : ''} title="Sell"><i class="fa-solid fa-cart-shopping"></i> Sell</button>
+                    <button class="btn-action" style="padding:4px 7px; background:var(--accent-rose); color:#fff;" onclick="deleteInventoryItem(${recordId})" title="Delete Row"><i class="fa-solid fa-trash"></i></button>
                   </div>
                 </td>
               </tr>`;
@@ -1131,8 +1129,9 @@
                 <td><strong style="color:${statusColor};">${item.expire_date || 'N/A'}</strong> ${statusKey === 'expired' ? '<span style="font-size:10px; background:rgba(244,63,94,0.2); color:var(--accent-rose); padding:1px 4px; border-radius:3px;">EXPIRED</span>' : ''}</td>
                 <td>
                   <div style="display:flex; gap:5px;">
-                    <button class="btn-action" style="padding:4px 7px; background:var(--accent-amber); color:#020617;" onclick="openEditModal(${recordId})"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn-action" style="padding:4px 7px; background:var(--accent-emerald); color:#020617;" onclick="openSaleModal(${recordId})" ${qty <= 0 ? 'disabled' : ''}><i class="fa-solid fa-cart-shopping"></i> Sell</button>
+                    <button class="btn-action" style="padding:4px 7px; background:var(--accent-amber); color:#020617;" onclick="openEditModal(${recordId})" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn-action" style="padding:4px 7px; background:var(--accent-emerald); color:#020617;" onclick="openSaleModal(${recordId})" ${qty <= 0 ? 'disabled' : ''} title="Sell"><i class="fa-solid fa-cart-shopping"></i> Sell</button>
+                    <button class="btn-action" style="padding:4px 7px; background:var(--accent-rose); color:#fff;" onclick="deleteInventoryItem(${recordId})" title="Delete Row"><i class="fa-solid fa-trash"></i></button>
                   </div>
                 </td>
               </tr>`;
@@ -1149,6 +1148,17 @@
       localItems = localItems.map(i => (i.id === id || i.id == id) ? { ...i, pdf_url: null } : i);
       localStorage.setItem('local_items_fallback', JSON.stringify(localItems));
       addAuditEntry("PDF Deleted", `Removed catalogue PDF from item ID ${id}`);
+      loadEnterpriseData();
+    }
+    async function deleteInventoryItem(id) {
+      if (!confirm("Are you sure you want to completely delete this item row from inventory?")) return;
+      if (db) {
+        try { await db.from('items').delete().eq('id', id); } catch(err) {}
+      }
+      let localItems = JSON.parse(localStorage.getItem('local_items_fallback') || '[]');
+      localItems = localItems.filter(i => i.id !== id && i.id != id);
+      localStorage.setItem('local_items_fallback', JSON.stringify(localItems));
+      addAuditEntry("Asset Deleted", `Removed item ID ${id} from inventory`);
       loadEnterpriseData();
     }
     function convertFileToBase64(file) {
