@@ -1100,9 +1100,10 @@
                 <td><strong style="color:var(--accent-cyan);">${item.price} ETB</strong></td>
                 <td>${catalogActionsHtml}</td>
                 <td>
-                  <div style="display:flex; gap:5px;">
-                    <button class="btn-action" style="padding:4px 7px; background:var(--accent-amber); color:#020617;" onclick="openEditModal(${recordId})"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn-action" style="padding:4px 7px; background:var(--accent-emerald); color:#020617;" onclick="openSaleModal(${recordId})" ${qty <= 0 ? 'disabled' : ''}><i class="fa-solid fa-cart-shopping"></i> Sell</button>
+                  <div style="display:flex; gap:5px; align-items:center;">
+                    <button class="btn-action" style="padding:4px 7px; background:var(--accent-amber); color:#020617;" onclick="openEditModal(${recordId})" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                    <a href="${catalogLink || '#'}" target="_blank" class="btn-action" style="padding:4px 7px; background:rgba(56,189,248,0.2); color:var(--accent-cyan); border-color:var(--accent-cyan); text-decoration:none; ${!catalogLink ? 'opacity:0.4; pointer-events:none;' : ''}" title="${catalogLink ? 'Open Website Link' : 'No link provided'}"><i class="fa-solid fa-link"></i> Link</a>
+                    <button class="btn-action" style="padding:4px 7px; background:var(--accent-emerald); color:#020617;" onclick="openSaleModal(${recordId})" ${qty <= 0 ? 'disabled' : ''} title="Sell"><i class="fa-solid fa-cart-shopping"></i> Sell</button>
                   </div>
                 </td>
               </tr>`;
