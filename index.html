@@ -34,7 +34,7 @@
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, #090d16 60%, #030508 100%);
       display: flex; justify-content: center; align-items: center; z-index: 9999;
-      overflow: hidden;
+      overflow: hidden; padding: 20px;
     }
     #auth-overlay::before {
       content: ''; position: absolute; width: 500px; height: 500px;
@@ -56,8 +56,30 @@
       0% { transform: translateY(0px) scale(1); }
       100% { transform: translateY(-50px) scale(1.15); }
     }
-    .auth-card {
+    .auth-container {
       position: relative; z-index: 2;
+      display: flex; gap: 40px; align-items: center; max-width: 880px; width: 100%;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .auth-intro-panel {
+      flex: 1; min-width: 320px; text-align: left;
+    }
+    .auth-intro-panel h1 {
+      font-size: 28px; font-weight: 800; color: var(--text-main); margin-bottom: 12px; line-height: 1.3;
+    }
+    .auth-intro-panel h1 span { color: var(--accent-cyan); }
+    .auth-intro-panel p {
+      color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px;
+    }
+    .auth-feature-list {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .auth-feature-item {
+      display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-muted);
+    }
+    .auth-feature-item i { color: var(--accent-emerald); font-size: 14px; }
+
+    .auth-card {
       background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -65,6 +87,7 @@
       width: 100%; max-width: 420px; padding: 45px 40px;
       box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       text-align: center;
+      flex-shrink: 0;
     }
     .auth-logo-badge {
       width: 68px; height: 68px;
@@ -291,26 +314,37 @@
 <body>
   <!-- AUTH SCREEN -->
   <div id="auth-overlay">
-    <div class="auth-card">
-      <div class="auth-logo-badge">
-        <i class="fa-solid fa-fingerprint"></i>
+    <div class="auth-container">
+      <div class="auth-intro-panel">
+        <h1>Welcome to <span>Lab Aid Trading PLC</span> Inventory System</h1>
+        <p>A professional enterprise-grade platform built to streamline stock management, technical catalog tracking, chemical shelf-life monitoring, and institutional tender dispatches with precision and security.</p>
+        <div class="auth-feature-list">
+          <div class="auth-feature-item"><i class="fa-solid fa-circle-check"></i> Real-time cloud synchronized asset directories</div>
+          <div class="auth-feature-item"><i class="fa-solid fa-circle-check"></i> Automated alphabetical sorting & stock analytics</div>
+          <div class="auth-feature-item"><i class="fa-solid fa-circle-check"></i> Secure role-based workstation authentication</div>
+        </div>
       </div>
-      <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.3px;">Workstation Portal</h2>
-      <p style="color: var(--text-muted); font-size: 13px; margin: 0 0 24px 0;">Lab Aid Trading PLC Enterprise Security</p>
-      <form onsubmit="handleLogin(event)">
-        <div class="form-group" style="text-align: left;">
-          <label>Username</label>
-          <div style="position:relative;"><i class="fa-solid fa-user-shield" style="position:absolute; left:15px; top:14px; color:var(--text-muted); font-size:14px;"></i>
-          <input type="text" class="auth-control" id="login-user" required placeholder="Lab Aid"></div>
+      <div class="auth-card">
+        <div class="auth-logo-badge">
+          <i class="fa-solid fa-fingerprint"></i>
         </div>
-        <div class="form-group" style="text-align: left; margin-top: 14px;">
-          <label>Password</label>
-          <div style="position:relative;"><i class="fa-solid fa-key" style="position:absolute; left:15px; top:14px; color:var(--text-muted); font-size:14px;"></i>
-          <input type="password" class="auth-control" id="login-pass" required placeholder="••••••••"></div>
-        </div>
-        <div id="login-error" style="color: var(--accent-rose); font-size: 12px; margin-top: 10px; display: none;"><i class="fa-solid fa-circle-exclamation"></i> Invalid credentials supplied.</div>
-        <button type="submit" class="auth-btn">Authenticate Session <i class="fa-solid fa-arrow-right-to-bracket" style="margin-left: 6px;"></i></button>
-      </form>
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.3px;">Workstation Portal</h2>
+        <p style="color: var(--text-muted); font-size: 13px; margin: 0 0 24px 0;">Lab Aid Trading PLC Enterprise Security</p>
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group" style="text-align: left;">
+            <label>Username</label>
+            <div style="position:relative;"><i class="fa-solid fa-user-shield" style="position:absolute; left:15px; top:14px; color:var(--text-muted); font-size:14px;"></i>
+            <input type="text" class="auth-control" id="login-user" required placeholder="Lab Aid"></div>
+          </div>
+          <div class="form-group" style="text-align: left; margin-top: 14px;">
+            <label>Password</label>
+            <div style="position:relative;"><i class="fa-solid fa-key" style="position:absolute; left:15px; top:14px; color:var(--text-muted); font-size:14px;"></i>
+            <input type="password" class="auth-control" id="login-pass" required placeholder="••••••••"></div>
+          </div>
+          <div id="login-error" style="color: var(--accent-rose); font-size: 12px; margin-top: 10px; display: none;"><i class="fa-solid fa-circle-exclamation"></i> Invalid credentials supplied.</div>
+          <button type="submit" class="auth-btn">Authenticate Session <i class="fa-solid fa-arrow-right-to-bracket" style="margin-left: 6px;"></i></button>
+        </form>
+      </div>
     </div>
   </div>
   <!-- NAVBAR -->
@@ -779,14 +813,17 @@
       let itemsData = [];
       if (db) {
         try {
-          const res = await db.from('items').select('*').order('id', { ascending: false });
+          const res = await db.from('items').select('*').order('item_name', { ascending: true });
           itemsData = res.data || [];
         } catch(e) { itemsData = []; }
       }
       if (!itemsData.length) {
         itemsData = JSON.parse(localStorage.getItem('local_items_fallback') || '[]');
       }
+      // Ensure alphabetical sorting A-Z on item names
+      itemsData.sort((a, b) => (a.item_name || '').localeCompare(b.item_name || ''));
       enterpriseItems = itemsData;
+
       let salesData = [];
       if (db) {
         try {
@@ -1023,7 +1060,6 @@
     function handleGlobalSearch(query) {
       renderEnterpriseTable(enterpriseItems, query);
     }
-    // PDF HELPER: Open Base64 PDFs via Blob URLs to fix display issue
     function openPdfDocument(base64Data) {
       try {
         const parts = base64Data.split(';');
@@ -1038,7 +1074,6 @@
         const blobUrl = URL.createObjectURL(blob);
         window.open(blobUrl, '_blank');
       } catch (err) {
-        // Fallback direct open if base64 parsing fails
         window.open(base64Data, '_blank');
       }
     }
@@ -1053,6 +1088,10 @@
         const cas = (item.cas_number || '').toLowerCase();
         return name.includes(query) || cat.includes(query) || brand.includes(query) || model.includes(query) || cas.includes(query);
       });
+
+      // Ensure alphabetical order A to Z on rendered subsets
+      filteredItems.sort((a, b) => (a.item_name || '').localeCompare(b.item_name || ''));
+
       const thead = document.getElementById('ent-table-head');
       const tbody = document.getElementById('ent-table-body');
       const chemThead = document.getElementById('chem-table-head');
@@ -1102,7 +1141,6 @@
                 <td>
                   <div style="display:flex; gap:5px; align-items:center;">
                     <button class="btn-action" style="padding:4px 7px; background:var(--accent-amber); color:#020617;" onclick="openEditModal(${recordId})" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                    <a href="${catalogLink || '#'}" target="_blank" class="btn-action" style="padding:4px 7px; background:rgba(56,189,248,0.2); color:var(--accent-cyan); border-color:var(--accent-cyan); text-decoration:none; ${!catalogLink ? 'opacity:0.4; pointer-events:none;' : ''}" title="${catalogLink ? 'Open Website Link' : 'No link provided'}"><i class="fa-solid fa-link"></i> Link</a>
                     <button class="btn-action" style="padding:4px 7px; background:var(--accent-emerald); color:#020617;" onclick="openSaleModal(${recordId})" ${qty <= 0 ? 'disabled' : ''} title="Sell"><i class="fa-solid fa-cart-shopping"></i> Sell</button>
                   </div>
                 </td>
