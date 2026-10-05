@@ -1456,6 +1456,7 @@
       if (!item) return;
       document.getElementById('sale-item-id').value = item.id;
       document.getElementById('sale-item-name').value = item.item_name;
+      document.getElementById('sale-invoice-number').value = '';
       document.getElementById('sale-item-summary').innerHTML = `<strong>${item.item_name}</strong> | Available Stock: <span style="color:var(--accent-cyan); font-weight:700;">${item.quantity} ${item.unit_of_measure || ''}</span>`;
       document.getElementById('sale-unit-price').value = item.price;
       document.getElementById('sale-qty').value = 1;
