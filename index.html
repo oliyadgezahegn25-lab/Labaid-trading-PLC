@@ -1550,7 +1550,7 @@
       c.innerHTML=records.map(s=>{
         const qty=parseFloat(s.quantity)||0, unitPrice=parseFloat(s.unit_price)||0;
         const total=parseFloat(s.total_price)||(qty*unitPrice);
-        const invoiceNo='INV-'+String(s.id||'').slice(-8), client=s.client_name||s.organization||'N/A';
+        const invoiceNo=s.invoice_number||('INV-'+String(s.id||'').slice(-8)), client=s.client_name||s.organization||'N/A';
         return `
         <div class="sale-msg-card" onclick="this.classList.toggle('expanded')">
           <div class="sale-summary">
