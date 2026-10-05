@@ -1471,20 +1471,33 @@
 
     function renderSalesHistoryDrawer() {
       const c = document.getElementById('sales-history-container');
-      if (!salesHistory.length) { c.innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:12px;">No sales recorded.</div>`; return; }
-      c.innerHTML = salesHistory.map(s => `
+      if (!salesHistory.length) { c.innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:12px; padding:30px;">No sales recorded.</div>`; return; }
+      c.innerHTML = salesHistory.map(s => {
+        const qty = parseFloat(s.quantity) || 0;
+        const unitPrice = parseFloat(s.unit_price) || 0;
+        const total = parseFloat(s.total_price) || (qty * unitPrice);
+        const invoiceNo = 'INV-' + String(s.id || '').slice(-8);
+        return `
         <div class="sale-msg-card" onclick="this.classList.toggle('expanded')">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <strong>${s.item_name}</strong>
-            <span style="color:var(--accent-emerald); font-weight:700;">${parseFloat(s.total_price).toLocaleString()} ETB</span>
+          <div class="invoice-topbar">
+            <div><div class="invoice-company">LAB AID TRADING PLC</div><div class="invoice-label">Sales Invoice / Dispatch Record</div></div>
+            <div><div class="invoice-number">${invoiceNo}</div><div class="invoice-label" style="text-align:right;">${s.sale_date || 'N/A'}</div></div>
           </div>
-          <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Client: ${s.client_name} | Qty: ${s.quantity}</div>
-          <div class="sale-msg-body">
-            <div><strong>Sale Type:</strong> ${s.sale_type}</div>
-            <div><strong>Date:</strong> ${s.sale_date}</div>
+          <div class="invoice-body">
+            <div class="invoice-meta">
+              <div><div class="invoice-meta-label">Bill To / Destination</div><div class="invoice-meta-value">${s.client_name || 'N/A'}</div></div>
+              <div><div class="invoice-meta-label">Transaction Type</div><div class="invoice-meta-value">${s.sale_type || 'Sell'}</div></div>
+            </div>
+            <table class="invoice-table">
+              <thead><tr><th style="text-align:left;">DESCRIPTION</th><th style="text-align:center;">QTY</th><th style="text-align:right;">UNIT PRICE</th><th style="text-align:right;">AMOUNT</th></tr></thead>
+              <tbody><tr><td><strong>${s.item_name}</strong></td><td style="text-align:center;">${qty}</td><td style="text-align:right;">${unitPrice.toLocaleString()} ETB</td><td style="text-align:right;"><strong>${total.toLocaleString()} ETB</strong></td></tr></tbody>
+            </table>
+            <div class="invoice-total-row"><div class="invoice-total-box"><div class="invoice-total-label">Grand Total</div><div class="invoice-total-value">${total.toLocaleString()} ETB</div></div></div>
+            <div class="invoice-footer"><i class="fa-solid fa-circle-check"></i> Recorded & Dispatched • Click invoice to expand details</div>
+            <div class="sale-msg-body"><div style="font-size:11px;color:#64748b;padding-top:10px;"><strong>Reference:</strong> ${invoiceNo} &nbsp; | &nbsp; <strong>Transaction Date:</strong> ${s.sale_date || 'N/A'}</div></div>
           </div>
-        </div>
-      `).join('');
+        </div>`;
+      }).join('');
     }
 
     function openExportModal() {
