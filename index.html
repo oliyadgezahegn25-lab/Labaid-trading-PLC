@@ -303,13 +303,34 @@
     .side-drawer.open { right: 0; }
     @media (max-width: 700px) { .side-drawer { width: 96vw; } #sales-history-search, #sales-history-sort, #sales-history-date { min-width:0; } }
 
-    .sale-msg-card {
-      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-light);
-      border-radius: 12px; padding: 14px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s ease;
-    }
-    .sale-msg-card:hover { background: rgba(255, 255, 255, 0.06); border-color: var(--accent-emerald); }
-    .sale-msg-body { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-light); font-size: 12px; color: var(--text-muted); }
-    .sale-msg-card.expanded .sale-msg-body { display: block; }
+    .sales-history-controls { display:grid; grid-template-columns:1fr; gap:8px; margin-bottom:14px; }
+    .sales-history-control-row { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:8px; }
+    .sale-msg-card { background:rgba(255,255,255,.035); border:1px solid var(--border-light); border-radius:12px; margin-bottom:9px; overflow:hidden; cursor:pointer; transition:all .2s ease; }
+    .sale-msg-card:hover { background:rgba(255,255,255,.06); border-color:rgba(16,185,129,.55); }
+    .sale-summary { display:grid; grid-template-columns:minmax(0,1fr) auto auto auto auto; align-items:center; gap:12px; padding:12px 13px; }
+    .sale-summary-main { min-width:0; }
+    .sale-summary-item { font-size:12.5px; font-weight:800; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .sale-summary-client { font-size:10.5px; color:var(--text-muted); margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .sale-summary-cell { text-align:right; white-space:nowrap; }
+    .sale-summary-label { font-size:8.5px; color:#64748b; text-transform:uppercase; letter-spacing:.5px; }
+    .sale-summary-value { font-size:11px; color:#e2e8f0; margin-top:2px; font-weight:700; }
+    .sale-summary-total { color:var(--accent-emerald); }
+    .sale-expand-icon { color:#64748b; font-size:11px; transition:transform .2s ease; }
+    .sale-msg-card.expanded .sale-expand-icon { transform:rotate(180deg); color:var(--accent-cyan); }
+    .sale-msg-body { display:none; padding:0 13px 13px; border-top:1px solid var(--border-light); font-size:12px; color:var(--text-muted); }
+    .sale-msg-card.expanded .sale-msg-body { display:block; }
+    .sale-detail-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:12px; }
+    .sale-detail-box { background:rgba(0,0,0,.2); border:1px solid var(--border-light); border-radius:9px; padding:9px; }
+    .sale-detail-label { font-size:9px; color:#64748b; text-transform:uppercase; letter-spacing:.5px; }
+    .sale-detail-value { font-size:11px; color:#e2e8f0; margin-top:4px; font-weight:600; word-break:break-word; }
+    .sale-email-box { margin-top:10px; padding:11px; border-radius:9px; background:rgba(56,189,248,.06); border:1px solid rgba(56,189,248,.2); }
+    .sale-email-box strong { color:#bae6fd; }
+    .sale-invoice-mini { margin-top:10px; border:1px solid var(--border-light); border-radius:9px; overflow:hidden; }
+    .sale-invoice-mini-head,.sale-invoice-mini-row { display:grid; grid-template-columns:1fr 55px 90px; gap:8px; padding:8px 10px; align-items:center; }
+    .sale-invoice-mini-head { background:rgba(0,0,0,.25); font-size:8.5px; color:#64748b; text-transform:uppercase; }
+    .sale-invoice-mini-row { font-size:10.5px; color:#e2e8f0; }
+    .sale-invoice-mini-row>:not(:first-child),.sale-invoice-mini-head>:not(:first-child) { text-align:right; }
+    @media (max-width:700px) { .sales-history-control-row { grid-template-columns:1fr; } .sale-summary { grid-template-columns:minmax(0,1fr) auto; } .sale-summary-cell:nth-of-type(2),.sale-summary-cell:nth-of-type(3) { display:none; } .sale-detail-grid { grid-template-columns:1fr; } }
 
     #tour-floating-box {
       position: fixed; bottom: 25px; right: 25px; width: 350px;
@@ -753,9 +774,24 @@
 
   <!-- SALES HISTORY DRAWER -->
   <div id="sales-drawer" class="side-drawer">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-light); padding-bottom: 14px;">
-      <h3 style="margin: 0; color: var(--accent-emerald); font-size: 16px;"><i class="fa-solid fa-receipt"></i> Sales History</h3>
-      <button onclick="toggleSalesDrawer()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">&times;</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid var(--border-light);padding-bottom:12px;">
+      <h3 style="margin:0;color:var(--accent-emerald);font-size:16px;"><i class="fa-solid fa-receipt"></i> Sales History</h3>
+      <button onclick="toggleSalesDrawer()" style="background:none;border:none;color:white;font-size:20px;cursor:pointer;">&times;</button>
+    </div>
+    <div class="sales-history-controls">
+      <input id="sales-history-search" class="form-control" placeholder="Search item or university / destination..." oninput="renderSalesHistoryDrawer()">
+      <div class="sales-history-control-row">
+        <select id="sales-history-sort" class="form-control" onchange="renderSalesHistoryDrawer()">
+          <option value="date-desc">Newest first</option><option value="date-asc">Oldest first</option>
+          <option value="item-asc">Item A–Z</option><option value="item-desc">Item Z–A</option>
+          <option value="client-asc">University A–Z</option><option value="client-desc">University Z–A</option>
+        </select>
+        <select id="sales-history-date" class="form-control" onchange="renderSalesHistoryDrawer()">
+          <option value="all">All dates</option><option value="today">Today</option><option value="week">Last 7 days</option>
+          <option value="month">Last 30 days</option><option value="year">Last 365 days</option>
+        </select>
+        <div id="sales-history-count" style="display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:10px;border:1px solid var(--border-light);border-radius:8px;padding:8px;">0 records</div>
+      </div>
     </div>
     <div id="sales-history-container"></div>
   </div>
@@ -1481,63 +1517,56 @@
     function toggleAuditDrawer() { document.getElementById('audit-drawer').classList.toggle('open'); }
 
     function renderSalesHistoryDrawer() {
-      const c = document.getElementById('sales-history-container');
-      const search = (document.getElementById('sales-history-search')?.value || '').trim().toLowerCase();
-      const sort = document.getElementById('sales-history-sort')?.value || 'date-desc';
-      const dateFilter = document.getElementById('sales-history-date')?.value || 'all';
-
-      const now = new Date();
-      const startDate = new Date(now);
-      if (dateFilter === 'today') startDate.setHours(0,0,0,0);
-      if (dateFilter === 'week') startDate.setDate(now.getDate() - 7);
-      if (dateFilter === 'month') startDate.setDate(now.getDate() - 30);
-      if (dateFilter === 'year') startDate.setDate(now.getDate() - 365);
-
-      let records = [...salesHistory].filter(s => {
-        const haystack = [s.item_name, s.client_name, s.organization].filter(Boolean).join(' ').toLowerCase();
-        if (search && !haystack.includes(search)) return false;
-        if (dateFilter !== 'all' && s.sale_date) {
-          const d = new Date(s.sale_date + 'T23:59:59');
-          if (dateFilter === 'today' && d.toDateString() !== now.toDateString()) return false;
-          if (dateFilter !== 'today' && d < startDate) return false;
+      const c=document.getElementById('sales-history-container');
+      const search=(document.getElementById('sales-history-search')?.value||'').trim().toLowerCase();
+      const sort=document.getElementById('sales-history-sort')?.value||'date-desc';
+      const dateFilter=document.getElementById('sales-history-date')?.value||'all';
+      const now=new Date(), startDate=new Date(now);
+      if(dateFilter==='today') startDate.setHours(0,0,0,0);
+      if(dateFilter==='week') startDate.setDate(now.getDate()-7);
+      if(dateFilter==='month') startDate.setDate(now.getDate()-30);
+      if(dateFilter==='year') startDate.setDate(now.getDate()-365);
+      let records=[...salesHistory].filter(s=>{
+        const haystack=[s.item_name,s.client_name,s.organization].filter(Boolean).join(' ').toLowerCase();
+        if(search&&!haystack.includes(search)) return false;
+        if(dateFilter!=='all'&&s.sale_date){
+          const d=new Date(s.sale_date+'T23:59:59');
+          if(dateFilter==='today'&&d.toDateString()!==now.toDateString()) return false;
+          if(dateFilter!=='today'&&d<startDate) return false;
         }
         return true;
       });
-
-      records.sort((a,b) => {
-        if (sort === 'item-asc' || sort === 'item-desc') return (a.item_name||'').localeCompare(b.item_name||'') * (sort === 'item-asc' ? 1 : -1);
-        if (sort === 'client-asc' || sort === 'client-desc') return (a.client_name||a.organization||'').localeCompare(b.client_name||b.organization||'') * (sort === 'client-asc' ? 1 : -1);
-        return ((new Date(a.sale_date || 0)) - (new Date(b.sale_date || 0))) * (sort === 'date-asc' ? 1 : -1);
+      records.sort((a,b)=>{
+        if(sort==='item-asc'||sort==='item-desc') return (a.item_name||'').localeCompare(b.item_name||'')*(sort==='item-asc'?1:-1);
+        if(sort==='client-asc'||sort==='client-desc') return (a.client_name||a.organization||'').localeCompare(b.client_name||b.organization||'')*(sort==='client-asc'?1:-1);
+        return (new Date(a.sale_date||0)-new Date(b.sale_date||0))*(sort==='date-asc'?1:-1);
       });
-
-      if (!records.length) {
-        c.innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:12px;padding:30px;">No matching sales records.</div>';
-        return;
-      }
-
-      c.innerHTML = records.map(s => {
-        const qty = parseFloat(s.quantity) || 0;
-        const unitPrice = parseFloat(s.unit_price) || 0;
-        const total = parseFloat(s.total_price) || (qty * unitPrice);
-        const invoiceNo = 'INV-' + String(s.id || '').slice(-8);
+      const countEl=document.getElementById('sales-history-count');
+      if(countEl) countEl.textContent=records.length+(records.length===1?' record':' records');
+      if(!records.length){ c.innerHTML='<div style="text-align:center;color:var(--text-muted);font-size:12px;padding:30px;">No matching sales records.</div>'; return; }
+      c.innerHTML=records.map(s=>{
+        const qty=parseFloat(s.quantity)||0, unitPrice=parseFloat(s.unit_price)||0;
+        const total=parseFloat(s.total_price)||(qty*unitPrice);
+        const invoiceNo='INV-'+String(s.id||'').slice(-8), client=s.client_name||s.organization||'N/A';
         return `
         <div class="sale-msg-card" onclick="this.classList.toggle('expanded')">
-          <div class="invoice-topbar">
-            <div><div class="invoice-company">LAB AID TRADING PLC</div><div class="invoice-label">Sales Invoice / Dispatch Record</div></div>
-            <div><div class="invoice-number">${invoiceNo}</div><div class="invoice-label" style="text-align:right;">${s.sale_date || 'N/A'}</div></div>
+          <div class="sale-summary">
+            <div class="sale-summary-main"><div class="sale-summary-item">${s.item_name||'N/A'}</div><div class="sale-summary-client"><i class="fa-solid fa-building-columns"></i> ${client}</div></div>
+            <div class="sale-summary-cell"><div class="sale-summary-label">Qty</div><div class="sale-summary-value">${qty}</div></div>
+            <div class="sale-summary-cell"><div class="sale-summary-label">Total</div><div class="sale-summary-value sale-summary-total">${total.toLocaleString()} ETB</div></div>
+            <div class="sale-summary-cell"><div class="sale-summary-label">Date</div><div class="sale-summary-value">${s.sale_date||'N/A'}</div></div>
+            <i class="fa-solid fa-chevron-down sale-expand-icon"></i>
           </div>
-          <div class="invoice-body">
-            <div class="invoice-meta">
-              <div><div class="invoice-meta-label">Bill To / Destination</div><div class="invoice-meta-value">${s.client_name || s.organization || 'N/A'}</div></div>
-              <div><div class="invoice-meta-label">Transaction Type</div><div class="invoice-meta-value">${s.sale_type || 'Sell'}</div></div>
+          <div class="sale-msg-body">
+            <div class="sale-detail-grid">
+              <div class="sale-detail-box"><div class="sale-detail-label">Invoice</div><div class="sale-detail-value">${invoiceNo}</div></div>
+              <div class="sale-detail-box"><div class="sale-detail-label">Transaction Type</div><div class="sale-detail-value">${s.sale_type||'Sell'}</div></div>
+              <div class="sale-detail-box"><div class="sale-detail-label">University / Destination</div><div class="sale-detail-value">${client}</div></div>
+              <div class="sale-detail-box"><div class="sale-detail-label">Transaction Date</div><div class="sale-detail-value">${s.sale_date||'N/A'}</div></div>
             </div>
-            <table class="invoice-table">
-              <thead><tr><th style="text-align:left;">DESCRIPTION</th><th style="text-align:center;">QTY</th><th style="text-align:right;">UNIT PRICE</th><th style="text-align:right;">AMOUNT</th></tr></thead>
-              <tbody><tr><td><strong>${s.item_name || 'N/A'}</strong></td><td style="text-align:center;">${qty}</td><td style="text-align:right;">${unitPrice.toLocaleString()} ETB</td><td style="text-align:right;"><strong>${total.toLocaleString()} ETB</strong></td></tr></tbody>
-            </table>
-            <div class="invoice-total-row"><div class="invoice-total-box"><div class="invoice-total-label">Grand Total</div><div class="invoice-total-value">${total.toLocaleString()} ETB</div></div></div>
-            <div class="invoice-footer"><i class="fa-solid fa-circle-check"></i> Recorded & Dispatched • Click invoice to expand details</div>
-            <div class="sale-msg-body"><div style="font-size:11px;color:#64748b;padding-top:10px;"><strong>Reference:</strong> ${invoiceNo} &nbsp; | &nbsp; <strong>Transaction Date:</strong> ${s.sale_date || 'N/A'}</div></div>
+            <div class="sale-invoice-mini"><div class="sale-invoice-mini-head"><span>Description</span><span>Qty</span><span>Amount</span></div><div class="sale-invoice-mini-row"><strong>${s.item_name||'N/A'}</strong><span>${qty}</span><strong>${total.toLocaleString()} ETB</strong></div></div>
+            <div class="sale-email-box"><div><i class="fa-solid fa-envelope"></i> <strong>Email notification</strong></div><div style="margin-top:5px;font-size:10.5px;">Automatic sale notification destination: <strong>oliyadgezahegn25@gmail.com</strong></div><div style="margin-top:5px;font-size:10px;color:#64748b;">The email contains the invoice, item, quantity, price, total, destination, transaction type, and sale date.</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:10px;color:#64748b;"><span><i class="fa-solid fa-circle-check" style="color:var(--accent-emerald);"></i> Recorded & Dispatched</span><span>Click to collapse</span></div>
           </div>
         </div>`;
       }).join('');
