@@ -707,6 +707,7 @@
       <form id="sale-form" onsubmit="handleSaleSubmit(event)">
         <input type="hidden" id="sale-item-id">
         <input type="hidden" id="sale-item-name">
+        <div class="form-group"><label>Invoice Number</label><input type="text" class="form-control" id="sale-invoice-number" placeholder="e.g. LTP/INV/2026/0047" required></div>
         <div class="form-group"><label>Destination / Client Name</label><input type="text" class="form-control" id="sale-client" placeholder="e.g. Bule Hora University / Regional Hospital" required></div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
           <div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="sale-qty" min="1" required></div>
