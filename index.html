@@ -301,6 +301,7 @@
       box-shadow: -10px 0 30px rgba(0,0,0,0.7); transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 150; padding: 22px; overflow-y: auto;
     }
     .side-drawer.open { right: 0; }
+    @media (max-width: 700px) { .side-drawer { width: 96vw; } #sales-history-search, #sales-history-sort, #sales-history-date { min-width:0; } }
 
     .sale-msg-card {
       background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-light);
@@ -1460,6 +1461,16 @@
       localItems = localItems.map(i => (i.id === itemId || i.id == itemId) ? { ...i, quantity: newQty } : i);
       localStorage.setItem('local_items_fallback', JSON.stringify(localItems));
 
+      // Send an automatic email notification after the sale is recorded.
+      if (db) {
+        try {
+          const { error: emailError } = await db.functions.invoke('send-sale-email', { body: { sale: saleRecord } });
+          if (emailError) showToast("Sale saved, but email notification could not be sent.", "info");
+          else showToast("Sale saved and email notification sent.", "success");
+        } catch (emailErr) {
+          showToast("Sale saved, but email notification could not be sent.", "info");
+        }
+      }
       showToast(`Checkout completed! Dispatched ${qtySold}x ${saleRecord.item_name}`, "success");
       addAuditEntry("Sale Recorded", `Dispatched ${qtySold}x "${saleRecord.item_name}" to ${saleRecord.client_name} (${saleRecord.sale_type})`);
       closeSaleModal();
@@ -1471,8 +1482,40 @@
 
     function renderSalesHistoryDrawer() {
       const c = document.getElementById('sales-history-container');
-      if (!salesHistory.length) { c.innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:12px; padding:30px;">No sales recorded.</div>`; return; }
-      c.innerHTML = salesHistory.map(s => {
+      const search = (document.getElementById('sales-history-search')?.value || '').trim().toLowerCase();
+      const sort = document.getElementById('sales-history-sort')?.value || 'date-desc';
+      const dateFilter = document.getElementById('sales-history-date')?.value || 'all';
+
+      const now = new Date();
+      const startDate = new Date(now);
+      if (dateFilter === 'today') startDate.setHours(0,0,0,0);
+      if (dateFilter === 'week') startDate.setDate(now.getDate() - 7);
+      if (dateFilter === 'month') startDate.setDate(now.getDate() - 30);
+      if (dateFilter === 'year') startDate.setDate(now.getDate() - 365);
+
+      let records = [...salesHistory].filter(s => {
+        const haystack = [s.item_name, s.client_name, s.organization].filter(Boolean).join(' ').toLowerCase();
+        if (search && !haystack.includes(search)) return false;
+        if (dateFilter !== 'all' && s.sale_date) {
+          const d = new Date(s.sale_date + 'T23:59:59');
+          if (dateFilter === 'today' && d.toDateString() !== now.toDateString()) return false;
+          if (dateFilter !== 'today' && d < startDate) return false;
+        }
+        return true;
+      });
+
+      records.sort((a,b) => {
+        if (sort === 'item-asc' || sort === 'item-desc') return (a.item_name||'').localeCompare(b.item_name||'') * (sort === 'item-asc' ? 1 : -1);
+        if (sort === 'client-asc' || sort === 'client-desc') return (a.client_name||a.organization||'').localeCompare(b.client_name||b.organization||'') * (sort === 'client-asc' ? 1 : -1);
+        return ((new Date(a.sale_date || 0)) - (new Date(b.sale_date || 0))) * (sort === 'date-asc' ? 1 : -1);
+      });
+
+      if (!records.length) {
+        c.innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:12px;padding:30px;">No matching sales records.</div>';
+        return;
+      }
+
+      c.innerHTML = records.map(s => {
         const qty = parseFloat(s.quantity) || 0;
         const unitPrice = parseFloat(s.unit_price) || 0;
         const total = parseFloat(s.total_price) || (qty * unitPrice);
@@ -1485,12 +1528,12 @@
           </div>
           <div class="invoice-body">
             <div class="invoice-meta">
-              <div><div class="invoice-meta-label">Bill To / Destination</div><div class="invoice-meta-value">${s.client_name || 'N/A'}</div></div>
+              <div><div class="invoice-meta-label">Bill To / Destination</div><div class="invoice-meta-value">${s.client_name || s.organization || 'N/A'}</div></div>
               <div><div class="invoice-meta-label">Transaction Type</div><div class="invoice-meta-value">${s.sale_type || 'Sell'}</div></div>
             </div>
             <table class="invoice-table">
               <thead><tr><th style="text-align:left;">DESCRIPTION</th><th style="text-align:center;">QTY</th><th style="text-align:right;">UNIT PRICE</th><th style="text-align:right;">AMOUNT</th></tr></thead>
-              <tbody><tr><td><strong>${s.item_name}</strong></td><td style="text-align:center;">${qty}</td><td style="text-align:right;">${unitPrice.toLocaleString()} ETB</td><td style="text-align:right;"><strong>${total.toLocaleString()} ETB</strong></td></tr></tbody>
+              <tbody><tr><td><strong>${s.item_name || 'N/A'}</strong></td><td style="text-align:center;">${qty}</td><td style="text-align:right;">${unitPrice.toLocaleString()} ETB</td><td style="text-align:right;"><strong>${total.toLocaleString()} ETB</strong></td></tr></tbody>
             </table>
             <div class="invoice-total-row"><div class="invoice-total-box"><div class="invoice-total-label">Grand Total</div><div class="invoice-total-value">${total.toLocaleString()} ETB</div></div></div>
             <div class="invoice-footer"><i class="fa-solid fa-circle-check"></i> Recorded & Dispatched • Click invoice to expand details</div>
