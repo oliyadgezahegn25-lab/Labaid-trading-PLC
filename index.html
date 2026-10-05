@@ -431,12 +431,9 @@
         <div class="form-group" id="tour-step-3-target">
           <label>Category</label>
           <select class="form-control" id="ent-category" onchange="toggleCategoryFields()" required>
-            <option value="Laboratory Equipment">Laboratory Equipment</option>
-            <option value="Educational & Lab Supplies">Educational & Lab Supplies</option>
-            <option value="Electrical & Power Supplies">Electrical & Power Supplies</option>
-            <option value="Agricultural Equipment">Agricultural Equipment</option>
-            <option value="Industrial Machinery">Industrial Machinery</option>
-            <option value="Chemicals & Reagents">Chemicals & Reagents</option>
+            <option value="Equipment">Equipment</option>
+            <option value="Discs">Discs</option>
+            <option value="Chemicals">Chemicals</option>
           </select>
         </div>
         <div class="form-group">
@@ -477,7 +474,7 @@
             <i class="fa-solid fa-microscope"></i> Lab Equipment & Supplies
           </button>
           <button class="tab-btn" id="tab-chemicals" onclick="switchEnterpriseView('chemicals')">
-            <i class="fa-solid fa-flask"></i> Chemicals & Reagents
+            <i class="fa-solid fa-flask"></i> Chemicals
           </button>
           <button class="tab-btn" id="tab-visuals" onclick="switchEnterpriseView('visuals')">
             <i class="fa-solid fa-chart-pie"></i> Visuals & Expiry Timelines
@@ -500,11 +497,8 @@
         <div class="filter-bar">
           <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;"><i class="fa-solid fa-filter"></i> Category Filter:</span>
           <button class="filter-pill active" id="eq-filter-all" onclick="setEquipmentFilter('all')">Show All</button>
-          <button class="filter-pill" id="eq-filter-lab-eq" onclick="setEquipmentFilter('Laboratory Equipment')">Laboratory Equipment</button>
-          <button class="filter-pill" id="eq-filter-lab-sup" onclick="setEquipmentFilter('Educational & Lab Supplies')">Educational & Lab Supplies</button>
-          <button class="filter-pill" id="eq-filter-elec" onclick="setEquipmentFilter('Electrical & Power Supplies')">Electrical & Power Supplies</button>
-          <button class="filter-pill" id="eq-filter-agri" onclick="setEquipmentFilter('Agricultural Equipment')">Agricultural Equipment</button>
-          <button class="filter-pill" id="eq-filter-ind" onclick="setEquipmentFilter('Industrial Machinery')">Industrial Machinery</button>
+          <button class="filter-pill" id="eq-filter-equipment" onclick="setEquipmentFilter('Equipment')">Equipment</button>
+          <button class="filter-pill" id="eq-filter-discs" onclick="setEquipmentFilter('Discs')">Discs</button>
         </div>
         <div class="table-container" id="tour-step-12-target">
           <table>
@@ -653,12 +647,9 @@
         <input type="hidden" id="edit-id">
         <div class="form-group"><label>Category</label>
           <select class="form-control" id="edit-category" onchange="toggleEditCategoryFields()">
-            <option value="Laboratory Equipment">Laboratory Equipment</option>
-            <option value="Educational & Lab Supplies">Educational & Lab Supplies</option>
-            <option value="Electrical & Power Supplies">Electrical & Power Supplies</option>
-            <option value="Agricultural Equipment">Agricultural Equipment</option>
-            <option value="Industrial Machinery">Industrial Machinery</option>
-            <option value="Chemicals & Reagents">Chemicals & Reagents</option>
+            <option value="Equipment">Equipment</option>
+            <option value="Discs">Discs</option>
+            <option value="Chemicals">Chemicals</option>
           </select>
         </div>
         <div class="form-group"><label>Item Name</label><input type="text" class="form-control" id="edit-name" required></div>
@@ -791,7 +782,7 @@
     const tourStepsDef = [
       { targetId: 'tour-step-1-target', title: 'Stage 1: Enterprise Brand Header', desc: 'Core navigation header running the Lab Aid Trading PLC Inventory with rapid action shortcuts.' },
       { targetId: 'tour-step-2-target', title: 'Stage 2: Asset Registration Sidebar', desc: 'Register new equipment, supplies, or chemicals directly into cloud storage.' },
-      { targetId: 'tour-step-3-target', title: 'Stage 3: Category Selector', desc: 'Select categories like Laboratory Equipment or Chemicals & Reagents.' },
+      { targetId: 'tour-step-3-target', title: 'Stage 3: Category Selector', desc: 'Select categories like Equipment or Chemicals.' },
       { targetId: 'tour-step-4-target', title: 'Stage 4: Sales History Drawer', desc: 'Track completed university and institutional dispatches with item-level breakdowns.' },
       { targetId: 'tour-step-5-target', title: 'Stage 5: Data Export & Import Center', desc: 'Download full inventory CSVs or import new batch inventory datasets.' },
       { targetId: 'tour-step-6-target', title: 'Stage 6: System Audit Logs', desc: 'Monitor workstation activity and administrative changes in real time.' },
@@ -947,7 +938,7 @@
       let oneYearFromNow = new Date();
       oneYearFromNow.setFullYear(now.getFullYear() + 1);
       let expiringSoon = enterpriseItems.filter(i => {
-        if (i.category !== "Chemicals & Reagents" || !i.expire_date) return false;
+        if (i.category !== "Chemicals" || !i.expire_date) return false;
         let exp = new Date(i.expire_date);
         return exp >= now && exp <= oneYearFromNow;
       }).length;
@@ -972,21 +963,8 @@
       equipmentCategoryFilter = catKey;
       document.querySelectorAll('#page-equipment .filter-pill').forEach(btn => btn.classList.remove('active'));
       const activeBtnId = catKey === 'all' ? 'eq-filter-all' :
-                          catKey === 'Laboratory Equipment' ? 'eq-filter-lab-eq' :
-                          catKey === 'Educational & Lab Supplies' ? 'eq-filter-lab-sup' :
-                          catKey === 'Electrical & Power Supplies' ? 'eq-filter-elec' :
-                          catKey === 'Agricultural Equipment' ? 'eq-filter-agri' : 'eq-filter-ind';
-      const btn = document.getElementById(activeBtnId);
-      if (btn) btn.classList.add('active');
-      renderEnterpriseTable(enterpriseItems, document.getElementById('global-search-input').value);
-    }
-
-    function setChemicalExpiryFilter(statusKey) {
-      chemicalExpiryFilter = statusKey;
-      document.querySelectorAll('#page-chemicals .filter-pill').forEach(btn => btn.classList.remove('active'));
-      const activeBtnId = statusKey === 'all' ? 'chem-filter-all' :
-                          statusKey === 'more_than_year' ? 'chem-filter-more1yr' :
-                          statusKey === 'less_than_year' ? 'chem-filter-less1yr' : 'chem-filter-expired';
+                          catKey === 'Equipment' ? 'eq-filter-equipment' :
+                          'eq-filter-discs';
       const btn = document.getElementById(activeBtnId);
       if (btn) btn.classList.add('active');
       renderEnterpriseTable(enterpriseItems, document.getElementById('global-search-input').value);
@@ -1005,7 +983,7 @@
 
     function renderExpiryTimelines() {
       const container = document.getElementById('expiry-timeline-list');
-      let chemicals = enterpriseItems.filter(i => i.category === "Chemicals & Reagents" && i.expire_date);
+      let chemicals = enterpriseItems.filter(i => i.category === "Chemicals" && i.expire_date);
       if (visualExpiryFilter !== 'all') {
         chemicals = chemicals.filter(chem => getChemExpiryStatus(chem.expire_date) === visualExpiryFilter);
       }
@@ -1053,7 +1031,7 @@
     }
 
     function exportVisualChemicals(mode) {
-      let targetChems = enterpriseItems.filter(i => i.category === "Chemicals & Reagents");
+      let targetChems = enterpriseItems.filter(i => i.category === "Chemicals");
       let exportFileName = "chemical_expiry_report.csv";
       if (mode === 'expired') {
         targetChems = targetChems.filter(c => getChemExpiryStatus(c.expire_date) === 'expired');
@@ -1133,12 +1111,12 @@
     }
 
     function toggleCategoryFields() {
-      const isChem = document.getElementById('ent-category').value === "Chemicals & Reagents";
+      const isChem = document.getElementById('ent-category').value === "Chemicals";
       document.getElementById('chem-special-fields').style.display = isChem ? 'block' : 'none';
       document.getElementById('standard-spec-fields').style.display = isChem ? 'none' : 'block';
     }
     function toggleEditCategoryFields() {
-      const isChem = document.getElementById('edit-category').value === "Chemicals & Reagents";
+      const isChem = document.getElementById('edit-category').value === "Chemicals";
       document.getElementById('edit-chem-fields').style.display = isChem ? 'block' : 'none';
       document.getElementById('edit-brand-model-group').style.display = isChem ? 'none' : 'grid';
       document.getElementById('edit-pdf-group').style.display = isChem ? 'none' : 'block';
@@ -1224,8 +1202,8 @@
       const chemThead = document.getElementById('chem-table-head');
       const chemTbody = document.getElementById('chem-table-body');
 
-      let equipmentItems = filteredItems.filter(item => item.category !== "Chemicals & Reagents");
-      let chemicalItems = filteredItems.filter(item => item.category === "Chemicals & Reagents");
+      let equipmentItems = filteredItems.filter(item => item.category !== "Chemicals");
+      let chemicalItems = filteredItems.filter(item => item.category === "Chemicals");
 
       if (equipmentCategoryFilter !== 'all') {
         equipmentItems = equipmentItems.filter(i => i.category === equipmentCategoryFilter);
@@ -1412,7 +1390,7 @@
         price: parseFloat(document.getElementById('edit-price').value) || 0,
         catalog_link: catalogLinkVal
       };
-      if (category === "Chemicals & Reagents") {
+      if (category === "Chemicals") {
         updated.cas_number = document.getElementById('edit-cas').value || null;
         updated.expire_date = document.getElementById('edit-expire').value || null;
         updated.brand = null; updated.model = null; updated.catalog_link = null;
@@ -1537,7 +1515,7 @@
           if (cols.length >= 2) {
             const newItem = {
               id: Date.now() + i,
-              category: cols[0] || 'Laboratory Equipment',
+              category: cols[0] || 'Equipment',
               item_name: cols[1] || 'Imported Asset',
               brand: cols[2] || '',
               model: cols[3] || '',
