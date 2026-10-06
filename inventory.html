@@ -528,7 +528,7 @@
           <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;"><i class="fa-solid fa-clock"></i> Expiry Status Filter:</span>
           <button class="filter-pill active" id="chem-filter-all" onclick="setChemicalExpiryFilter('all')">Show All</button>
           <button class="filter-pill emerald" id="chem-filter-more1yr" onclick="setChemicalExpiryFilter('more_than_year')">> 1 Year Remaining</button>
-          <button class="filter-pill amber" id="chem-filter-less1yr" onclick="setChemicalExpiryFilter('less_than_year')">< 1 Year Remaining</button>
+          <button class="filter-pill amber" id="chem-filter-less1yr" onclick="setChemicalExpiryFilter('less_than_year')">Less than 1 Year Remaining</button>
           <button class="filter-pill rose" id="chem-filter-expired" onclick="setChemicalExpiryFilter('expired')">Expired</button>
         </div>
         <div class="table-container">
@@ -956,11 +956,23 @@
     }
     function getChemExpiryStatus(expireDateStr) {
       if (!expireDateStr) return 'none';
+      
+      // Parse YYYY-MM-DD safely as a local calendar date so the filter does
+      // not shift by one day because of UTC/local timezone conversion.
+      const parts = String(expireDateStr).split('-').map(Number);
+      let exp;
+      if (parts.length === 3 && parts.every(Number.isFinite)) {
+        exp = new Date(parts[0], parts[1] - 1, parts[2]);
+      } else {
+        exp = new Date(expireDateStr);
+      }
+      if (Number.isNaN(exp.getTime())) return 'none';
+      exp.setHours(0,0,0,0);
+      
       const now = new Date();
       now.setHours(0,0,0,0);
-      const exp = new Date(expireDateStr);
-      exp.setHours(0,0,0,0);
-      const diffDays = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+      const diffDays = Math.floor((exp - now) / (1000 * 60 * 60 * 24));
+      
       if (diffDays < 0) return 'expired';
       if (diffDays <= 365) return 'less_than_year';
       return 'more_than_year';
@@ -1218,7 +1230,10 @@
         equipmentItems = equipmentItems.filter(i => i.category === equipmentCategoryFilter);
       }
       if (chemicalExpiryFilter !== 'all') {
-        chemicalItems = chemicalItems.filter(c => getChemExpiryStatus(c.expire_date) === chemicalExpiryFilter);
+        chemicalItems = chemicalItems.filter(c => {
+          const status = getChemExpiryStatus(c.expire_date);
+          return status === chemicalExpiryFilter;
+        });
       }
       if (currentView === 'equipment') {
         document.getElementById('table-record-count').textContent = `Showing ${equipmentItems.length} records`;
@@ -1618,39 +1633,3 @@
         let importedCount = 0;
         for (let i = 1; i < lines.length; i++) {
           const cols = lines[i].split(',').map(c => c.replace(/^"|"$/g, '').trim());
-          if (cols.length >= 3) {
-            const payload = {
-              id: Date.now() + i,
-              category: cols[1] || 'Equipment',
-              item_name: cols[2] || cols[0],
-              brand: cols[3] || null,
-              model: cols[4] || null,
-              unit_of_measure: cols[5] || 'Pcs',
-              quantity: parseInt(cols[6]) || 0,
-              price: parseFloat(cols[7]) || 0,
-              cas_number: cols[8] || null,
-              expire_date: cols[9] || null,
-              catalog_link: cols[10] || null
-            };
-            if (db) { try { await db.from('items').insert([payload]); } catch(err){} }
-            let localItems = JSON.parse(localStorage.getItem('local_items_fallback') || '[]');
-            localItems.unshift(payload);
-            localStorage.setItem('local_items_fallback', JSON.stringify(localItems));
-            importedCount++;
-          }
-        }
-        showToast(`Successfully imported ${importedCount} items!`, "success");
-        addAuditEntry("CSV Import", `Imported ${importedCount} items from CSV file.`);
-        closeExportModal();
-        loadEnterpriseData();
-      };
-      reader.readAsText(file);
-    }
-
-    // Initialize on page load
-    window.addEventListener('DOMContentLoaded', () => {
-      // Auto-load data if session already authenticated or start login
-    });
-  </script>
-</body>
-</html>
