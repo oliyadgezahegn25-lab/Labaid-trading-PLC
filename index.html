@@ -786,8 +786,8 @@
         <div class="filter-bar">
           <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;"><i class="fa-solid fa-clock"></i> Expiry Status Filter:</span>
           <button class="filter-pill active" id="chem-filter-all" onclick="setChemicalExpiryFilter('all')">Show All</button>
-          <button class="filter-pill emerald" id="chem-filter-more1yr" onclick="setChemicalExpiryFilter('more_than_year')">> 1 Year Remaining</button>
-          <button class="filter-pill amber" id="chem-filter-less1yr" onclick="setChemicalExpiryFilter('less_than_year')">< 1 Year Remaining</button>
+          <button class="filter-pill emerald" id="chem-filter-more1yr" onclick="setChemicalExpiryFilter('more_than_year')">More than 1 Year Remaining</button>
+          <button class="filter-pill amber" id="chem-filter-less1yr" onclick="setChemicalExpiryFilter('less_than_year')">Less than 1 Year Remaining</button>
           <button class="filter-pill rose" id="chem-filter-expired" onclick="setChemicalExpiryFilter('expired')">Expired</button>
         </div>
         <div class="table-container">
@@ -1244,11 +1244,18 @@
 
     function getChemExpiryStatus(expireDateStr) {
       if (!expireDateStr) return 'none';
+      const parts = String(expireDateStr).split('-').map(Number);
+      let exp;
+      if (parts.length === 3 && parts.every(Number.isFinite)) {
+        exp = new Date(parts[0], parts[1] - 1, parts[2]);
+      } else {
+        exp = new Date(expireDateStr);
+      }
+      if (Number.isNaN(exp.getTime())) return 'none';
+      exp.setHours(0,0,0,0);
       const now = new Date();
       now.setHours(0,0,0,0);
-      const exp = new Date(expireDateStr);
-      exp.setHours(0,0,0,0);
-      const diffDays = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+      const diffDays = Math.floor((exp - now) / (1000 * 60 * 60 * 24));
       if (diffDays < 0) return 'expired';
       if (diffDays <= 365) return 'less_than_year';
       return 'more_than_year';
@@ -1490,7 +1497,15 @@
         return name.includes(query) || cat.includes(query) || brand.includes(query) || model.includes(query) || cas.includes(query);
       });
 
-      filteredItems.sort((a, b) => (a.item_name || '').localeCompare(b.item_name || ''));
+      filteredItems.sort((a, b) => {
+        const aFeatured = String(a.item_name || '').toLowerCase().includes('bench top multimeter') ||
+          (String(a.item_name || '').toLowerCase().includes('multi meter') && a.catalog_link && a.pdf_url);
+        const bFeatured = String(b.item_name || '').toLowerCase().includes('bench top multimeter') ||
+          (String(b.item_name || '').toLowerCase().includes('multi meter') && b.catalog_link && b.pdf_url);
+        if (aFeatured && !bFeatured) return -1;
+        if (!aFeatured && bFeatured) return 1;
+        return (a.item_name || '').localeCompare(b.item_name || '');
+      });
 
       const thead = document.getElementById('ent-table-head');
       const tbody = document.getElementById('ent-table-body');
@@ -1570,8 +1585,8 @@
             const expiryBadge = statusKey === 'expired'
               ? `<span class="badge-stock badge-out-stock"><i class="fa-solid fa-circle-xmark"></i> Expired</span>`
               : statusKey === 'less_than_year'
-                ? `<span class="badge-stock badge-low-stock"><i class="fa-solid fa-triangle-exclamation"></i> < 1 Year</span>`
-                : `<span class="badge-stock badge-in-stock"><i class="fa-solid fa-check-circle"></i> Valid</span>`;
+                ? `<span class="badge-stock badge-low-stock"><i class="fa-solid fa-triangle-exclamation"></i> Less than 1 Year</span>`
+                : `<span class="badge-stock badge-in-stock"><i class="fa-solid fa-check-circle"></i> More than 1 Year</span>`;
             const stockBadge = qty === 0
               ? `<span class="badge-stock badge-out-stock"><i class="fa-solid fa-circle-xmark"></i> Out</span>`
               : qty <= 5
