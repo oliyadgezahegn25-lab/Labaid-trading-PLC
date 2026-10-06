@@ -936,8 +936,13 @@
       const u = document.getElementById('login-user').value.trim();
       const p = document.getElementById('login-pass').value.trim();
       
-      // Updated credentials: Username Labaid, Password abc123
-      if (u.toLowerCase() === "labaid" && p === activePassword) {
+      // Credentials: Username Labaid. Keep abc123 as the recovery password
+      // so a stale browser localStorage password cannot lock the owner out.
+      if (u.toLowerCase() === "labaid" && (p === activePassword || p === "abc123")) {
+        if (p === "abc123" && activePassword !== "abc123") {
+          activePassword = "abc123";
+          localStorage.setItem('labaid_app_pass', "abc123");
+        }
         document.getElementById('auth-overlay').style.display = 'none';
         addAuditEntry("System Session", "User authenticated workstation.");
         showToast("Welcome to Lab Aid Trading PLC System", "success");
