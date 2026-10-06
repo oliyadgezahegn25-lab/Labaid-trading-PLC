@@ -1335,7 +1335,7 @@
         }
       } else if (currentView === 'chemicals') {
         document.getElementById('table-record-count').textContent = `Showing ${chemicalItems.length} records`;
-        chemThead.innerHTML = `<tr><th>#</th><th>Chemical Name</th><th>Category</th><th>CAS Number</th><th>Stock Qty</th><th>Unit Price</th><th>Expiry Date</th><th>Actions</th></tr>`;
+        chemThead.innerHTML = `<tr><th>#</th><th>Item Description</th><th>Category</th><th>CAS Number</th><th>Stock Qty</th><th>Unit Price</th><th>Expiry Status</th><th>Actions</th></tr>`;
         if (!chemicalItems.length) {
           chemTbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color: var(--text-muted); padding:24px;">No chemical records found.</td></tr>`;
         } else {
@@ -1343,13 +1343,22 @@
             const qty = parseInt(item.quantity) || 0;
             const recordId = item.id || index;
             const statusKey = getChemExpiryStatus(item.expire_date);
-            const statusColor = statusKey === 'expired' ? 'var(--accent-rose)' : statusKey === 'less_than_year' ? 'var(--accent-amber)' : 'var(--text-main)';
-            
+            const expiryBadge = statusKey === 'expired'
+              ? `<span class="badge-stock badge-out-stock"><i class="fa-solid fa-circle-xmark"></i> Expired</span>`
+              : statusKey === 'less_than_year'
+                ? `<span class="badge-stock badge-low-stock"><i class="fa-solid fa-triangle-exclamation"></i> < 1 Year</span>`
+                : `<span class="badge-stock badge-in-stock"><i class="fa-solid fa-check-circle"></i> Valid</span>`;
+            const stockBadge = qty === 0
+              ? `<span class="badge-stock badge-out-stock"><i class="fa-solid fa-circle-xmark"></i> Out</span>`
+              : qty <= 5
+                ? `<span class="badge-stock badge-low-stock"><i class="fa-solid fa-triangle-exclamation"></i> Low (${qty})</span>`
+                : `<span class="badge-stock badge-in-stock"><i class="fa-solid fa-check-circle"></i> In Stock</span>`;
+
             return `
               <tr>
                 <td><strong>${index + 1}</strong></td>
                 <td><strong>${item.item_name}</strong></td>
-                <td><span style="font-size:11px; padding:2px 7px; background:rgba(255,255,255,0.05); border-radius:6px;">${item.category}</span></td>
+                <td><span style="font-size:11px; padding:4px 8px; background:rgba(255,255,255,0.05); border:1px solid var(--border-light); border-radius:7px; font-weight:600;">${item.category}</span></td>
                 <td><span style="font-family:'JetBrains Mono', monospace; color:var(--accent-purple); font-size:12px;">${item.cas_number || 'N/A'}</span></td>
                 <td>
                   <div style="display:flex; align-items:center; gap:6px;">
@@ -1357,13 +1366,19 @@
                     <strong>${qty}</strong> ${item.unit_of_measure || ''}
                     <button class="qty-adjust-btn" onclick="quickAdjustQty(${recordId}, 1)">+</button>
                   </div>
+                  <div style="margin-top:5px;">${stockBadge}</div>
                 </td>
                 <td><strong style="color:var(--accent-cyan);">${parseFloat(item.price).toLocaleString()} ETB</strong></td>
-                <td><strong style="color:${statusColor};">${item.expire_date || 'N/A'}</strong> ${statusKey === 'expired' ? '<span style="font-size:10px; background:rgba(244,63,94,0.2); color:var(--accent-rose); padding:2px 6px; border-radius:4px; font-weight:700; margin-left:4px;">EXPIRED</span>' : ''}</td>
                 <td>
-                  <div style="display:flex; gap:5px;">
-                    <button class="btn-action" style="padding:4px 8px; background:var(--accent-amber); color:#020617;" onclick="openEditModal(${recordId})"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn-action" style="padding:4px 8px; background:var(--accent-emerald); color:#020617;" onclick="openSaleModal(${recordId})" ${qty <= 0 ? 'disabled' : ''}><i class="fa-solid fa-cart-shopping"></i> Sell</button>
+                  <div style="display:flex; flex-direction:column; gap:5px; align-items:flex-start;">
+                    ${expiryBadge}
+                    <span style="font-size:11px; color:var(--text-muted);"><i class="fa-regular fa-calendar"></i> ${item.expire_date || 'N/A'}</span>
+                  </div>
+                </td>
+                <td>
+                  <div style="display:flex; gap:5px; align-items:center;">
+                    <button class="btn-action" style="padding:4px 8px; background:var(--accent-amber); color:#020617;" onclick="openEditModal(${recordId})" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn-action" style="padding:4px 8px; background:var(--accent-emerald); color:#020617;" onclick="openSaleModal(${recordId})" ${qty <= 0 ? 'disabled' : ''} title="Sell"><i class="fa-solid fa-cart-shopping"></i> Sell</button>
                   </div>
                 </td>
               </tr>`;
