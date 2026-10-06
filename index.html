@@ -1283,6 +1283,26 @@
       renderExpiryTimelines();
     }
 
+    function setChemicalExpiryFilter(statusKey) {
+      chemicalExpiryFilter = statusKey;
+
+      document.querySelectorAll('#page-chemicals .filter-pill').forEach(btn => btn.classList.remove('active'));
+
+      const activeBtnId =
+        statusKey === 'all' ? 'chem-filter-all' :
+        statusKey === 'expired' ? 'chem-filter-expired' :
+        statusKey === 'less_than_year' ? 'chem-filter-less1yr' :
+        'chem-filter-more1yr';
+
+      const btn = document.getElementById(activeBtnId);
+      if (btn) btn.classList.add('active');
+
+      renderEnterpriseTable(
+        enterpriseItems,
+        document.getElementById('global-search-input')?.value || ''
+      );
+    }
+
     function renderExpiryTimelines() {
       const container = document.getElementById('expiry-timeline-list');
       let chemicals = enterpriseItems.filter(i => i.category === "Chemicals" && i.expire_date);
