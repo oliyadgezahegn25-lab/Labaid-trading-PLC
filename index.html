@@ -501,10 +501,41 @@
       .navbar, .sidebar, .nav-actions, .filter-bar, .view-tabs, .btn-action, #auth-overlay, #toast-container { display: none !important; }
       .app-container { height: auto !important; overflow: visible !important; }
       .content-area { background: #fff !important; padding: 0 !important; }
-      .table-container { border: 1px solid #ccc !important; box-shadow: none !important; }
-      th, td { color: #000 !important; border-bottom: 1px solid #ddd !important; }
+        th, td { color: #000 !important; border-bottom: 1px solid #ddd !important; }
     }
-  </style>
+      /* FINAL TABLE OVERRIDE — keep the futuristic inventory surface visible */
+    .content-area .table-container {
+      background: linear-gradient(145deg,#0b1b31 0%,#071426 100%) !important;
+      border: 1px solid rgba(56,189,248,.28) !important;
+      border-radius: 18px !important;
+      box-shadow: 0 18px 45px rgba(2,12,27,.42), inset 0 1px 0 rgba(125,211,252,.08) !important;
+      overflow: hidden !important;
+    }
+    .content-area .table-container table { border-collapse: separate !important; border-spacing: 0 7px !important; padding: 0 9px 9px !important; }
+    .content-area .table-container thead th {
+      background: linear-gradient(180deg,rgba(56,189,248,.20),rgba(56,189,248,.055)) !important;
+      color:#8be3ff !important;
+      border:0 !important;
+      padding:15px 14px !important;
+      font-size:10px !important;
+      letter-spacing:1px !important;
+    }
+    .content-area .table-container tbody td {
+      background:rgba(12,31,53,.94) !important;
+      border-top:1px solid rgba(125,211,252,.08) !important;
+      border-bottom:1px solid rgba(125,211,252,.08) !important;
+      color:#dbeafe !important;
+      padding:15px 14px !important;
+    }
+    .content-area .table-container tbody tr:nth-child(even) td { background:rgba(17,40,66,.94) !important; }
+    .content-area .table-container tbody tr:hover td {
+      background:linear-gradient(90deg,rgba(56,189,248,.16),rgba(56,189,248,.055)) !important;
+      border-top-color:rgba(56,189,248,.32) !important;
+      border-bottom-color:rgba(56,189,248,.32) !important;
+    }
+    .content-area .table-container tbody td strong { color:#f4fbff !important; }
+
+</style>
 </head>
 <body>
   <!-- TOAST CONTAINER -->
