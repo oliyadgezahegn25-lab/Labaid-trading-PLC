@@ -9,7 +9,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
-
     :root {
       --bg-dark: #07090e;
       --bg-canvas: #0b1120;
@@ -32,7 +31,6 @@
       --accent-rose-glow: rgba(244, 63, 94, 0.25);
       --accent-indigo: #6366f1;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
     
     body { 
@@ -46,20 +44,17 @@
         radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 40%),
         radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);
     }
-
     /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
     ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
-
     .tour-highlight-active {
       position: relative;
       z-index: 210 !important;
       box-shadow: 0 0 0 4px var(--accent-cyan), 0 0 30px rgba(56, 189, 248, 0.7) !important;
       transition: all 0.3s ease;
     }
-
     /* AUTH OVERLAY */
     #auth-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -81,7 +76,6 @@
     }
     @keyframes floatOrb { 0% { transform: translateY(0px) scale(1); } 100% { transform: translateY(40px) scale(1.1); } }
     @keyframes floatOrb2 { 0% { transform: translateY(0px) scale(1); } 100% { transform: translateY(-50px) scale(1.15); } }
-
     .auth-container {
       position: relative; z-index: 2;
       display: flex; gap: 40px; align-items: center; max-width: 900px; width: 100%;
@@ -94,7 +88,6 @@
     .auth-feature-list { display: flex; flex-direction: column; gap: 12px; }
     .auth-feature-item { display: flex; align-items: center; gap: 12px; font-size: 13.5px; color: var(--text-muted); }
     .auth-feature-item i { color: var(--accent-emerald); font-size: 15px; }
-
     .auth-card {
       background: rgba(15, 23, 42, 0.8);
       backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
@@ -126,7 +119,6 @@
       box-shadow: 0 8px 20px rgba(56, 189, 248, 0.35); transition: all 0.3s ease;
     }
     .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(56, 189, 248, 0.5); background: linear-gradient(135deg, #7dd3fc, #0284c7); }
-
     /* NAVBAR */
     .navbar {
       background: var(--panel-solid);
@@ -139,7 +131,6 @@
     .brand { font-size: 17px; font-weight: 800; color: var(--accent-cyan); display: flex; align-items: center; gap: 10px; letter-spacing: 0.3px; }
     .brand i { font-size: 20px; background: linear-gradient(135deg, #38bdf8, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .nav-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-
     .btn-action {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border-light);
@@ -157,12 +148,10 @@
     .btn-action:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-1px); border-color: rgba(255, 255, 255, 0.2); }
     .btn-primary { background: var(--accent-cyan); color: #020617; border: none; font-weight: 700; }
     .btn-primary:hover { background: #0284c7; color: #fff; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3); }
-
     /* LAYOUT */
     .app-container { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 58px); }
     .sidebar { width: 350px; background: var(--panel-solid); border-right: 1px solid var(--border-light); padding: 20px; overflow-y: auto; flex-shrink: 0; }
     .content-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; background: var(--bg-canvas); }
-
     .filter-bar {
       display: flex;
       gap: 8px;
@@ -193,7 +182,6 @@
     .filter-pill.active.rose { background: var(--accent-rose-glow); border-color: var(--accent-rose); color: var(--accent-rose); }
     .filter-pill.active.amber { background: var(--accent-amber-glow); border-color: var(--accent-amber); color: var(--accent-amber); }
     .filter-pill.active.emerald { background: var(--accent-emerald-glow); border-color: var(--accent-emerald); color: var(--accent-emerald); }
-
     .dashboard-deck {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -216,7 +204,6 @@
     .analytics-card.amber::before { background: var(--accent-amber); }
     .analytics-card.emerald::before { background: var(--accent-emerald); }
     .analytics-card.purple::before { background: var(--accent-purple); }
-
     .charts-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
     .chart-box {
       background: var(--panel-solid);
@@ -227,7 +214,6 @@
       display: flex; flex-direction: column;
     }
     .chart-wrapper { position: relative; flex: 1; width: 100%; height: 100%; }
-
     .expiry-visual-container {
       background: var(--panel-solid);
       border: 1px solid var(--border-light);
@@ -250,7 +236,6 @@
       border-radius: 4px; overflow: hidden; position: relative;
     }
     .timeline-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
-
     .form-group { margin-bottom: 12px; text-align: left; }
     .form-group label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
     .form-control {
@@ -259,25 +244,21 @@
       padding: 9px 12px; color: white; font-size: 13px; transition: all 0.2s ease;
     }
     .form-control:focus { outline: none; border-color: var(--accent-cyan); box-shadow: 0 0 0 3px var(--accent-cyan-glow); }
-
     .view-tabs { display: flex; gap: 10px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
     .tab-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .tab-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-light); color: var(--text-muted); padding: 8px 16px; font-size: 12.5px; font-weight: 700; cursor: pointer; border-radius: 8px; transition: all 0.2s ease; }
     .tab-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
     .tab-btn.active { background: var(--accent-cyan-glow); border-color: var(--accent-cyan); color: var(--accent-cyan); }
-
     .table-container { background: var(--panel-solid); border: 1px solid var(--border-light); border-radius: 14px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
     table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
     th { background: rgba(0, 0, 0, 0.4); padding: 13px 16px; color: var(--text-muted); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; border-bottom: 1px solid var(--border-light); }
     td { padding: 13px 16px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
     tr:hover { background: rgba(255, 255, 255, 0.025); }
-
     /* BADGES & QUICK ACTIONS */
     .badge-stock { padding: 3px 8px; border-radius: 12px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
     .badge-in-stock { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
     .badge-low-stock { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); border: 1px solid rgba(245, 158, 11, 0.3); }
     .badge-out-stock { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); border: 1px solid rgba(244, 63, 94, 0.3); }
-
     .qty-adjust-btn {
       width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--border-light);
       background: rgba(255,255,255,0.08); color: #fff; cursor: pointer;
@@ -285,7 +266,6 @@
       transition: all 0.2s ease;
     }
     .qty-adjust-btn:hover { background: var(--accent-cyan); color: #020617; }
-
     /* MODALS & DRAWERS */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -294,7 +274,6 @@
     }
     .modal-overlay.active { display: flex; }
     .modal-box { background: var(--panel-solid); border: 1px solid var(--border-light); border-radius: 18px; width: 100%; max-width: 520px; padding: 26px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0,0,0,0.8); }
-
     .side-drawer {
       position: fixed; top: 0; right: -460px; width: 440px; height: 100vh;
       background: var(--panel-solid); border-left: 1px solid var(--border-light);
@@ -302,7 +281,6 @@
     }
     .side-drawer.open { right: 0; }
     @media (max-width: 700px) { .side-drawer { width: 96vw; } #sales-history-search, #sales-history-sort, #sales-history-date { min-width:0; } }
-
     .sales-history-controls { display:grid; grid-template-columns:1fr; gap:8px; margin-bottom:14px; }
     .sales-history-control-row { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:8px; }
     .sale-msg-card { background:rgba(255,255,255,.035); border:1px solid var(--border-light); border-radius:12px; margin-bottom:9px; overflow:hidden; cursor:pointer; transition:all .2s ease; }
@@ -331,14 +309,12 @@
     .sale-invoice-mini-row { font-size:10.5px; color:#e2e8f0; }
     .sale-invoice-mini-row>:not(:first-child),.sale-invoice-mini-head>:not(:first-child) { text-align:right; }
     @media (max-width:700px) { .sales-history-control-row { grid-template-columns:1fr; } .sale-summary { grid-template-columns:minmax(0,1fr) auto; } .sale-summary-cell:nth-of-type(2),.sale-summary-cell:nth-of-type(3) { display:none; } .sale-detail-grid { grid-template-columns:1fr; } }
-
     #tour-floating-box {
       position: fixed; bottom: 25px; right: 25px; width: 350px;
       background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px);
       border: 1px solid var(--accent-cyan); border-radius: 16px; padding: 20px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.8); z-index: 300; display: none;
     }
-
     /* TOAST NOTIFICATIONS */
     #toast-container {
       position: fixed; bottom: 24px; right: 24px; z-index: 10000;
@@ -355,7 +331,6 @@
     .toast-success { border-color: var(--accent-emerald); color: #a7f3d0; }
     .toast-error { border-color: var(--accent-rose); color: #fecdd3; }
     .toast-info { border-color: var(--accent-cyan); color: #bae6fd; }
-
     /* PRINT STYLES */
     @media print {
       body { background: #fff !important; color: #000 !important; }
@@ -370,7 +345,6 @@
 <body>
   <!-- TOAST CONTAINER -->
   <div id="toast-container"></div>
-
   <!-- AUTH SCREEN -->
   <div id="auth-overlay">
     <div class="auth-container">
@@ -410,7 +384,6 @@
       </div>
     </div>
   </div>
-
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="brand" id="tour-step-1-target">
@@ -440,7 +413,6 @@
       </button>
     </div>
   </header>
-
   <!-- APP CONTAINER -->
   <div class="app-container">
     <!-- SIDEBAR FORM -->
@@ -486,7 +458,6 @@
         </button>
       </form>
     </aside>
-
     <!-- CONTENT AREA -->
     <main class="content-area">
       <!-- VIEW TABS SWITCHER -->
@@ -513,7 +484,6 @@
           <div style="font-size: 12px; color: var(--text-muted);" id="table-record-count">Showing 0 records</div>
         </div>
       </div>
-
       <!-- PAGE CONTAINER 1: EQUIPMENT -->
       <div id="page-equipment" class="page-section" style="display: flex; flex-direction: column; gap: 12px;">
         <div class="filter-bar">
@@ -529,7 +499,6 @@
           </table>
         </div>
       </div>
-
       <!-- PAGE CONTAINER 2: CHEMICALS -->
       <div id="page-chemicals" class="page-section" style="display: none; flex-direction: column; gap: 12px;">
         <div class="filter-bar">
@@ -546,7 +515,6 @@
           </table>
         </div>
       </div>
-
       <!-- PAGE CONTAINER 3: VISUALS & EXPIRY TIMELINES -->
       <div id="page-visuals-expiry" class="page-section" style="display: none; flex-direction: column; gap: 16px;">
         <div class="dashboard-deck" id="tour-step-8-target">
@@ -599,7 +567,6 @@
           <div id="expiry-timeline-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;"></div>
         </div>
       </div>
-
       <!-- PAGE CONTAINER 4: INTELLIGENCE HUB REPLENISHMENT PAGE -->
       <div id="page-hub" class="page-section" style="display: none; flex-direction: column; gap: 16px;">
         <div class="dashboard-deck">
@@ -630,7 +597,6 @@
       </div>
     </main>
   </div>
-
   <!-- FLOATING TOUR GUIDE BOX -->
   <div id="tour-floating-box">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -644,7 +610,6 @@
       <button class="btn-action btn-primary" id="tour-next-btn" onclick="travelTourStep(1)">Next <i class="fa-solid fa-arrow-right"></i></button>
     </div>
   </div>
-
   <!-- PASSWORD MODAL -->
   <div class="modal-overlay" id="password-modal">
     <div class="modal-box" style="max-width: 400px;">
@@ -660,7 +625,6 @@
       </form>
     </div>
   </div>
-
   <!-- EDIT MODAL -->
   <div class="modal-overlay" id="edit-modal">
     <div class="modal-box">
@@ -698,7 +662,6 @@
       </form>
     </div>
   </div>
-
   <!-- SALE MODAL -->
   <div class="modal-overlay" id="sale-modal">
     <div class="modal-box">
@@ -728,7 +691,6 @@
       </form>
     </div>
   </div>
-
   <!-- EXPORT / IMPORT MODAL -->
   <div class="modal-overlay" id="export-modal">
     <div class="modal-box">
@@ -756,14 +718,12 @@
           <i class="fa-solid fa-file-import"></i> Upload & Import CSV Stock
         </button>
       </div>
-
       <div style="display: flex; gap: 10px; margin-top: 18px;">
         <button class="btn-action" style="flex:1; justify-content: center;" onclick="closeExportModal()">Cancel</button>
         <button class="btn-action" style="flex:1; justify-content: center; background: var(--accent-cyan); color: #020617;" onclick="processExportRequest()">Download CSV</button>
       </div>
     </div>
   </div>
-
   <!-- AUDIT LOG DRAWER -->
   <div id="audit-drawer" class="side-drawer">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-light); padding-bottom: 14px;">
@@ -772,7 +732,6 @@
     </div>
     <div id="audit-log-container"></div>
   </div>
-
   <!-- SALES HISTORY DRAWER -->
   <div id="sales-drawer" class="side-drawer">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid var(--border-light);padding-bottom:12px;">
@@ -796,7 +755,6 @@
     </div>
     <div id="sales-history-container"></div>
   </div>
-
   <!-- JAVASCRIPT ENGINE -->
   <script>
     const SUPABASE_URL = "https://cbmvbbfbgauqusibdnup.supabase.co";
@@ -805,7 +763,6 @@
     try {
       db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     } catch(err) { db = null; }
-
     let enterpriseItems = [];
     let salesHistory = [];
     let auditLogs = [];
@@ -816,7 +773,6 @@
     let chemicalExpiryFilter = 'all';
     let visualExpiryFilter = 'all';
     let activePassword = localStorage.getItem('labaid_app_pass') || "abc123";
-
     const tourStepsDef = [
       { targetId: 'tour-step-1-target', title: 'Stage 1: Enterprise Brand Header', desc: 'Core navigation header running the Lab Aid Trading PLC Inventory with rapid action shortcuts.' },
       { targetId: 'tour-step-2-target', title: 'Stage 2: Asset Registration Sidebar', desc: 'Register new equipment, supplies, or chemicals directly into cloud storage.' },
@@ -832,7 +788,6 @@
       { targetId: 'tour-step-12-target', title: 'Stage 12: Item Matrix & Quick Actions', desc: 'Edit asset records, adjust quantities instantly (+/-), trigger sales, or manage stock.' },
       { targetId: 'tab-hub', title: 'Stage 13: Intelligence Hub Replenishment Page', desc: 'Explore portfolio valuation metrics and automated low-stock reorder recommendations.' }
     ];
-
     // TOAST SYSTEM
     function showToast(msg, type = 'info') {
       const container = document.getElementById('toast-container');
@@ -848,7 +803,6 @@
         setTimeout(() => toast.remove(), 300);
       }, 3200);
     }
-
     function startInteractiveTour() {
       currentTourIndex = 0;
       document.getElementById('tour-floating-box').style.display = 'block';
@@ -880,7 +834,6 @@
       nBtn.innerHTML = currentTourIndex === tourStepsDef.length - 1 ? `Finish <i class="fa-solid fa-check"></i>` : `Next <i class="fa-solid fa-arrow-right"></i>`;
       nBtn.onclick = currentTourIndex === tourStepsDef.length - 1 ? closeInteractiveTour : () => travelTourStep(1);
     }
-
     function openPasswordModal() { document.getElementById('password-modal').classList.add('active'); }
     function closePasswordModal() { document.getElementById('password-modal').classList.remove('active'); }
     function handlePasswordChange(e) {
@@ -896,7 +849,6 @@
       closePasswordModal();
       addAuditEntry("Security", "User changed account password.");
     }
-
     function handleLogin(e) {
       e.preventDefault();
       const u = document.getElementById('login-user').value.trim();
@@ -913,13 +865,11 @@
         showToast("Authentication Failed. Check credentials.", "error");
       }
     }
-
     function logoutSystem() {
       document.getElementById('auth-overlay').style.display = 'flex';
       addAuditEntry("System Session", "User logged out.");
       showToast("Logged out successfully", "info");
     }
-
     function addAuditEntry(action, details) {
       auditLogs.unshift({ time: new Date().toLocaleTimeString(), action, details });
       renderAuditLogs();
@@ -936,7 +886,6 @@
         </div>
       `).join('');
     }
-
     async function loadEnterpriseData() {
       let itemsData = [];
       if (db) {
@@ -951,7 +900,6 @@
       // Alphabetical sorting A-Z
       itemsData.sort((a, b) => (a.item_name || '').localeCompare(b.item_name || ''));
       enterpriseItems = itemsData;
-
       let salesData = [];
       if (db) {
         try {
@@ -968,7 +916,6 @@
       renderEnterpriseTable(enterpriseItems);
       renderSalesHistoryDrawer();
     }
-
     function updateAnalyticsDeck() {
       let totalQty = enterpriseItems.reduce((acc, i) => acc + (parseInt(i.quantity) || 0), 0);
       let cats = new Set(enterpriseItems.map(i => i.category)).size;
@@ -984,7 +931,6 @@
       document.getElementById('stat-categories-count').textContent = `${cats} Active`;
       document.getElementById('stat-expiry-alert').textContent = `${expiringSoon} Items`;
     }
-
     function getChemExpiryStatus(expireDateStr) {
       if (!expireDateStr) return 'none';
       const now = new Date();
@@ -996,7 +942,6 @@
       if (diffDays <= 365) return 'less_than_year';
       return 'more_than_year';
     }
-
     function setEquipmentFilter(catKey) {
       equipmentCategoryFilter = catKey;
       document.querySelectorAll('#page-equipment .filter-pill').forEach(btn => btn.classList.remove('active'));
@@ -1007,7 +952,16 @@
       if (btn) btn.classList.add('active');
       renderEnterpriseTable(enterpriseItems, document.getElementById('global-search-input').value);
     }
-
+    function setChemicalExpiryFilter(statusKey) {
+      chemicalExpiryFilter = statusKey;
+      document.querySelectorAll('#page-chemicals .filter-pill').forEach(btn => btn.classList.remove('active'));
+      const activeBtnId = statusKey === 'all' ? 'chem-filter-all' :
+                          statusKey === 'expired' ? 'chem-filter-expired' :
+                          statusKey === 'less_than_year' ? 'chem-filter-less1yr' : 'chem-filter-more1yr';
+      const btn = document.getElementById(activeBtnId);
+      if (btn) btn.classList.add('active');
+      renderEnterpriseTable(enterpriseItems, document.getElementById('global-search-input').value);
+    }
     function setVisualExpiryFilter(statusKey) {
       visualExpiryFilter = statusKey;
       document.querySelectorAll('#page-visuals-expiry .filter-pill').forEach(btn => btn.classList.remove('active'));
@@ -1018,7 +972,6 @@
       if (btn) btn.classList.add('active');
       renderExpiryTimelines();
     }
-
     function renderExpiryTimelines() {
       const container = document.getElementById('expiry-timeline-list');
       let chemicals = enterpriseItems.filter(i => i.category === "Chemicals" && i.expire_date);
@@ -1067,7 +1020,6 @@
         `;
       }).join('');
     }
-
     function exportVisualChemicals(mode) {
       let targetChems = enterpriseItems.filter(i => i.category === "Chemicals");
       let exportFileName = "chemical_expiry_report.csv";
@@ -1097,7 +1049,6 @@
       showToast("Chemical report exported!", "success");
       addAuditEntry("Export Generated", `Downloaded chemical expiry CSV (${mode})`);
     }
-
     function renderHubData() {
       let totalVal = enterpriseItems.reduce((acc, i) => acc + ((parseInt(i.quantity) || 0) * (parseFloat(i.price) || 0)), 0);
       document.getElementById('stat-total-valuation').textContent = totalVal.toLocaleString('en-US', {minimumFractionDigits: 2}) + " ETB";
@@ -1123,7 +1074,6 @@
         `;
       }).join('');
     }
-
     function renderCharts() {
       let catCounts = {};
       enterpriseItems.forEach(i => {
@@ -1147,7 +1097,6 @@
         }
       });
     }
-
     function toggleCategoryFields() {
       const isChem = document.getElementById('ent-category').value === "Chemicals";
       document.getElementById('chem-special-fields').style.display = isChem ? 'block' : 'none';
@@ -1160,7 +1109,6 @@
       document.getElementById('edit-pdf-group').style.display = isChem ? 'none' : 'block';
       document.getElementById('edit-link-group').style.display = isChem ? 'none' : 'block';
     }
-
     function switchEnterpriseView(mode) {
       currentView = mode;
       document.getElementById('tab-equipment').classList.toggle('active', mode === 'equipment');
@@ -1171,7 +1119,6 @@
       document.getElementById('page-chemicals').style.display = mode === 'chemicals' ? 'flex' : 'none';
       document.getElementById('page-visuals-expiry').style.display = mode === 'visuals' ? 'flex' : 'none';
       document.getElementById('page-hub').style.display = mode === 'hub' ? 'flex' : 'none';
-
       if (mode === 'visuals') {
         renderCharts(); renderExpiryTimelines();
         document.getElementById('table-record-count').textContent = 'Visual Analytics Active';
@@ -1183,11 +1130,9 @@
         renderEnterpriseTable(enterpriseItems, query);
       }
     }
-
     function handleGlobalSearch(query) {
       renderEnterpriseTable(enterpriseItems, query);
     }
-
     function openPdfDocument(base64Data) {
       try {
         const parts = base64Data.split(';');
@@ -1199,7 +1144,6 @@
         window.open(URL.createObjectURL(blob), '_blank');
       } catch (err) { window.open(base64Data, '_blank'); }
     }
-
     async function quickAdjustQty(id, delta) {
       const item = enterpriseItems.find(i => i.id === id || i.id == id);
       if (!item) return;
@@ -1216,11 +1160,9 @@
       addAuditEntry("Stock Adjusted", `Adjusted "${item.item_name}" stock to ${newQty}`);
       loadEnterpriseData();
     }
-
     function triggerPrintReport() {
       window.print();
     }
-
     function renderEnterpriseTable(items, searchQuery = '') {
       const query = searchQuery.toLowerCase().trim();
       const filteredItems = items.filter(item => {
@@ -1232,24 +1174,19 @@
         const cas = (item.cas_number || '').toLowerCase();
         return name.includes(query) || cat.includes(query) || brand.includes(query) || model.includes(query) || cas.includes(query);
       });
-
       filteredItems.sort((a, b) => (a.item_name || '').localeCompare(b.item_name || ''));
-
       const thead = document.getElementById('ent-table-head');
       const tbody = document.getElementById('ent-table-body');
       const chemThead = document.getElementById('chem-table-head');
       const chemTbody = document.getElementById('chem-table-body');
-
       let equipmentItems = filteredItems.filter(item => item.category !== "Chemicals");
       let chemicalItems = filteredItems.filter(item => item.category === "Chemicals");
-
       if (equipmentCategoryFilter !== 'all') {
         equipmentItems = equipmentItems.filter(i => i.category === equipmentCategoryFilter);
       }
       if (chemicalExpiryFilter !== 'all') {
         chemicalItems = chemicalItems.filter(c => getChemExpiryStatus(c.expire_date) === chemicalExpiryFilter);
       }
-
       if (currentView === 'equipment') {
         document.getElementById('table-record-count').textContent = `Showing ${equipmentItems.length} records`;
         thead.innerHTML = `<tr><th>#</th><th>Item Description</th><th>Category</th><th>Brand / Model</th><th>Stock Qty</th><th>Unit Price</th><th>Status</th><th>Catalogue Spec</th><th>Actions</th></tr>`;
@@ -1263,7 +1200,6 @@
             let stockBadge = qty === 0 ? `<span class="badge-stock badge-out-stock"><i class="fa-solid fa-circle-xmark"></i> Out</span>` :
                              qty <= 5 ? `<span class="badge-stock badge-low-stock"><i class="fa-solid fa-triangle-exclamation"></i> Low (${qty})</span>` :
                              `<span class="badge-stock badge-in-stock"><i class="fa-solid fa-check-circle"></i> In Stock</span>`;
-
             let catalogActionsHtml = `<span style="color:var(--text-muted); font-size:11px;">None</span>`;
             let actionsList = [];
             if (item.pdf_url) {
@@ -1274,7 +1210,6 @@
               actionsList.push(`<a href="${item.catalog_link}" target="_blank" class="btn-action" style="padding:3px 7px; font-size:11px; background:rgba(168,85,247,0.15); color:var(--accent-purple); border-color:var(--accent-purple);"><i class="fa-solid fa-link"></i> Link</a>`);
             }
             if (actionsList.length > 0) catalogActionsHtml = `<div style="display:flex; gap:4px; align-items:center;">${actionsList.join('')}</div>`;
-
             return `
               <tr>
                 <td><strong>${index + 1}</strong></td>
@@ -1338,7 +1273,6 @@
         }
       }
     }
-
     async function deleteItemPdf(id) {
       if (!confirm("Are you sure you want to delete the PDF catalogue for this item?")) return;
       if (db) {
@@ -1351,7 +1285,6 @@
       addAuditEntry("PDF Deleted", `Removed catalogue PDF from item ID ${id}`);
       loadEnterpriseData();
     }
-
     function convertFileToBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -1360,7 +1293,6 @@
         reader.onerror = error => reject(error);
       });
     }
-
     async function handleItemSubmit(e) {
       e.preventDefault();
       const pdfFile = document.getElementById('ent-pdf-file').files[0];
@@ -1381,7 +1313,6 @@
         cas_number: document.getElementById('ent-cas').value || null,
         expire_date: document.getElementById('ent-expire').value || null
       };
-
       if (db) {
         try { await db.from('items').insert([payload]); } catch(err) {}
       }
@@ -1394,7 +1325,6 @@
       document.getElementById('enterprise-form').reset();
       loadEnterpriseData();
     }
-
     function openEditModal(id) {
       const item = enterpriseItems.find(i => i.id === id || i.id == id);
       if (!item) return;
@@ -1412,7 +1342,6 @@
       document.getElementById('edit-modal').classList.add('active');
     }
     function closeEditModal() { document.getElementById('edit-modal').classList.remove('active'); }
-
     async function handleEditSubmit(e) {
       e.preventDefault();
       const id = parseInt(document.getElementById('edit-id').value);
@@ -1437,7 +1366,6 @@
         updated.model = document.getElementById('edit-model').value;
         if (catalogUrl) updated.pdf_url = catalogUrl;
       }
-
       if (db) {
         try { await db.from('items').update(updated).eq('id', id); } catch(err) {}
       }
@@ -1450,7 +1378,6 @@
       closeEditModal();
       loadEnterpriseData();
     }
-
     function openSaleModal(id) {
       const item = enterpriseItems.find(i => i.id === id || i.id == id);
       if (!item) return;
@@ -1464,7 +1391,6 @@
       document.getElementById('sale-modal').classList.add('active');
     }
     function closeSaleModal() { document.getElementById('sale-modal').classList.remove('active'); }
-
     async function handleSaleSubmit(e) {
       e.preventDefault();
       const itemId = parseInt(document.getElementById('sale-item-id').value);
@@ -1484,14 +1410,12 @@
         total_price: qtySold * parseFloat(document.getElementById('sale-unit-price').value),
         sale_date: document.getElementById('sale-date').value
       };
-
       if (db) {
         try { await db.from('sales_log').insert([saleRecord]); } catch(err) {}
       }
       let localSales = JSON.parse(localStorage.getItem('local_sales_fallback') || '[]');
       localSales.unshift(saleRecord);
       localStorage.setItem('local_sales_fallback', JSON.stringify(localSales));
-
       const newQty = item.quantity - qtySold;
       if (db) {
         try { await db.from('items').update({ quantity: newQty }).eq('id', itemId); } catch(err) {}
@@ -1499,7 +1423,6 @@
       let localItems = JSON.parse(localStorage.getItem('local_items_fallback') || '[]');
       localItems = localItems.map(i => (i.id === itemId || i.id == itemId) ? { ...i, quantity: newQty } : i);
       localStorage.setItem('local_items_fallback', JSON.stringify(localItems));
-
       // Send an automatic email notification after the sale is recorded.
       if (db) {
         try {
@@ -1515,10 +1438,8 @@
       closeSaleModal();
       loadEnterpriseData();
     }
-
     function toggleSalesDrawer() { document.getElementById('sales-drawer').classList.toggle('open'); }
     function toggleAuditDrawer() { document.getElementById('audit-drawer').classList.toggle('open'); }
-
     function renderSalesHistoryDrawer() {
       const c=document.getElementById('sales-history-container');
       const search=(document.getElementById('sales-history-search')?.value||'').trim().toLowerCase();
@@ -1574,91 +1495,125 @@
         </div>`;
       }).join('');
     }
-
     function openExportModal() {
       document.getElementById('export-target').value = 'inventory';
       toggleExportFilterOptions();
       document.getElementById('export-modal').classList.add('active');
     }
-    function closeExportModal() { document.getElementById('export-modal').classList.remove('active'); }
+    function closeExportModal() {
+      document.getElementById('export-modal').classList.remove('active');
+    }
     function toggleExportFilterOptions() {
       const target = document.getElementById('export-target').value;
       document.getElementById('export-sales-filter-group').style.display = target === 'sales' ? 'block' : 'none';
     }
+    function processExportRequest() {
+      const target = document.getElementById('export-target').value;
+      if (target === 'inventory') {
+        exportInventoryCSV();
+      } else {
+        const timeframe = document.getElementById('export-sales-timeframe').value;
+        exportSalesCSV(timeframe);
+      }
+      closeExportModal();
+    }
+    function exportInventoryCSV() {
+      if (!enterpriseItems.length) { showToast("No inventory items to export.", "error"); return; }
+      let csv = "data:text/csv;charset=utf-8,";
+      csv += "ID,Category,Item Name,Brand,Model,Unit,Quantity,Price (ETB),CAS Number,Expiry Date,Catalog Link\r\n";
+      enterpriseItems.forEach(i => {
+        csv += `"${i.id || ''}","${i.category || ''}","${i.item_name || ''}","${i.brand || ''}","${i.model || ''}","${i.unit_of_measure || ''}",${i.quantity || 0},${i.price || 0},"${i.cas_number || ''}","${i.expire_date || ''}","${i.catalog_link || ''}"\r\n`;
+      });
+      const link = document.createElement("a");
+      link.setAttribute("href", encodeURI(csv));
+      link.setAttribute("download", "inventory_export.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("Inventory exported to CSV!", "success");
+      addAuditEntry("Export Generated", "Downloaded inventory CSV.");
+    }
+    function exportSalesCSV(timeframe) {
+      const now = new Date();
+      let startDate = new Date(now);
+      if (timeframe === 'week') startDate.setDate(now.getDate() - 7);
+      if (timeframe === 'month') startDate.setDate(now.getDate() - 30);
+      if (timeframe === 'year') startDate.setDate(now.getDate() - 365);
 
+      let records = [...salesHistory].filter(s => {
+        if (timeframe !== 'all' && s.sale_date) {
+          const d = new Date(s.sale_date + 'T23:59:59');
+          if (d < startDate) return false;
+        }
+        return true;
+      });
+
+      if (!records.length) { showToast("No sales records match the selected filter.", "error"); return; }
+
+      let csv = "data:text/csv;charset=utf-8,";
+      csv += "Transaction ID,Invoice Number,Item Name,Client / Destination,Sale Type,Quantity,Unit Price (ETB),Total Price (ETB),Sale Date\r\n";
+      records.forEach(s => {
+        const qty = parseFloat(s.quantity) || 0;
+        const unitPrice = parseFloat(s.unit_price) || 0;
+        const total = parseFloat(s.total_price) || (qty * unitPrice);
+        csv += `"${s.id || ''}","${s.invoice_number || ''}","${s.item_name || ''}","${s.client_name || s.organization || ''}","${s.sale_type || 'Sell'}",${qty},${unitPrice},${total},"${s.sale_date || ''}"\r\n`;
+      });
+
+      const link = document.createElement("a");
+      link.setAttribute("href", encodeURI(csv));
+      link.setAttribute("download", `sales_export_${timeframe}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("Sales history exported to CSV!", "success");
+      addAuditEntry("Export Generated", `Downloaded sales CSV (${timeframe}).`);
+    }
     function processCSVImport() {
       const fileInput = document.getElementById('import-csv-file');
       if (!fileInput.files.length) { showToast("Please select a CSV file first.", "error"); return; }
       const file = fileInput.files[0];
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = async function(e) {
         const text = e.target.result;
-        const lines = text.split('\n');
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        if (lines.length < 2) { showToast("CSV file appears empty or missing headers.", "error"); return; }
+        
         let importedCount = 0;
-        let localItems = JSON.parse(localStorage.getItem('local_items_fallback') || '[]');
-
         for (let i = 1; i < lines.length; i++) {
-          if (!lines[i].trim()) continue;
           const cols = lines[i].split(',').map(c => c.replace(/^"|"$/g, '').trim());
-          if (cols.length >= 2) {
-            const newItem = {
+          if (cols.length >= 3) {
+            const payload = {
               id: Date.now() + i,
-              category: cols[0] || 'Equipment',
-              item_name: cols[1] || 'Imported Asset',
-              brand: cols[2] || '',
-              model: cols[3] || '',
-              quantity: parseInt(cols[4]) || 1,
-              price: parseFloat(cols[5]) || 0,
-              unit_of_measure: 'Pcs'
+              category: cols[1] || 'Equipment',
+              item_name: cols[2] || cols[0],
+              brand: cols[3] || null,
+              model: cols[4] || null,
+              unit_of_measure: cols[5] || 'Pcs',
+              quantity: parseInt(cols[6]) || 0,
+              price: parseFloat(cols[7]) || 0,
+              cas_number: cols[8] || null,
+              expire_date: cols[9] || null,
+              catalog_link: cols[10] || null
             };
-            localItems.unshift(newItem);
-            if (db) { try { db.from('items').insert([newItem]); } catch(err){} }
+            if (db) { try { await db.from('items').insert([payload]); } catch(err){} }
+            let localItems = JSON.parse(localStorage.getItem('local_items_fallback') || '[]');
+            localItems.unshift(payload);
+            localStorage.setItem('local_items_fallback', JSON.stringify(localItems));
             importedCount++;
           }
         }
-        localStorage.setItem('local_items_fallback', JSON.stringify(localItems));
-        showToast(`Successfully imported ${importedCount} assets!`, "success");
-        addAuditEntry("CSV Import", `Imported ${importedCount} items from CSV`);
+        showToast(`Successfully imported ${importedCount} items!`, "success");
+        addAuditEntry("CSV Import", `Imported ${importedCount} items from CSV file.`);
         closeExportModal();
         loadEnterpriseData();
       };
       reader.readAsText(file);
     }
 
-    function processExportRequest() {
-      const target = document.getElementById('export-target').value;
-      let csv = "data:text/csv;charset=utf-8,";
-      let filename = target === 'inventory' ? "inventory_export.csv" : "sales_export.csv";
-
-      if (target === 'inventory') {
-        csv += "Category,Item Name,Brand,Model,Quantity,Price (ETB),Catalog Link\r\n";
-        enterpriseItems.forEach(i => { csv += `"${i.category}","${i.item_name}","${i.brand || ''}","${i.model || ''}",${i.quantity},${i.price},"${i.catalog_link || ''}"\r\n`; });
-      } else {
-        const timeframe = document.getElementById('export-sales-timeframe').value;
-        const now = new Date();
-        let filteredSales = salesHistory.filter(s => {
-          if (!s.sale_date) return timeframe === 'all';
-          const sDate = new Date(s.sale_date);
-          const diffDays = (now - sDate) / (1000 * 60 * 60 * 24);
-          if (timeframe === 'week') return diffDays <= 7;
-          if (timeframe === 'month') return diffDays <= 30;
-          if (timeframe === 'year') return diffDays <= 365;
-          return true;
-        });
-        filename = `sales_export_${timeframe}.csv`;
-        csv += "Item Name,Sale Type,Client Name,Quantity,Unit Price,Total,Date\r\n";
-        filteredSales.forEach(s => { csv += `"${s.item_name}","${s.sale_type}","${s.client_name}",${s.quantity},${s.unit_price},${s.total_price},"${s.sale_date}"\r\n`; });
-      }
-
-      const link = document.createElement("a");
-      link.setAttribute("href", encodeURI(csv));
-      link.setAttribute("download", filename);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      showToast("Data export downloaded!", "success");
-      closeExportModal();
-    }
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      // Auto-load data if session already authenticated or start login
+    });
   </script>
 </body>
 </html>
