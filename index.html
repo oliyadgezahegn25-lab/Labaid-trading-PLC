@@ -303,11 +303,49 @@
     #page-visuals-expiry .analytics-card { border-top:2px solid rgba(56,189,248,.55); }
 
 
-    .table-container { background: var(--panel-solid); border: 1px solid var(--border-light); border-radius: 14px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    /* BLUE ENTERPRISE INVENTORY SURFACE */
+    .table-container {
+      background: linear-gradient(180deg, #0e1a2d 0%, #0a1425 100%);
+      border: 1px solid rgba(56,189,248,.24);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(2,12,27,.35), inset 0 1px 0 rgba(56,189,248,.06);
+    }
     table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
-    th { background: rgba(0, 0, 0, 0.4); padding: 13px 16px; color: var(--text-muted); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; border-bottom: 1px solid var(--border-light); }
-    td { padding: 13px 16px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
-    tr:hover { background: rgba(255, 255, 255, 0.025); }
+    th {
+      background: linear-gradient(180deg, rgba(56,189,248,.18), rgba(14,165,233,.07));
+      padding: 13px 16px;
+      color: #7dd3fc;
+      font-weight: 800;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .65px;
+      border-bottom: 1px solid rgba(56,189,248,.25);
+    }
+    td {
+      padding: 13px 16px;
+      border-bottom: 1px solid rgba(148,163,184,.10);
+      vertical-align: middle;
+      color: #dbeafe;
+      background: rgba(8,20,37,.55);
+    }
+    tbody tr:nth-child(even) td { background: rgba(15,35,58,.48); }
+    tbody tr:hover td {
+      background: linear-gradient(90deg, rgba(56,189,248,.10), rgba(56,189,248,.035));
+      box-shadow: inset 3px 0 0 rgba(56,189,248,.7);
+    }
+    tbody td strong { color: #f0f9ff; }
+    .table-container .qty-adjust-btn {
+      background: rgba(56,189,248,.10);
+      border-color: rgba(56,189,248,.28);
+      color: #7dd3fc;
+    }
+    .table-container .qty-adjust-btn:hover {
+      background: rgba(56,189,248,.22);
+      border-color: #38bdf8;
+      color: #e0f2fe;
+    }
+    .table-container .section-blue-header { margin: 10px; }
 
     /* BADGES & QUICK ACTIONS */
     .badge-stock { padding: 3px 8px; border-radius: 12px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
