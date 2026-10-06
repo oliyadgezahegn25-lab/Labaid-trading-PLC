@@ -592,6 +592,29 @@
       color: #dbeafe !important;
     }
 
+    /* FINAL HOVER FIX — keep item rows dark and readable */
+    .content-area .table-container tbody tr:hover {
+      background: transparent !important;
+      transform: none !important;
+      filter: none !important;
+    }
+    .content-area .table-container tbody tr:hover td,
+    .content-area .table-container tbody tr:nth-child(even):hover td,
+    .content-area .table-container tbody tr:nth-child(odd):hover td {
+      background: #0c1f35 !important;
+      color: #dbeafe !important;
+      box-shadow: inset 0 0 0 1px rgba(56,189,248,.16) !important;
+      border-top-color: rgba(56,189,248,.18) !important;
+      border-bottom-color: rgba(56,189,248,.18) !important;
+      text-shadow: none !important;
+    }
+    .content-area .table-container tbody tr:hover td strong,
+    .content-area .table-container tbody tr:hover td span,
+    .content-area .table-container tbody tr:hover td div {
+      color: inherit;
+      text-shadow: none !important;
+    }
+
 </style>
 </head>
 <body>
