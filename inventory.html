@@ -254,6 +254,29 @@
     th { background: rgba(0, 0, 0, 0.4); padding: 13px 16px; color: var(--text-muted); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; border-bottom: 1px solid var(--border-light); }
     td { padding: 13px 16px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
     tr:hover { background: rgba(255, 255, 255, 0.025); }
+    .featured-inventory-row {
+      background: linear-gradient(90deg, rgba(56, 189, 248, 0.12), rgba(168, 85, 247, 0.08)) !important;
+      box-shadow: inset 3px 0 0 var(--accent-cyan);
+    }
+    .featured-inventory-row:hover {
+      background: linear-gradient(90deg, rgba(56, 189, 248, 0.18), rgba(168, 85, 247, 0.12)) !important;
+    }
+    .featured-inventory-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: 8px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      vertical-align: middle;
+    }
     /* BADGES & QUICK ACTIONS */
     .badge-stock { padding: 3px 8px; border-radius: 12px; font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
     .badge-in-stock { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
@@ -1174,7 +1197,17 @@
         const cas = (item.cas_number || '').toLowerCase();
         return name.includes(query) || cat.includes(query) || brand.includes(query) || model.includes(query) || cas.includes(query);
       });
+      // Keep the single item that has BOTH a PDF catalogue and an external catalogue link
+      // at the top. Every other item remains alphabetically ordered underneath it.
       filteredItems.sort((a, b) => (a.item_name || '').localeCompare(b.item_name || ''));
+      const featuredItem = filteredItems.find(item =>
+        item.category !== "Chemicals" && item.pdf_url && item.catalog_link
+      );
+      if (featuredItem) {
+        const featuredIndex = filteredItems.indexOf(featuredItem);
+        if (featuredIndex > -1) filteredItems.splice(featuredIndex, 1);
+        filteredItems.unshift(featuredItem);
+      }
       const thead = document.getElementById('ent-table-head');
       const tbody = document.getElementById('ent-table-body');
       const chemThead = document.getElementById('chem-table-head');
@@ -1196,6 +1229,7 @@
           tbody.innerHTML = equipmentItems.map((item, index) => {
             const qty = parseInt(item.quantity) || 0;
             const recordId = item.id || index;
+            const isFeatured = featuredItem && (item.id === featuredItem.id || item.id == featuredItem.id);
             
             let stockBadge = qty === 0 ? `<span class="badge-stock badge-out-stock"><i class="fa-solid fa-circle-xmark"></i> Out</span>` :
                              qty <= 5 ? `<span class="badge-stock badge-low-stock"><i class="fa-solid fa-triangle-exclamation"></i> Low (${qty})</span>` :
@@ -1213,7 +1247,10 @@
             return `
               <tr>
                 <td><strong>${index + 1}</strong></td>
-                <td><strong>${item.item_name}</strong></td>
+                <td>
+                  <strong>${item.item_name}</strong>
+                  ${isFeatured ? '<span class="featured-inventory-badge"><i class="fa-solid fa-star"></i> Featured</span>' : ''}
+                </td>
                 <td><span style="font-size:11px; padding:2px 7px; background:rgba(255,255,255,0.05); border-radius:6px;">${item.category}</span></td>
                 <td><span style="font-size:12px; color:var(--text-muted);">${item.brand || '-'} / ${item.model || '-'}</span></td>
                 <td>
