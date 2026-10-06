@@ -565,6 +565,33 @@
     .content-area .table-container tbody tr:hover td strong { color: #f4fbff !important; }
     .content-area .table-container tbody tr:hover .badge-stock { filter: none !important; }
 
+    /* RESTORE ORIGINAL DARK INVENTORY UI — login styling untouched */
+    body { background-color: var(--bg-dark) !important; color: var(--text-main) !important; }
+    .content-area { background: transparent !important; color: var(--text-main) !important; }
+    .content-area .panel,
+    .content-area .card,
+    .content-area .table-container,
+    .content-area .section-card,
+    .content-area .stat-card {
+      background: rgba(15,23,42,.75) !important;
+      color: var(--text-main) !important;
+      border-color: var(--border-light) !important;
+    }
+    .content-area .table-container thead th {
+      background: linear-gradient(135deg, rgba(15,23,42,.98), rgba(14,165,233,.12)) !important;
+      color: #7dd3fc !important;
+      border-color: rgba(56,189,248,.18) !important;
+    }
+    .content-area .table-container tbody td {
+      background: rgba(15,23,42,.58) !important;
+      color: #dbeafe !important;
+      border-color: rgba(148,163,184,.10) !important;
+    }
+    .content-area .table-container tbody tr:hover td {
+      background: linear-gradient(90deg, rgba(56,189,248,.105), rgba(56,189,248,.045)) !important;
+      color: #dbeafe !important;
+    }
+
 </style>
 </head>
 <body>
