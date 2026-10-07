@@ -1128,7 +1128,7 @@
 
     function startInteractiveTour() {
       currentTourIndex = 0;
-      localStorage.setItem('labaid_inventory_tour_seen','1');
+      localStorage.removeItem('labaid_inventory_tour_seen');
       document.getElementById('tour-floating-box').style.display = 'block';
       renderTourStep();
     }
@@ -1214,7 +1214,7 @@
         addAuditEntry("System Session", "User authenticated workstation.");
         showToast("Welcome to Lab Aid Trading PLC System", "success");
         loadEnterpriseData();
-        setTimeout(() => { if (!localStorage.getItem('labaid_inventory_tour_seen')) startInteractiveTour(); }, 900);
+        setTimeout(() => { startInteractiveTour(); }, 900);
       } else {
         document.getElementById('login-error').style.display = 'block';
         showToast("Authentication Failed. Check credentials.", "error");
