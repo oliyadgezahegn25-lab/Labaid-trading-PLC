@@ -667,11 +667,11 @@
   <!-- NAVBAR -->
   <header class="navbar">
     <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-      <div class="brand" id="tour-step-1-target">
+      <div class="brand">
         <i class="fa-solid fa-microchip"></i> Lab Aid Trading PLC Inventory
       </div>
       <a href="https://oliyadgezahegn25-lab.github.io/outcome-platform/" target="_blank" rel="noopener noreferrer"
-         style="display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid rgba(56,189,248,.28);border-radius:9px;background:rgba(56,189,248,.08);color:#7dd3fc;text-decoration:none;font-size:11px;font-weight:700;white-space:nowrap;transition:.2s ease;"
+         id="tour-step-1-target" style="display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid rgba(56,189,248,.28);border-radius:9px;background:rgba(56,189,248,.08);color:#7dd3fc;text-decoration:none;font-size:11px;font-weight:700;white-space:nowrap;transition:.2s ease;"
          onmouseover="this.style.background='rgba(56,189,248,.16)';this.style.borderColor='rgba(56,189,248,.5)'"
          onmouseout="this.style.background='rgba(56,189,248,.08)';this.style.borderColor='rgba(56,189,248,.28)'">
         <i class="fa-solid fa-globe"></i> Click here
@@ -1081,19 +1081,20 @@
     let activePassword = localStorage.getItem('labaid_app_pass') || "abc123";
 
     const tourStepsDef = [
-      { targetId: 'tour-step-1-target', title: 'Stage 1: Enterprise Brand Header', desc: 'Core navigation header running the Lab Aid Trading PLC Inventory with rapid action shortcuts.' },
-      { targetId: 'tour-step-2-target', title: 'Stage 2: Asset Registration Sidebar', desc: 'Register new equipment, supplies, or chemicals directly into cloud storage.' },
-      { targetId: 'tour-step-3-target', title: 'Stage 3: Category Selector', desc: 'Select categories like Equipment or Chemicals.' },
-      { targetId: 'tour-step-4-target', title: 'Stage 4: Sales History Drawer', desc: 'Track completed university and institutional dispatches with item-level breakdowns.' },
-      { targetId: 'tour-step-5-target', title: 'Stage 5: Data Export & Import Center', desc: 'Download full inventory CSVs or import new batch inventory datasets.' },
-      { targetId: 'tour-step-6-target', title: 'Stage 6: System Audit Logs', desc: 'Monitor workstation activity and administrative changes in real time.' },
-      { targetId: 'tour-step-7-target', title: 'Stage 7: Security Settings', desc: 'Update your account credentials and workstation access keys.' },
-      { targetId: 'tour-step-8-target', title: 'Stage 8: Intelligence Analytics Deck', desc: 'Live cards displaying total volume, active sectors, and chemical expiration warnings.' },
-      { targetId: 'tour-step-9-target', title: 'Stage 9: Visualization Charts & Timelines', desc: 'Interactive graphical distribution charts and expiry tracking timelines.' },
-      { targetId: 'tour-step-10-target', title: 'Stage 10: Page View Control', desc: 'Quickly access Lab Equipment, Chemicals, Visuals, and Intelligence Hub pages.' },
-      { targetId: 'tour-step-11-target', title: 'Stage 11: Sector Page Switcher', desc: 'Switch between Equipment, Chemicals, Visuals, and Intelligence Hub pages seamlessly.' },
-      { targetId: 'tour-step-12-target', title: 'Stage 12: Item Matrix & Quick Actions', desc: 'Edit asset records, adjust quantities instantly (+/-), trigger sales, or manage stock.' },
-      { targetId: 'tab-hub', title: 'Stage 13: Intelligence Hub Replenishment Page', desc: 'Explore portfolio valuation metrics and automated low-stock reorder recommendations.' }
+      { targetId: 'tour-step-1-target', title: 'Welcome: Visit the New Labaid Website', desc: 'Start here. Click “Click here” beside the inventory title to open the new Labaid Trading PLC website in a new tab. When you are ready, press Next to continue the tour.' },
+      { targetId: 'tour-step-ai-target', title: 'Step 2: Your Labaid AI Assistant', desc: 'This is the Ask AI assistant. Click it anytime to ask about equipment, chemicals, quotations, or requirements. Press Next to continue exploring the inventory.' },
+      { targetId: 'tour-step-2-target', title: 'Step 3: Asset Registration Sidebar', desc: 'Register new equipment, supplies, or chemicals directly into cloud storage.' },
+      { targetId: 'tour-step-3-target', title: 'Step 4: Category Selector', desc: 'Select categories like Equipment or Chemicals.' },
+      { targetId: 'tour-step-4-target', title: 'Step 5: Sales History Drawer', desc: 'Track completed university and institutional dispatches with item-level breakdowns.' },
+      { targetId: 'tour-step-5-target', title: 'Step 6: Data Export & Import Center', desc: 'Download full inventory CSVs or import new batch inventory datasets.' },
+      { targetId: 'tour-step-6-target', title: 'Step 7: System Audit Logs', desc: 'Monitor workstation activity and administrative changes in real time.' },
+      { targetId: 'tour-step-7-target', title: 'Step 8: Security Settings', desc: 'Update your account credentials and workstation access keys.' },
+      { targetId: 'tour-step-8-target', title: 'Step 9: Intelligence Analytics Deck', desc: 'Live cards displaying total volume, active sectors, and chemical expiration warnings.' },
+      { targetId: 'tour-step-9-target', title: 'Step 10: Visualization Charts & Timelines', desc: 'Interactive graphical distribution charts and expiry tracking timelines.' },
+      { targetId: 'tour-step-10-target', title: 'Step 11: Page View Control', desc: 'Quickly access Lab Equipment, Chemicals, Visuals, and Intelligence Hub pages.' },
+      { targetId: 'tour-step-11-target', title: 'Step 12: Sector Page Switcher', desc: 'Switch between Equipment, Chemicals, Visuals, and Intelligence Hub pages seamlessly.' },
+      { targetId: 'tour-step-12-target', title: 'Step 13: Item Matrix & Quick Actions', desc: 'Edit asset records, adjust quantities instantly (+/-), trigger sales, or manage stock.' },
+      { targetId: 'tab-hub', title: 'Step 14: Intelligence Hub Replenishment Page', desc: 'Explore portfolio valuation metrics and automated low-stock reorder recommendations.' }
     ];
 
     // TOAST SYSTEM
@@ -1980,7 +1981,7 @@
 </script>
 
 <div class="labaid-chat" id="labaidChat">
-  <button class="labaid-chat-toggle" id="chatToggle" aria-label="Open Labaid assistant" aria-expanded="false">
+  <button class="labaid-chat-toggle" id="tour-step-ai-target" aria-label="Open Labaid assistant" aria-expanded="false">
     <span class="chat-pulse"></span><span class="chat-icon">✦</span><span>Ask AI</span>
   </button>
   <section class="labaid-chat-panel" id="chatPanel" aria-label="Labaid assistant">
