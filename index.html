@@ -487,6 +487,10 @@
     .tour-highlight-active{z-index:210!important;box-shadow:0 0 0 3px #38bdf8,0 0 0 8px rgba(56,189,248,.14),0 0 34px rgba(56,189,248,.65)!important;border-radius:10px!important}
     @media(max-width:600px){#tour-floating-box{right:15px;left:15px;bottom:15px;width:auto;padding:17px}.tour-highlight-active{scroll-margin-top:90px}}
 
+    #tour-floating-box{transition:left .28s ease,top .28s ease}
+    #tour-floating-box:before{left:18px;top:50%;margin-top:-7px;transform:rotate(45deg)}
+    #tour-floating-box.tour-guide-left:before{left:auto;right:-7px;transform:rotate(225deg)}
+    @media(max-width:600px){#tour-floating-box{left:15px!important;right:15px!important;top:auto!important;bottom:15px!important;width:auto}.tour-highlight-active{scroll-margin-top:90px}}
     /* TOAST NOTIFICATIONS */
     #toast-container {
       position: fixed; bottom: 24px; right: 24px; z-index: 10000;
@@ -1142,6 +1146,7 @@
       document.querySelectorAll('.tour-highlight-active').forEach(el => el.classList.remove('tour-highlight-active'));
       const step = tourStepsDef[currentTourIndex];
       const targetEl = document.getElementById(step.targetId);
+      const box = document.getElementById('tour-floating-box');
       if (targetEl) {
         targetEl.classList.add('tour-highlight-active');
         targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1153,6 +1158,28 @@
       const nBtn = document.getElementById('tour-next-btn');
       nBtn.innerHTML = currentTourIndex === tourStepsDef.length - 1 ? `Finish <i class="fa-solid fa-check"></i>` : `Next <i class="fa-solid fa-arrow-right"></i>`;
       nBtn.onclick = currentTourIndex === tourStepsDef.length - 1 ? closeInteractiveTour : () => travelTourStep(1);
+
+      // Keep the guide message physically beside the highlighted control.
+      // Recalculate after scrolling and whenever the viewport changes.
+      const positionGuide = () => {
+        if (!targetEl || box.style.display === 'none') return;
+        const r = targetEl.getBoundingClientRect();
+        const gap = 18;
+        const bw = box.offsetWidth || 390;
+        const bh = box.offsetHeight || 220;
+        let left = r.right + gap;
+        let top = r.top + (r.height / 2) - (bh / 2);
+        if (left + bw > window.innerWidth - 12) left = r.left - bw - gap;
+        if (left < 12) left = Math.max(12, Math.min(window.innerWidth - bw - 12, r.left + (r.width / 2) - bw / 2));
+        if (top < 12) top = 12;
+        if (top + bh > window.innerHeight - 12) top = Math.max(12, window.innerHeight - bh - 12);
+        box.style.left = left + 'px';
+        box.style.top = top + 'px';
+        box.style.right = 'auto';
+        box.style.bottom = 'auto';
+        box.classList.toggle('tour-guide-left', left < r.left);
+      };
+      requestAnimationFrame(() => requestAnimationFrame(positionGuide));
     }
 
     function openPasswordModal() { document.getElementById('password-modal').classList.add('active'); }
