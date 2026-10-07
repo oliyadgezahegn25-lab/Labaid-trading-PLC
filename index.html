@@ -478,6 +478,15 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.8); z-index: 300; display: none;
     }
 
+    /* INTERACTIVE TOUR — guided message experience */
+    #tour-floating-box{position:fixed;bottom:25px;right:25px;width:min(390px,calc(100vw - 30px));background:linear-gradient(145deg,rgba(15,23,42,.98),rgba(7,15,29,.98));backdrop-filter:blur(22px);border:1px solid rgba(56,189,248,.55);border-radius:18px;padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.72),0 0 35px rgba(56,189,248,.12);z-index:10001;display:none}
+    #tour-floating-box:before{content:'';position:absolute;top:-7px;left:28px;width:13px;height:13px;background:#101a2d;border-left:1px solid rgba(56,189,248,.55);border-top:1px solid rgba(56,189,248,.55);transform:rotate(45deg)}
+    #tour-step-title{font-size:15px!important;line-height:1.35;color:#f8fafc!important}
+    #tour-step-desc{font-size:12px!important;line-height:1.65!important;color:#a8b7c8!important}
+    #tour-floating-box .btn-action{min-height:34px}
+    .tour-highlight-active{z-index:210!important;box-shadow:0 0 0 3px #38bdf8,0 0 0 8px rgba(56,189,248,.14),0 0 34px rgba(56,189,248,.65)!important;border-radius:10px!important}
+    @media(max-width:600px){#tour-floating-box{right:15px;left:15px;bottom:15px;width:auto;padding:17px}.tour-highlight-active{scroll-margin-top:90px}}
+
     /* TOAST NOTIFICATIONS */
     #toast-container {
       position: fixed; bottom: 24px; right: 24px; z-index: 10000;
@@ -897,7 +906,7 @@
   <!-- FLOATING TOUR GUIDE BOX -->
   <div id="tour-floating-box">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-      <span id="tour-step-badge" style="font-size: 10px; background: rgba(56,189,248,0.2); color: var(--accent-cyan); padding: 3px 8px; border-radius: 6px; font-weight: 700;">STEP 1 OF 13</span>
+      <span id="tour-step-badge" style="font-size: 10px; background: rgba(56,189,248,0.2); color: var(--accent-cyan); padding: 3px 8px; border-radius: 6px; font-weight: 700;">STEP 1 OF 14</span>
       <button onclick="closeInteractiveTour()" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer;">&times;</button>
     </div>
     <h4 id="tour-step-title" style="font-size: 14px; margin-bottom: 6px; color: var(--text-main);"></h4>
@@ -1082,7 +1091,7 @@
 
     const tourStepsDef = [
       { targetId: 'tour-step-1-target', title: 'Welcome: Visit the New Labaid Website', desc: 'Start here. Click “Click here” beside the inventory title to open the new Labaid Trading PLC website in a new tab. When you are ready, press Next to continue the tour.' },
-      { targetId: 'tour-step-ai-target', title: 'Step 2: Your Labaid AI Assistant', desc: 'This is the Ask AI assistant. Click it anytime to ask about equipment, chemicals, quotations, or requirements. Press Next to continue exploring the inventory.' },
+      { targetId: 'chatToggle', title: 'Step 2: Your Labaid AI Assistant', desc: 'This is the Ask AI assistant. Click it anytime to ask about equipment, chemicals, quotations, or requirements. Press Next to continue exploring the inventory.' },
       { targetId: 'tour-step-2-target', title: 'Step 3: Asset Registration Sidebar', desc: 'Register new equipment, supplies, or chemicals directly into cloud storage.' },
       { targetId: 'tour-step-3-target', title: 'Step 4: Category Selector', desc: 'Select categories like Equipment or Chemicals.' },
       { targetId: 'tour-step-4-target', title: 'Step 5: Sales History Drawer', desc: 'Track completed university and institutional dispatches with item-level breakdowns.' },
@@ -1115,6 +1124,7 @@
 
     function startInteractiveTour() {
       currentTourIndex = 0;
+      localStorage.setItem('labaid_inventory_tour_seen','1');
       document.getElementById('tour-floating-box').style.display = 'block';
       renderTourStep();
     }
@@ -1177,6 +1187,7 @@
         addAuditEntry("System Session", "User authenticated workstation.");
         showToast("Welcome to Lab Aid Trading PLC System", "success");
         loadEnterpriseData();
+        setTimeout(() => { if (!localStorage.getItem('labaid_inventory_tour_seen')) startInteractiveTour(); }, 900);
       } else {
         document.getElementById('login-error').style.display = 'block';
         showToast("Authentication Failed. Check credentials.", "error");
@@ -1981,7 +1992,7 @@
 </script>
 
 <div class="labaid-chat" id="labaidChat">
-  <button class="labaid-chat-toggle" id="tour-step-ai-target" aria-label="Open Labaid assistant" aria-expanded="false">
+  <button class="labaid-chat-toggle" id="chatToggle" aria-label="Open Labaid assistant" aria-expanded="false">
     <span class="chat-pulse"></span><span class="chat-icon">✦</span><span>Ask AI</span>
   </button>
   <section class="labaid-chat-panel" id="chatPanel" aria-label="Labaid assistant">
