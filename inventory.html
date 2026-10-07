@@ -694,6 +694,7 @@
         <input type="hidden" id="sale-item-id">
         <input type="hidden" id="sale-item-name">
         <div class="form-group"><label>Invoice Number</label><input type="text" class="form-control" id="sale-invoice-number" placeholder="e.g. LTP/INV/2026/0047" required></div>
+        <div class="form-group"><label>Invoice PDF <span style="color:var(--accent-rose);">*</span></label><input type="file" class="form-control" id="sale-invoice-pdf" accept="application/pdf,.pdf" required><div style="font-size:10px;color:var(--text-muted);margin-top:5px;"><i class="fa-solid fa-lock"></i> Attach the invoice PDF for this sale. Maximum 10 MB.</div></div>
         <div class="form-group"><label>Destination / Client Name</label><input type="text" class="form-control" id="sale-client" placeholder="e.g. Bule Hora University / Regional Hospital" required></div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
           <div class="form-group"><label>Quantity</label><input type="number" class="form-control" id="sale-qty" min="1" required></div>
@@ -1442,19 +1443,48 @@
       document.getElementById('sale-date').value = new Date().toISOString().split('T')[0];
       document.getElementById('sale-modal').classList.add('active');
     }
-    function closeSaleModal() { document.getElementById('sale-modal').classList.remove('active'); }
+    function closeSaleModal() {
+      document.getElementById('sale-modal').classList.remove('active');
+      const invoiceInput = document.getElementById('sale-invoice-pdf');
+      if (invoiceInput) invoiceInput.value = '';
+    }
+    function getInvoicePublicUrl(path) {
+      if (!path || !db) return null;
+      const { data } = db.storage.from('sales-invoices').getPublicUrl(path);
+      return data?.publicUrl || null;
+    }
     async function handleSaleSubmit(e) {
       e.preventDefault();
       const itemId = parseInt(document.getElementById('sale-item-id').value);
       const qtySold = parseInt(document.getElementById('sale-qty').value);
       const item = enterpriseItems.find(i => i.id === itemId || i.id == itemId);
+      const invoiceFile = document.getElementById('sale-invoice-pdf').files[0];
       if (!item || item.quantity < qtySold) { showToast("Insufficient stock quantity!", "error"); return; }
-      
+      if (!invoiceFile) { showToast("Please attach the invoice PDF before completing the sale.", "error"); return; }
+      if (invoiceFile.type !== 'application/pdf' && !invoiceFile.name.toLowerCase().endsWith('.pdf')) { showToast("Only PDF invoice files are allowed.", "error"); return; }
+      if (invoiceFile.size > 10 * 1024 * 1024) { showToast("Invoice PDF must be 10 MB or smaller.", "error"); return; }
+
+      let invoicePdfPath = null;
+      if (db) {
+        const safeName = invoiceFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        invoicePdfPath = `invoices/${Date.now()}_${Math.random().toString(36).slice(2, 10)}_${safeName}`;
+        const { error: uploadError } = await db.storage.from('sales-invoices').upload(invoicePdfPath, invoiceFile, {
+          contentType: 'application/pdf',
+          upsert: false
+        });
+        if (uploadError) {
+          console.error('Invoice upload failed:', uploadError);
+          showToast("Invoice upload failed. Sale was not recorded.", "error");
+          return;
+        }
+      }
+
       const saleRecord = {
         id: Date.now(),
         item_id: itemId,
         item_name: document.getElementById('sale-item-name').value,
         invoice_number: document.getElementById('sale-invoice-number').value.trim(),
+        invoice_pdf_path: invoicePdfPath,
         sale_type: document.getElementById('sale-type').value,
         client_name: document.getElementById('sale-client').value,
         quantity: qtySold,
@@ -1463,7 +1493,13 @@
         sale_date: document.getElementById('sale-date').value
       };
       if (db) {
-        try { await db.from('sales_log').insert([saleRecord]); } catch(err) {}
+        const { error: saleError } = await db.from('sales_log').insert([saleRecord]);
+        if (saleError) {
+          console.error('Sale record failed:', saleError);
+          if (invoicePdfPath) await db.storage.from('sales-invoices').remove([invoicePdfPath]);
+          showToast("Sale could not be recorded. The invoice upload was rolled back.", "error");
+          return;
+        }
       }
       let localSales = JSON.parse(localStorage.getItem('local_sales_fallback') || '[]');
       localSales.unshift(saleRecord);
@@ -1524,6 +1560,8 @@
         const qty=parseFloat(s.quantity)||0, unitPrice=parseFloat(s.unit_price)||0;
         const total=parseFloat(s.total_price)||(qty*unitPrice);
         const invoiceNo=s.invoice_number||('INV-'+String(s.id||'').slice(-8)), client=s.client_name||s.organization||'N/A';
+        const invoiceUrl=getInvoicePublicUrl(s.invoice_pdf_path);
+        const invoiceAction=invoiceUrl ? '<a href="' + invoiceUrl + '" target="_blank" rel="noopener" class="btn-action" style="margin-top:10px;display:inline-flex;background:rgba(244,63,94,.15);color:var(--accent-rose);border-color:var(--accent-rose);"><i class="fa-solid fa-file-pdf"></i> View Invoice PDF</a>' : '<span style="font-size:10px;color:var(--text-muted);">No invoice PDF attached</span>';
         return `
         <div class="sale-msg-card" onclick="this.classList.toggle('expanded')">
           <div class="sale-summary">
@@ -1541,6 +1579,7 @@
               <div class="sale-detail-box"><div class="sale-detail-label">Transaction Date</div><div class="sale-detail-value">${s.sale_date||'N/A'}</div></div>
             </div>
             <div class="sale-invoice-mini"><div class="sale-invoice-mini-head"><span>Description</span><span>Qty</span><span>Amount</span></div><div class="sale-invoice-mini-row"><strong>${s.item_name||'N/A'}</strong><span>${qty}</span><strong>${total.toLocaleString()} ETB</strong></div></div>
+            <div style="margin-top:10px;">${invoiceAction}</div>
             <div class="sale-email-box"><div><i class="fa-solid fa-envelope"></i> <strong>Email notification</strong></div><div style="margin-top:5px;font-size:10.5px;">Automatic sale notification destination: <strong>oliyadgezahegn25@gmail.com</strong></div><div style="margin-top:5px;font-size:10px;color:#64748b;">The email contains the invoice, item, quantity, price, total, destination, transaction type, and sale date.</div></div>
             <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:10px;color:#64748b;"><span><i class="fa-solid fa-circle-check" style="color:var(--accent-emerald);"></i> Recorded & Dispatched</span><span>Click to collapse</span></div>
           </div>
