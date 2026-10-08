@@ -743,13 +743,21 @@
 @media(max-width:520px){.export-target-grid{grid-template-columns:1fr}.sales-metrics-grid{grid-template-columns:1fr}.export-actions{flex-direction:column}.export-actions .btn-action{width:100%}}
 
 
-.sales-calculate-btn{border:1px solid rgba(85,222,207,.42);background:linear-gradient(135deg,rgba(85,222,207,.16),rgba(78,169,255,.12));color:#dffcf8;border-radius:10px;padding:9px 14px;display:inline-flex;align-items:center;gap:7px;font:800 10px Manrope;letter-spacing:.4px;cursor:pointer;box-shadow:0 0 18px rgba(85,222,207,.07);transition:.2s ease}
+.sales-calculate-btn{border:1px solid rgba(85,222,207,.42);background:linear-gradient(135deg,rgba(85,222,207,.16),rgba(78,169,255,.12));color:#dffcf8;border-radius:10px;padding:9px 14px;display:inline-flex;align-items:center;justify-content:center;gap:7px;font:800 10px Manrope;letter-spacing:.4px;cursor:pointer;box-shadow:0 0 18px rgba(85,222,207,.07);transition:.2s ease}
 .sales-calculate-btn:hover{transform:translateY(-2px);border-color:#55decf;background:linear-gradient(135deg,rgba(85,222,207,.26),rgba(78,169,255,.19));box-shadow:0 0 25px rgba(85,222,207,.13)}
 .sales-calculate-btn:active{transform:translateY(0)}
-.sales-calculated-status{font-size:8px;color:#6f8992;letter-spacing:.3px;white-space:nowrap}
-.sales-analytics-panel.calculated{animation:salesCalcPulse .55s ease}
-@keyframes salesCalcPulse{0%{box-shadow:0 0 0 rgba(85,222,207,0)}45%{box-shadow:0 0 30px rgba(85,222,207,.12)}100%{box-shadow:0 18px 45px rgba(2,12,27,.25)}}
-@media(max-width:700px){.sales-calculated-status{display:none}.sales-calculate-btn{flex:1;justify-content:center}}
+.sales-history-calc-row{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;margin-top:2px}
+.sales-history-calc-status{font-size:8px;color:#6f8992;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sales-history-calc-panel{margin-top:8px;padding:11px;border-radius:12px;background:linear-gradient(145deg,rgba(16,185,129,.07),rgba(56,189,248,.05));border:1px solid rgba(85,222,207,.18);box-shadow:0 12px 25px rgba(0,0,0,.14)}
+.sales-history-calc-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:9px;font-size:9px;text-transform:uppercase;letter-spacing:.7px;color:#8ea7ae;font-weight:800}
+.sales-history-calc-head span:first-child{color:#55d7ca}
+.sales-history-calc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.sales-history-calc-grid>div{padding:8px;border-radius:9px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.055);min-width:0}
+.sales-history-calc-grid small{display:block;font-size:7.5px;text-transform:uppercase;letter-spacing:.45px;color:#647d86}
+.sales-history-calc-grid strong{display:block;margin-top:4px;color:#e7fbf7;font-size:10.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sales-history-calc-panel.calculated{animation:salesHistoryCalcPulse .55s ease}
+@keyframes salesHistoryCalcPulse{0%{box-shadow:0 0 0 rgba(85,222,207,0)}45%{box-shadow:0 0 28px rgba(85,222,207,.14)}100%{box-shadow:0 12px 25px rgba(0,0,0,.14)}}
+@media(max-width:700px){.sales-history-calc-row{grid-template-columns:1fr}.sales-history-calc-status{white-space:normal}.sales-history-calc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sales-history-calc-panel{padding:10px}}
 
 </style>
 </head>
@@ -1035,10 +1043,7 @@
                 <span>to</span>
                 <input type="date" id="sales-analytics-end" class="form-control">
               </div>
-              <button type="button" class="sales-calculate-btn" onclick="calculateSalesNow()">
-                <i class="fa-solid fa-calculator"></i> Calculate
-              </button>
-              <span class="sales-calculated-status" id="sales-calculated-status">Ready to calculate</span>
+
             </div>
           </div>
           <div class="sales-metrics-grid">
@@ -1267,6 +1272,26 @@
           <option value="month">Last 30 days</option><option value="year">Last 365 days</option>
         </select>
         <div id="sales-history-count" style="display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:10px;border:1px solid var(--border-light);border-radius:8px;padding:8px;">0 records</div>
+      </div>
+      <div class="sales-history-calc-row">
+        <button type="button" class="sales-calculate-btn" onclick="calculateSalesFromHistory()">
+          <i class="fa-solid fa-calculator"></i> Calculate
+        </button>
+        <span class="sales-history-calc-status" id="sales-history-calc-status">Calculate the filtered sales</span>
+      </div>
+      <div class="sales-history-calc-panel" id="sales-history-calc-panel" aria-live="polite">
+        <div class="sales-history-calc-head">
+          <span><i class="fa-solid fa-chart-simple"></i> Sales calculation</span>
+          <span id="sales-history-calc-period">All dates</span>
+        </div>
+        <div class="sales-history-calc-grid">
+          <div><small>Units sold</small><strong id="sh-calc-units">0</strong></div>
+          <div><small>Revenue</small><strong id="sh-calc-revenue">0.00 ETB</strong></div>
+          <div><small>Transactions</small><strong id="sh-calc-transactions">0</strong></div>
+          <div><small>Average sale</small><strong id="sh-calc-average">0.00 ETB</strong></div>
+          <div><small>Unique clients</small><strong id="sh-calc-clients">0</strong></div>
+          <div><small>Top item</small><strong id="sh-calc-top-item">—</strong></div>
+        </div>
       </div>
     </div>
     <div id="sales-history-container"></div>
@@ -2083,6 +2108,58 @@
 
     function toggleSalesDrawer() { document.getElementById('sales-drawer').classList.toggle('open'); }
     function toggleAuditDrawer() { document.getElementById('audit-drawer').classList.toggle('open'); }
+
+    function calculateSalesFromHistory(){
+      const search=(document.getElementById('sales-history-search')?.value||'').trim().toLowerCase();
+      const dateFilter=document.getElementById('sales-history-date')?.value||'all';
+      const now=new Date(), startDate=new Date(now);
+      if(dateFilter==='today') startDate.setHours(0,0,0,0);
+      if(dateFilter==='week') startDate.setDate(now.getDate()-7);
+      if(dateFilter==='month') startDate.setDate(now.getDate()-30);
+      if(dateFilter==='year') startDate.setDate(now.getDate()-365);
+
+      const records=salesHistory.filter(s=>{
+        const haystack=[s.item_name,s.client_name,s.organization].filter(Boolean).join(' ').toLowerCase();
+        if(search&&!haystack.includes(search)) return false;
+        if(dateFilter!=='all'&&s.sale_date){
+          const d=new Date(s.sale_date+'T23:59:59');
+          if(dateFilter==='today'&&d.toDateString()!==now.toDateString()) return false;
+          if(dateFilter!=='today'&&d<startDate) return false;
+        }
+        return true;
+      });
+
+      const revenue=records.reduce((sum,s)=>{
+        const qty=toNumber(s.quantity), unitPrice=toNumber(s.unit_price);
+        return sum+toNumber(s.total_price||(qty*unitPrice));
+      },0);
+      const units=records.reduce((sum,s)=>sum+toNumber(s.quantity),0);
+      const clients=new Set(records.map(s=>(s.client_name||s.organization||'').trim()).filter(Boolean));
+      const itemMap=new Map();
+      records.forEach(s=>{
+        const name=s.item_name||'Unnamed item';
+        itemMap.set(name,(itemMap.get(name)||0)+toNumber(s.quantity));
+      });
+      const topItem=[...itemMap.entries()].sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
+      const avg=records.length?revenue/records.length:0;
+      const periodLabel={all:'All dates',today:'Today',week:'Last 7 days',month:'Last 30 days',year:'Last 365 days'}[dateFilter]||'All dates';
+
+      const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
+      set('sh-calc-units',units.toLocaleString());
+      set('sh-calc-revenue',money(revenue));
+      set('sh-calc-transactions',records.length.toLocaleString());
+      set('sh-calc-average',money(avg));
+      set('sh-calc-clients',clients.size.toLocaleString());
+      set('sh-calc-top-item',topItem);
+      set('sales-history-calc-period',periodLabel);
+      const status=document.getElementById('sales-history-calc-status');
+      if(status){
+        const when=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+        status.textContent=records.length+' transaction'+(records.length===1?'':'s')+' · calculated '+when;
+      }
+      const panel=document.getElementById('sales-history-calc-panel');
+      if(panel){panel.classList.remove('calculated');void panel.offsetWidth;panel.classList.add('calculated');}
+    }
 
     function renderSalesHistoryDrawer() {
       const c=document.getElementById('sales-history-container');
