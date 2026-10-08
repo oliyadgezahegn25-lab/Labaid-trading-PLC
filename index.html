@@ -749,6 +749,17 @@
 .sales-calculate-btn.active{border-color:#55decf;background:linear-gradient(135deg,rgba(85,222,207,.30),rgba(78,169,255,.20));box-shadow:0 0 28px rgba(85,222,207,.18),inset 0 0 18px rgba(85,222,207,.05)}
 .sales-history-calc-row{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;margin-top:2px}
 .sales-history-calc-status{font-size:8px;color:#6f8992;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sales-calc-options{display:grid;gap:10px;margin-bottom:10px}
+.sales-calc-option-group{padding:9px;border-radius:10px;background:rgba(0,0,0,.14);border:1px solid rgba(255,255,255,.055)}
+.sales-calc-option-group label{display:block;font-size:7.5px;text-transform:uppercase;letter-spacing:.55px;color:#6f8992;font-weight:800;margin-bottom:7px}
+.sales-calc-choice-row{display:flex;gap:6px;flex-wrap:wrap}
+.sales-calc-choice{border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035);color:#9db1b8;border-radius:8px;padding:7px 10px;font:800 8px Manrope;cursor:pointer;transition:.18s ease}
+.sales-calc-choice:hover,.sales-calc-choice.active{color:#eafffb;border-color:rgba(85,222,207,.5);background:rgba(85,222,207,.12);box-shadow:0 0 14px rgba(85,222,207,.06)}
+.sales-run-calc-btn{justify-self:start}
+.sales-calc-type-breakdown{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:9px}
+.sales-calc-type-card{padding:8px;border-radius:9px;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.05)}
+.sales-calc-type-card small{display:block;color:#647d86;font-size:7px;text-transform:uppercase;letter-spacing:.4px}
+.sales-calc-type-card strong{display:block;color:#e7fbf7;font-size:9.5px;margin-top:3px}
 .sales-history-calc-panel{margin-top:8px;padding:11px;border-radius:12px;background:linear-gradient(145deg,rgba(16,185,129,.07),rgba(56,189,248,.05));border:1px solid rgba(85,222,207,.18);box-shadow:0 12px 25px rgba(0,0,0,.14)}
 .sales-history-calc-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:9px;font-size:9px;text-transform:uppercase;letter-spacing:.7px;color:#8ea7ae;font-weight:800}
 .sales-history-calc-head span:first-child{color:#55d7ca}
@@ -1276,28 +1287,52 @@
       </div>
       <div class="sales-history-calc-row">
         <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;">
-          <button type="button" class="sales-calculate-btn" id="sales-history-calculate-btn" onclick="calculateSalesFromHistory()">
+          <button type="button" class="sales-calculate-btn" id="sales-history-calculate-btn" onclick="toggleSalesCalculationPanel()">
             <i class="fa-solid fa-calculator"></i> Calculate
           </button>
           <button type="button" class="sales-calculate-btn" id="sales-history-export-calc-btn" onclick="exportSalesCalculation()" style="border-color:rgba(78,169,255,.42);background:linear-gradient(135deg,rgba(78,169,255,.16),rgba(168,85,247,.10));">
             <i class="fa-solid fa-file-excel"></i> Export
           </button>
         </div>
-        <span class="sales-history-calc-status" id="sales-history-calc-status">Choose a time frame, then calculate</span>
+        <span class="sales-history-calc-status" id="sales-history-calc-status">Open Calculate to choose a period and sale type</span>
       </div>
-      <div class="sales-history-calc-panel" id="sales-history-calc-panel" aria-live="polite">
+      <div class="sales-history-calc-panel" id="sales-history-calc-panel" aria-live="polite" style="display:none;">
         <div class="sales-history-calc-head">
           <span><i class="fa-solid fa-chart-simple"></i> Sales calculation</span>
-          <span id="sales-history-calc-period">All dates</span>
+          <span id="sales-history-calc-period">All Time</span>
+        </div>
+        <div class="sales-calc-options">
+          <div class="sales-calc-option-group">
+            <label>Time frame</label>
+            <div class="sales-calc-choice-row" id="sales-calc-period-options">
+              <button type="button" class="sales-calc-choice active" data-period="all" onclick="setSalesCalcPeriod('all')">All Time</button>
+              <button type="button" class="sales-calc-choice" data-period="week" onclick="setSalesCalcPeriod('week')">This Week</button>
+              <button type="button" class="sales-calc-choice" data-period="month" onclick="setSalesCalcPeriod('month')">This Month</button>
+              <button type="button" class="sales-calc-choice" data-period="year" onclick="setSalesCalcPeriod('year')">This Year</button>
+            </div>
+          </div>
+          <div class="sales-calc-option-group">
+            <label>Sale type</label>
+            <div class="sales-calc-choice-row" id="sales-calc-type-options">
+              <button type="button" class="sales-calc-choice active" data-type="all" onclick="setSalesCalcType('all')">All Types</button>
+              <button type="button" class="sales-calc-choice" data-type="Sale" onclick="setSalesCalcType('Sale')">Sale</button>
+              <button type="button" class="sales-calc-choice" data-type="Credit" onclick="setSalesCalcType('Credit')">Credit</button>
+              <button type="button" class="sales-calc-choice" data-type="Sample" onclick="setSalesCalcType('Sample')">Sample</button>
+            </div>
+          </div>
+          <button type="button" class="sales-calculate-btn sales-run-calc-btn" onclick="calculateSalesFromHistory()">
+            <i class="fa-solid fa-bolt"></i> Calculate Results
+          </button>
         </div>
         <div class="sales-history-calc-grid">
-          <div><small>Units sold</small><strong id="sh-calc-units">0</strong></div>
+          <div><small>Units</small><strong id="sh-calc-units">0</strong></div>
           <div><small>Revenue</small><strong id="sh-calc-revenue">0.00 ETB</strong></div>
           <div><small>Transactions</small><strong id="sh-calc-transactions">0</strong></div>
-          <div><small>Average sale</small><strong id="sh-calc-average">0.00 ETB</strong></div>
+          <div><small>Average</small><strong id="sh-calc-average">0.00 ETB</strong></div>
           <div><small>Unique clients</small><strong id="sh-calc-clients">0</strong></div>
           <div><small>Top item</small><strong id="sh-calc-top-item">—</strong></div>
         </div>
+        <div class="sales-calc-type-breakdown" id="sales-calc-type-breakdown"></div>
       </div>
     </div>
     <div id="sales-history-container"></div>
@@ -2115,7 +2150,37 @@
     function toggleSalesDrawer() { document.getElementById('sales-drawer').classList.toggle('open'); }
     function toggleAuditDrawer() { document.getElementById('audit-drawer').classList.toggle('open'); }
 
-    function getSalesHistoryFilteredRecords(){
+    function getSalesCalcState(){
+      return {
+        period: window.salesCalcPeriod || 'all',
+        type: window.salesCalcType || 'all'
+      };
+    }
+
+    function setSalesCalcPeriod(period){
+      window.salesCalcPeriod=period;
+      document.querySelectorAll('#sales-calc-period-options .sales-calc-choice').forEach(b=>b.classList.toggle('active',b.dataset.period===period));
+      calculateSalesFromHistory();
+    }
+
+    function setSalesCalcType(type){
+      window.salesCalcType=type;
+      document.querySelectorAll('#sales-calc-type-options .sales-calc-choice').forEach(b=>b.classList.toggle('active',b.dataset.type===type));
+      calculateSalesFromHistory();
+    }
+
+    function toggleSalesCalculationPanel(){
+      const btn=document.getElementById('sales-history-calculate-btn');
+      const panel=document.getElementById('sales-history-calc-panel');
+      if(!panel) return;
+      const open=panel.style.display!=='none';
+      panel.style.display=open?'none':'';
+      btn?.classList.toggle('active',!open);
+      const status=document.getElementById('sales-history-calc-status');
+      if(status) status.textContent=open?'Calculation closed':'Choose a time frame and sale type, then calculate';
+    }
+
+    function getSalesHistoryFilteredRecords(options={}){
       const search=(document.getElementById('sales-history-search')?.value||'').trim().toLowerCase();
       const dateFilter=document.getElementById('sales-history-date')?.value||'all';
       const now=new Date(), startDate=new Date(now);
@@ -2132,24 +2197,27 @@
           if(dateFilter==='today'&&d.toDateString()!==now.toDateString()) return false;
           if(dateFilter!=='today'&&d<startDate) return false;
         }
+        if(options.period){
+          const saleDate=s.sale_date?new Date(s.sale_date+'T23:59:59'):null;
+          if(saleDate){
+            const periodStart=new Date(now);
+            if(options.period==='week') periodStart.setDate(now.getDate()-7);
+            if(options.period==='month') periodStart.setMonth(now.getMonth()-1);
+            if(options.period==='year') periodStart.setFullYear(now.getFullYear()-1);
+            if(options.period!=='all'&&saleDate<periodStart) return false;
+          } else if(options.period!=='all') return false;
+        }
+        if(options.type&&options.type!=='all'){
+          const actual=(s.sale_type||'').trim().toLowerCase();
+          if(actual!==options.type.toLowerCase()) return false;
+        }
         return true;
       });
     }
 
     function calculateSalesFromHistory(){
-      const btn=document.getElementById('sales-history-calculate-btn');
-      const panel=document.getElementById('sales-history-calc-panel');
-
-      // Clicking Calculate again hides/deselects the calculation.
-      if(btn?.classList.contains('active')){
-        btn.classList.remove('active');
-        if(panel) panel.style.display='none';
-        const status=document.getElementById('sales-history-calc-status');
-        if(status) status.textContent='Calculation hidden · choose a time frame and calculate again';
-        return;
-      }
-
-      const records=getSalesHistoryFilteredRecords();
+      const state=getSalesCalcState();
+      const records=getSalesHistoryFilteredRecords(state);
       const revenue=records.reduce((sum,s)=>{
         const qty=toNumber(s.quantity), unitPrice=toNumber(s.unit_price);
         return sum+toNumber(s.total_price||(qty*unitPrice));
@@ -2163,8 +2231,8 @@
       });
       const topItem=[...itemMap.entries()].sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
       const avg=records.length?revenue/records.length:0;
-      const dateFilter=document.getElementById('sales-history-date')?.value||'all';
-      const periodLabel={all:'All dates',today:'Today',week:'This Week',month:'This Month',year:'This Year'}[dateFilter]||'All dates';
+      const periodLabel={all:'All Time',week:'This Week',month:'This Month',year:'This Year'}[state.period]||'All Time';
+      const typeLabel={all:'All Types',Sale:'Sale',Credit:'Credit',Sample:'Sample'}[state.type]||'All Types';
 
       const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
       set('sh-calc-units',units.toLocaleString());
@@ -2173,74 +2241,61 @@
       set('sh-calc-average',money(avg));
       set('sh-calc-clients',clients.size.toLocaleString());
       set('sh-calc-top-item',topItem);
-      set('sales-history-calc-period',periodLabel);
+      set('sales-history-calc-period',periodLabel+' · '+typeLabel);
+
+      const counts={Sale:0,Credit:0,Sample:0};
+      records.forEach(s=>{const k=Object.keys(counts).find(x=>x.toLowerCase()===(s.sale_type||'').trim().toLowerCase());if(k)counts[k]++;});
+      const breakdown=document.getElementById('sales-calc-type-breakdown');
+      if(breakdown) breakdown.innerHTML=Object.entries(counts).map(([k,v])=>'<div class="sales-calc-type-card"><small>'+k+' transactions</small><strong>'+v.toLocaleString()+'</strong></div>').join('');
 
       const status=document.getElementById('sales-history-calc-status');
       if(status){
         const when=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-        status.textContent=records.length+' transaction'+(records.length===1?'':'s')+' · '+periodLabel+' · calculated '+when;
+        status.textContent=records.length+' transaction'+(records.length===1?'':'s')+' · '+periodLabel+' · '+typeLabel+' · '+when;
       }
-      if(btn) btn.classList.add('active');
-      if(panel){
-        panel.style.display='';
-        panel.classList.remove('calculated');
-        void panel.offsetWidth;
-        panel.classList.add('calculated');
-      }
+      const panel=document.getElementById('sales-history-calc-panel');
+      if(panel){panel.classList.remove('calculated');void panel.offsetWidth;panel.classList.add('calculated');}
     }
 
     function exportSalesCalculation(){
-      if(typeof XLSX==='undefined'){
-        showToast('Excel export is still loading. Try again in a moment.','info');
-        return;
-      }
-
-      const records=getSalesHistoryFilteredRecords();
-      const dateFilter=document.getElementById('sales-history-date')?.value||'all';
-      const periodLabel={all:'All dates',today:'Today',week:'This Week',month:'This Month',year:'This Year'}[dateFilter]||'All dates';
-      const revenue=records.reduce((sum,s)=>{
-        const qty=toNumber(s.quantity), unitPrice=toNumber(s.unit_price);
-        return sum+toNumber(s.total_price||(qty*unitPrice));
-      },0);
+      if(typeof XLSX==='undefined'){showToast('Excel export is still loading. Try again in a moment.','info');return;}
+      const state=getSalesCalcState();
+      const records=getSalesHistoryFilteredRecords(state);
+      const periodLabel={all:'All Time',week:'This Week',month:'This Month',year:'This Year'}[state.period]||'All Time';
+      const typeLabel={all:'All Types',Sale:'Sale',Credit:'Credit',Sample:'Sample'}[state.type]||'All Types';
+      const revenue=records.reduce((sum,s)=>sum+toNumber(s.total_price||(toNumber(s.quantity)*toNumber(s.unit_price))),0);
       const units=records.reduce((sum,s)=>sum+toNumber(s.quantity),0);
       const clients=new Set(records.map(s=>(s.client_name||s.organization||'').trim()).filter(Boolean));
       const itemMap=new Map();
-      records.forEach(s=>{
-        const name=s.item_name||'Unnamed item';
-        itemMap.set(name,(itemMap.get(name)||0)+toNumber(s.quantity));
-      });
+      records.forEach(s=>{const n=s.item_name||'Unnamed item';itemMap.set(n,(itemMap.get(n)||0)+toNumber(s.quantity));});
       const topItem=[...itemMap.entries()].sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
       const avg=records.length?revenue/records.length:0;
 
       const summary=[
-        ['Period',periodLabel],
-        ['Units Sold',units],
-        ['Sales Revenue (ETB)',revenue],
-        ['Transactions',records.length],
-        ['Average Sale (ETB)',avg],
-        ['Unique Clients',clients.size],
-        ['Top Selling Item',topItem],
+        ['Report','Labaid Sales Calculation'],['Time Frame',periodLabel],['Sale Type',typeLabel],
+        ['Units Sold',units],['Sales Revenue (ETB)',revenue],['Transactions',records.length],
+        ['Average Transaction (ETB)',avg],['Unique Clients',clients.size],['Top Selling Item',topItem],
         ['Generated',new Date().toLocaleString()]
       ];
-      const details=records.map(s=>({
-        'Sale Date':s.sale_date||'',
-        'Item Name':s.item_name||'',
-        'Client / Organization':s.client_name||s.organization||'',
-        'Quantity':toNumber(s.quantity),
-        'Unit Price (ETB)':toNumber(s.unit_price),
+      const detailRows=records.map(s=>({
+        'Sale Date':s.sale_date||'','Item Name':s.item_name||'',
+        'Client / Organization':s.client_name||s.organization||'','Sale Type':s.sale_type||'',
+        'Quantity':toNumber(s.quantity),'Unit Price (ETB)':toNumber(s.unit_price),
         'Total Price (ETB)':toNumber(s.total_price||(toNumber(s.quantity)*toNumber(s.unit_price))),
-        'Sale Type':s.sale_type||'',
         'Invoice Number':s.invoice_number||''
       }));
-
+      const byType={Sale:[],Credit:[],Sample:[]};
+      records.forEach(s=>{const k=Object.keys(byType).find(x=>x.toLowerCase()===(s.sale_type||'').trim().toLowerCase());if(k)byType[k].push(s);});
       const wb=XLSX.utils.book_new();
-      const wsSummary=XLSX.utils.aoa_to_sheet([['SALES CALCULATION',''],...summary]);
-      const wsDetails=XLSX.utils.json_to_sheet(details.length?details:[{'Sale Date':'','Item Name':'No sales found for this period'}]);
-      XLSX.utils.book_append_sheet(wb,wsSummary,'Calculation Summary');
-      XLSX.utils.book_append_sheet(wb,wsDetails,'Sales Details');
-      const safePeriod=periodLabel.replace(/[^a-z0-9]+/gi,'_').replace(/^_|_$/g,'');
-      XLSX.writeFile(wb,'Labaid_Sales_Calculation_'+safePeriod+'.xlsx');
-      showToast('Sales calculation exported to Excel.','success');
+      XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(summary),'Summary');
+      XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(detailRows.length?detailRows:[{'Item Name':'No matching sales'}]),'All Details');
+      Object.entries(byType).forEach(([type,rows])=>{
+        const data=rows.map(s=>({'Sale Date':s.sale_date||'','Item Name':s.item_name||'','Client / Organization':s.client_name||s.organization||'','Quantity':toNumber(s.quantity),'Unit Price (ETB)':toNumber(s.unit_price),'Total Price (ETB)':toNumber(s.total_price||(toNumber(s.quantity)*toNumber(s.unit_price))),'Invoice Number':s.invoice_number||''}));
+        XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(data.length?data:[{'Result':'No '+type+' transactions in this period'}]),type);
+      });
+      const safe=(periodLabel+'_'+typeLabel).replace(/[^a-z0-9]+/gi,'_').replace(/^_|_$/g,'');
+      XLSX.writeFile(wb,'Labaid_Sales_'+safe+'.xlsx');
+      showToast('Organized sales report exported to Excel.','success');
     }
 
 
