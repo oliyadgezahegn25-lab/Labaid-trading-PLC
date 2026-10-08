@@ -2275,40 +2275,42 @@
       const state=getSalesCalcState();
       const records=getSalesHistoryFilteredRecords(state);
       const periodLabel={all:'All Time',week:'This Week',month:'This Month',year:'This Year'}[state.period]||'All Time';
-      const typeLabel={all:'All Types',Sale:'Sale',Credit:'Credit',Sample:'Sample'}[state.type]||'All Types';
-      const revenue=records.reduce((sum,s)=>sum+toNumber(s.total_price||(toNumber(s.quantity)*toNumber(s.unit_price))),0);
-      const units=records.reduce((sum,s)=>sum+toNumber(s.quantity),0);
-      const clients=new Set(records.map(s=>(s.client_name||s.organization||'').trim()).filter(Boolean));
+      const selectedType={all:'All',Sale:'Cash / Paid',Credit:'Credit',Sample:'Sample'}[state.type]||'All';
+      const filteredForExport=selectedType==='All'?records:salesRowsForType(records,selectedType);
+      const revenue=filteredForExport.reduce((sum,s)=>sum+toNumber(s.total_price||(toNumber(s.quantity)*toNumber(s.unit_price))),0);
+      const units=filteredForExport.reduce((sum,s)=>sum+toNumber(s.quantity),0);
+      const clients=new Set(filteredForExport.map(s=>(s.client_name||s.organization||'').trim()).filter(Boolean));
       const itemMap=new Map();
-      records.forEach(s=>{const n=s.item_name||'Unnamed item';itemMap.set(n,(itemMap.get(n)||0)+toNumber(s.quantity));});
+      filteredForExport.forEach(s=>{const n=s.item_name||'Unnamed item';itemMap.set(n,(itemMap.get(n)||0)+toNumber(s.quantity));});
       const topItem=[...itemMap.entries()].sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
-      const avg=records.length?revenue/records.length:0;
+      const avg=filteredForExport.length?revenue/filteredForExport.length:0;
 
-      const summary=[
-        ['Report','Labaid Sales Calculation'],['Time Frame',periodLabel],['Sale Type',typeLabel],
-        ['Units Sold',units],['Sales Revenue (ETB)',revenue],['Transactions',records.length],
-        ['Average Transaction (ETB)',avg],['Unique Clients',clients.size],['Top Selling Item',topItem],
-        ['Generated',new Date().toLocaleString()]
-      ];
-      const detailRows=records.map(s=>({
-        'Sale Date':s.sale_date||'','Item Name':s.item_name||'',
-        'Client / Organization':s.client_name||s.organization||'','Sale Type':s.sale_type||'',
-        'Quantity':toNumber(s.quantity),'Unit Price (ETB)':toNumber(s.unit_price),
-        'Total Price (ETB)':toNumber(s.total_price||(toNumber(s.quantity)*toNumber(s.unit_price))),
-        'Invoice Number':s.invoice_number||''
-      }));
-      const byType={Sale:[],Credit:[],Sample:[]};
-      records.forEach(s=>{const k=Object.keys(byType).find(x=>x.toLowerCase()===(s.sale_type||'').trim().toLowerCase());if(k)byType[k].push(s);});
       const wb=XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(summary),'Summary');
-      XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(detailRows.length?detailRows:[{'Item Name':'No matching sales'}]),'All Details');
-      Object.entries(byType).forEach(([type,rows])=>{
-        const data=rows.map(s=>({'Sale Date':s.sale_date||'','Item Name':s.item_name||'','Client / Organization':s.client_name||s.organization||'','Quantity':toNumber(s.quantity),'Unit Price (ETB)':toNumber(s.unit_price),'Total Price (ETB)':toNumber(s.total_price||(toNumber(s.quantity)*toNumber(s.unit_price))),'Invoice Number':s.invoice_number||''}));
-        XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(data.length?data:[{'Result':'No '+type+' transactions in this period'}]),type);
-      });
-      const safe=(periodLabel+'_'+typeLabel).replace(/[^a-z0-9]+/gi,'_').replace(/^_|_$/g,'');
-      XLSX.writeFile(wb,'Labaid_Sales_'+safe+'.xlsx');
-      showToast('Organized sales report exported to Excel.','success');
+      addSalesSummarySheet(wb,filteredForExport,periodLabel,'Labaid Sales Calculation');
+      const detailRows=salesExportRows(filteredForExport);
+      const detailSheet=XLSX.utils.json_to_sheet(detailRows.length?detailRows:[{'Result':'No matching transactions'}]);
+      formatSheet(detailSheet,detailRows);
+      XLSX.utils.book_append_sheet(wb,detailSheet,'All Transactions');
+      appendSalesTypeSheets(wb,filteredForExport);
+
+      const calcOverview=[
+        {'Metric':'Selected Time Frame','Value':periodLabel},
+        {'Metric':'Selected Transaction Type','Value':selectedType==='All'?'All Types':selectedType},
+        {'Metric':'Units Sold','Value':units},
+        {'Metric':'Sales Revenue (ETB)','Value':revenue},
+        {'Metric':'Transactions','Value':filteredForExport.length},
+        {'Metric':'Average Transaction (ETB)','Value':avg},
+        {'Metric':'Unique Universities / Organizations','Value':clients.size},
+        {'Metric':'Top Selling Item','Value':topItem},
+        {'Metric':'Generated','Value':new Date().toLocaleString()}
+      ];
+      const calcSheet=XLSX.utils.json_to_sheet(calcOverview);
+      formatSheet(calcSheet,calcOverview);
+      XLSX.utils.book_append_sheet(wb,calcSheet,'Calculation');
+
+      const safe=(periodLabel+'_'+(selectedType==='All'?'All_Types':selectedType)).replace(/[^a-z0-9]+/gi,'_').replace(/^_|_$/g,'');
+      XLSX.writeFile(wb,'Labaid_Sales_Calculation_'+safe+'.xlsx',{bookType:'xlsx',compression:true});
+      showToast('Professional sales calculation workbook exported.','success');
     }
 
 
@@ -2614,18 +2616,77 @@
     function salesExportRows(records){
       return records.map(s=>{
         const item=enterpriseItems.find(i=>String(i.id)===String(s.item_id));
+        const university=s.client_name||s.organization||'';
+        const type=String(s.sale_type||'').trim().toLowerCase();
         return {
+          'Sale Date':s.sale_date||'',
+          'University / Organization':university,
+          'Invoice Number':s.invoice_number||'',
           'Item Name':s.item_name||'',
           'Category':item?.category||'Unclassified',
-          'Invoice Number':s.invoice_number||'',
-          'Sale Type':s.sale_type||'',
-          'Client / Destination':s.client_name||s.organization||'',
+          'Transaction Type':type==='sell'?'Cash / Paid':(type==='credit'?'Credit':(type==='sample'?'Sample':s.sale_type||'')),
           'Quantity':toNumber(s.quantity),
           'Unit Price (ETB)':toNumber(s.unit_price),
-          'Total (ETB)':toNumber(s.total_price||toNumber(s.quantity)*toNumber(s.unit_price)),
-          'Sale Date':s.sale_date||''
+          'Total (ETB)':toNumber(s.total_price||toNumber(s.quantity)*toNumber(s.unit_price))
         };
       });
+    }
+
+    function salesTypeLabel(value){
+      const type=String(value||'').trim().toLowerCase();
+      if(type==='sell'||type==='sale'||type==='cash'||type==='cash / paid'||type==='paid')return 'Cash / Paid';
+      if(type==='credit'||type==='credit agreement')return 'Credit';
+      if(type==='sample'||type==='sample item'||type==='sample item (demo)')return 'Sample';
+      return value||'Other';
+    }
+
+    function salesRowsForType(records,type){
+      if(type==='All')return records;
+      const wanted=type.toLowerCase();
+      return records.filter(s=>salesTypeLabel(s.sale_type).toLowerCase()===wanted);
+    }
+
+    function appendSalesTypeSheets(wb,records){
+      const sheets=[
+        ['Cash - Paid',salesRowsForType(records,'Cash / Paid'),'Cash / Paid'],
+        ['Credit',salesRowsForType(records,'Credit'),'Credit'],
+        ['Sample',salesRowsForType(records,'Sample'),'Sample']
+      ];
+      sheets.forEach(([sheetName,rows,typeLabel])=>{
+        const data=salesExportRows(rows);
+        const ws=XLSX.utils.json_to_sheet(data.length?data:[{'Result':'No '+typeLabel+' transactions in this period.'}]);
+        formatSheet(ws,data);
+        XLSX.utils.book_append_sheet(wb,ws,sheetName);
+      });
+    }
+
+    function addSalesSummarySheet(wb,records,periodLabel,reportTitle){
+      const totalRevenue=records.reduce((sum,s)=>sum+toNumber(s.total_price||(toNumber(s.quantity)*toNumber(s.unit_price))),0);
+      const totalUnits=records.reduce((sum,s)=>sum+toNumber(s.quantity),0);
+      const typeRows=['Cash / Paid','Credit','Sample'].map(type=>{
+        const rows=salesRowsForType(records,type);
+        return {
+          'Transaction Type':type,
+          'Transactions':rows.length,
+          'Units':rows.reduce((sum,s)=>sum+toNumber(s.quantity),0),
+          'Revenue (ETB)':rows.reduce((sum,s)=>sum+toNumber(s.total_price||(toNumber(s.quantity)*toNumber(s.unit_price))),0)
+        };
+      });
+      const overview=[
+        {'Report':reportTitle,'Value':''},
+        {'Report':'Time Frame','Value':periodLabel},
+        {'Report':'Total Transactions','Value':records.length},
+        {'Report':'Total Units','Value':totalUnits},
+        {'Report':'Total Revenue (ETB)','Value':totalRevenue},
+        {'Report':'Unique Universities / Organizations','Value':new Set(records.map(s=>(s.client_name||s.organization||'').trim()).filter(Boolean)).size},
+        {'Report':'Generated','Value':new Date().toLocaleString()}
+      ];
+      const ws=XLSX.utils.json_to_sheet(overview);
+      formatSheet(ws,overview);
+      XLSX.utils.book_append_sheet(wb,ws,'Summary');
+      const tws=XLSX.utils.json_to_sheet(typeRows);
+      formatSheet(tws,typeRows);
+      XLSX.utils.book_append_sheet(wb,tws,'Type Summary');
     }
 
     async function processExportRequest(){
@@ -2637,21 +2698,15 @@
         const timeframe=document.getElementById('export-sales-timeframe').value;
         const a=getSalesAnalytics(timeframe);
         const wb=XLSX.utils.book_new();
-        const summaryRows=[
-          {'Metric':'Period','Value':a.bounds.label},
-          {'Metric':'Units Sold','Value':a.units},
-          {'Metric':'Sales Revenue (ETB)','Value':a.revenue},
-          {'Metric':'Transactions','Value':a.transactions},
-          {'Metric':'Average Sale (ETB)','Value':a.avgSale},
-          {'Metric':'Unique Clients','Value':a.clients},
-          {'Metric':'Top Selling Item','Value':a.topItems[0]?.name||''},
-          {'Metric':'Largest Transaction (ETB)','Value':a.largest}
-        ];
-        const summarySheet=XLSX.utils.json_to_sheet(summaryRows);formatSheet(summarySheet,summaryRows);XLSX.utils.book_append_sheet(wb,summarySheet,'Sales Summary');
-        const details=salesExportRows(a.filtered);const detailSheet=XLSX.utils.json_to_sheet(details.length?details:[{'Item Name':'No sales records'}]);formatSheet(detailSheet,details);XLSX.utils.book_append_sheet(wb,detailSheet,'Sales Details');
+        addSalesSummarySheet(wb,a.filtered,a.bounds.label,'Labaid Sales Report');
+        const details=salesExportRows(a.filtered);
+        const detailSheet=XLSX.utils.json_to_sheet(details.length?details:[{'Result':'No sales records for this period.'}]);
+        formatSheet(detailSheet,details);
+        XLSX.utils.book_append_sheet(wb,detailSheet,'All Transactions');
+        appendSalesTypeSheets(wb,a.filtered);
         XLSX.writeFile(wb,'Labaid_Sales_'+timeframe+'.xlsx',{bookType:'xlsx',compression:true});
-        showToast('Sales workbook downloaded.','success');
-        addAuditEntry('Export Generated','Downloaded sales Excel workbook ('+timeframe+')');
+        showToast('Professional sales workbook downloaded.','success');
+        addAuditEntry('Export Generated','Downloaded organized sales Excel workbook ('+timeframe+')');
       }else{
         const wb=buildInventoryWorkbook(target);
         const name={inventory_all:'Labaid_Inventory_All',inventory_laboratory:'Labaid_Laboratory',inventory_discs:'Labaid_Discs',inventory_chemicals:'Labaid_Chemicals'}[target]||'Labaid_Inventory';
