@@ -61,6 +61,75 @@
       transition: all 0.3s ease;
     }
 
+ 
+    /* CORPORATE WEBSITE ENTRY */
+    .auth-container { max-width: 980px; gap: 28px; align-items: stretch; flex-wrap: nowrap; }
+    .corporate-card {
+      position: relative; overflow: hidden; flex: 1; min-width: 0; max-width: 480px;
+      padding: 42px 36px; border-radius: 24px;
+      background: rgba(15,23,42,.8); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 30px 60px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.15);
+      text-align:center; isolation:isolate;
+      transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+    }
+    .corporate-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(56,189,248,.38);
+      box-shadow: 0 35px 75px rgba(0,0,0,.82), 0 0 45px rgba(56,189,248,.10), inset 0 1px 0 rgba(255,255,255,.18);
+    }
+    .corporate-card::before {
+      content:''; position:absolute; width:260px; height:260px; border-radius:50%;
+      background:rgba(56,189,248,.10); filter:blur(65px); top:-120px; right:-90px; z-index:-1;
+    }
+    .corporate-card::after {
+      content:''; position:absolute; width:220px; height:220px; border-radius:50%;
+      background:rgba(168,85,247,.08); filter:blur(65px); bottom:-120px; left:-90px; z-index:-1;
+    }
+    .corporate-orbit { position:absolute; inset:0; pointer-events:none; opacity:.55; }
+    .corporate-orbit span { position:absolute; border:1px solid rgba(56,189,248,.10); border-radius:50%; }
+    .corporate-orbit span:nth-child(1){width:310px;height:310px;top:-150px;right:-120px;}
+    .corporate-orbit span:nth-child(2){width:210px;height:210px;bottom:-100px;left:-75px;border-color:rgba(168,85,247,.10);}
+    .corporate-orbit span:nth-child(3){width:8px;height:8px;background:#38bdf8;border:0;top:27%;right:15%;box-shadow:0 0 18px #38bdf8;}
+    .corporate-badge {
+      width:68px;height:68px;margin:0 auto 20px;border-radius:20px;
+      display:flex;align-items:center;justify-content:center;font-size:25px;color:#67e8f9;
+      background:linear-gradient(135deg,rgba(56,189,248,.20),rgba(168,85,247,.20));
+      border:1px solid rgba(56,189,248,.38); box-shadow:0 10px 28px rgba(56,189,248,.18);
+    }
+    .corporate-card .auth-eyebrow { margin-bottom:16px; justify-content:center; }
+    .corporate-card h1 { font-size:clamp(32px,3.2vw,46px); line-height:1.02; letter-spacing:-2px; margin-bottom:18px; font-weight:800; }
+    .corporate-card h1 span {
+      display:block; margin-top:5px;
+      background:linear-gradient(110deg,#f8fafc 0%,#7dd3fc 48%,#818cf8 100%);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .corporate-card>p { color:#94a3b8;font-size:13px;line-height:1.75;margin:0 auto 22px;max-width:390px; }
+    .corporate-features { display:grid; gap:8px; margin-bottom:24px; text-align:left; }
+    .corporate-features div {
+      display:flex;align-items:center;gap:11px;padding:10px 12px;border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.025);border-radius:10px;color:#cbd5e1;font-size:11.5px;
+    }
+    .corporate-features i {
+      width:25px;height:25px;display:flex;align-items:center;justify-content:center;border-radius:7px;
+      color:#67e8f9;background:rgba(56,189,248,.10);border:1px solid rgba(56,189,248,.18);font-size:11px;
+    }
+    .corporate-btn {
+      display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:13px 16px;border-radius:12px;
+      color:#03111b;text-decoration:none;font-size:13px;font-weight:800;
+      background:linear-gradient(135deg,#38bdf8,#0284c7);box-shadow:0 8px 24px rgba(56,189,248,.28);
+      transition:.25s ease;
+    }
+    .corporate-btn:hover { transform:translateY(-2px);box-shadow:0 13px 30px rgba(56,189,248,.42);background:linear-gradient(135deg,#7dd3fc,#0284c7); }
+    @media(max-width:820px){
+      .auth-container{flex-direction:column;max-width:480px;}
+      .corporate-card,.auth-card{max-width:none;}
+    }
+    @media(max-width:520px){
+      #auth-overlay{padding:14px;}
+      .corporate-card,.auth-card{padding:32px 24px;border-radius:20px;}
+    }
+
     /* AUTH OVERLAY */
     #auth-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -640,14 +709,20 @@
   <!-- AUTH SCREEN -->
   <div id="auth-overlay">
     <div class="auth-container">
-      <div class="auth-intro-panel">
-        <div class="auth-eyebrow">LAB AID TRADING PLC · INVENTORY PLATFORM</div>
-        <p>One secure workspace for managing laboratory equipment, chemicals, stock intelligence and sales operations—with your data synchronized in real time.</p>
-        <div class="auth-feature-list">
-          <div class="auth-feature-item"><i class="fa-solid fa-cloud"></i><span>Live cloud synchronization & centralized catalogues</span></div>
-          <div class="auth-feature-item"><i class="fa-solid fa-chart-line"></i><span>Real-time inventory intelligence & analytics</span></div>
-          <div class="auth-feature-item"><i class="fa-solid fa-shield-halved"></i><span>Secure access built for your workstation</span></div>
+      <div class="corporate-card">
+        <div class="corporate-orbit"><span></span><span></span><span></span></div>
+        <div class="corporate-badge"><i class="fa-solid fa-globe"></i></div>
+        <div class="auth-eyebrow">LABAID TRADING PLC · PUBLIC</div>
+        <h1>Corporate <span>Website</span></h1>
+        <p>Discover who we are, what we do, the products we supply, our services, partners, and the Labaid Trading PLC story.</p>
+        <div class="corporate-features">
+          <div><i class="fa-solid fa-building"></i><span>About Labaid</span></div>
+          <div><i class="fa-solid fa-flask"></i><span>Products & services</span></div>
+          <div><i class="fa-solid fa-handshake"></i><span>Partners & supply network</span></div>
         </div>
+        <a class="corporate-btn" href="https://oliyadgezahegn25-lab.github.io/outcome-platform/" target="_blank" rel="noopener noreferrer">
+          Explore Labaid <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
       </div>
       <div class="auth-card">
         <div class="auth-logo-badge">
