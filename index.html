@@ -742,6 +742,15 @@
 @media(max-width:700px){.export-target-grid{grid-template-columns:1fr 1fr}.export-center-head,.sales-analytics-head{flex-direction:column;align-items:flex-start}.sales-insight-grid{grid-template-columns:1fr}.sales-metrics-grid{grid-template-columns:1fr 1fr}.sales-custom-range{width:100%}.sales-custom-range .form-control{min-width:0;flex:1}.export-format-badge{display:none}}
 @media(max-width:520px){.export-target-grid{grid-template-columns:1fr}.sales-metrics-grid{grid-template-columns:1fr}.export-actions{flex-direction:column}.export-actions .btn-action{width:100%}}
 
+
+.sales-calculate-btn{border:1px solid rgba(85,222,207,.42);background:linear-gradient(135deg,rgba(85,222,207,.16),rgba(78,169,255,.12));color:#dffcf8;border-radius:10px;padding:9px 14px;display:inline-flex;align-items:center;gap:7px;font:800 10px Manrope;letter-spacing:.4px;cursor:pointer;box-shadow:0 0 18px rgba(85,222,207,.07);transition:.2s ease}
+.sales-calculate-btn:hover{transform:translateY(-2px);border-color:#55decf;background:linear-gradient(135deg,rgba(85,222,207,.26),rgba(78,169,255,.19));box-shadow:0 0 25px rgba(85,222,207,.13)}
+.sales-calculate-btn:active{transform:translateY(0)}
+.sales-calculated-status{font-size:8px;color:#6f8992;letter-spacing:.3px;white-space:nowrap}
+.sales-analytics-panel.calculated{animation:salesCalcPulse .55s ease}
+@keyframes salesCalcPulse{0%{box-shadow:0 0 0 rgba(85,222,207,0)}45%{box-shadow:0 0 30px rgba(85,222,207,.12)}100%{box-shadow:0 18px 45px rgba(2,12,27,.25)}}
+@media(max-width:700px){.sales-calculated-status{display:none}.sales-calculate-btn{flex:1;justify-content:center}}
+
 </style>
 </head>
 <body>
@@ -1022,10 +1031,14 @@
                 <option value="custom">Custom Range</option>
               </select>
               <div id="sales-custom-range" class="sales-custom-range" style="display:none;">
-                <input type="date" id="sales-analytics-start" class="form-control" onchange="renderSalesAnalytics()">
+                <input type="date" id="sales-analytics-start" class="form-control">
                 <span>to</span>
-                <input type="date" id="sales-analytics-end" class="form-control" onchange="renderSalesAnalytics()">
+                <input type="date" id="sales-analytics-end" class="form-control">
               </div>
+              <button type="button" class="sales-calculate-btn" onclick="calculateSalesNow()">
+                <i class="fa-solid fa-calculator"></i> Calculate
+              </button>
+              <span class="sales-calculated-status" id="sales-calculated-status">Ready to calculate</span>
             </div>
           </div>
           <div class="sales-metrics-grid">
@@ -2301,6 +2314,22 @@
       const categories=[...categoryMap.values()].sort((a,b)=>b.revenue-a.revenue);
       const largest=filtered.reduce((max,s)=>Math.max(max,toNumber(s.total_price||(toNumber(s.quantity)*toNumber(s.unit_price)))),0);
       return {bounds,filtered,revenue,units,transactions:filtered.length,avgSale:filtered.length?revenue/filtered.length:0,clients:clients.size,topItems,categories,largest};
+    }
+
+
+    function calculateSalesNow(){
+      const status=document.getElementById('sales-calculated-status');
+      const panel=document.getElementById('salesAnalyticsPanel');
+      renderSalesAnalytics();
+      if(panel){panel.classList.remove('calculated');void panel.offsetWidth;panel.classList.add('calculated');}
+      if(status){
+        const period=document.getElementById('sales-analytics-period')?.value||'week';
+        const start=document.getElementById('sales-analytics-start')?.value||'';
+        const end=document.getElementById('sales-analytics-end')?.value||'';
+        const a=getSalesAnalytics(period,start,end);
+        const when=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+        status.textContent=a.transactions+' transaction'+(a.transactions===1?'':'s')+' · calculated '+when;
+      }
     }
 
     function renderSalesAnalytics(){
