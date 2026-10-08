@@ -2159,7 +2159,7 @@
       const itemMap=new Map();
       records.forEach(s=>{
         const name=s.item_name||'Unnamed item';
-        itemMap.set(name,(itemMap.get(name)||0)+toNumber(s.quantity);
+        itemMap.set(name,(itemMap.get(name)||0)+toNumber(s.quantity));
       });
       const topItem=[...itemMap.entries()].sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
       const avg=records.length?revenue/records.length:0;
