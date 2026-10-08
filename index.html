@@ -2192,11 +2192,17 @@
       return salesHistory.filter(s=>{
         const haystack=[s.item_name,s.client_name,s.organization].filter(Boolean).join(' ').toLowerCase();
         if(search&&!haystack.includes(search)) return false;
-        if(dateFilter!=='all'&&s.sale_date){
-          const d=new Date(s.sale_date+'T23:59:59');
-          if(dateFilter==='today'&&d.toDateString()!==now.toDateString()) return false;
-          if(dateFilter!=='today'&&d<startDate) return false;
+
+        // When calculating, use the calculation panel's period as the source of truth.
+        // This keeps the result independent from the separate Sales History date filter.
+        if(!options.period){
+          if(dateFilter!=='all'&&s.sale_date){
+            const d=new Date(s.sale_date+'T23:59:59');
+            if(dateFilter==='today'&&d.toDateString()!==now.toDateString()) return false;
+            if(dateFilter!=='today'&&d<startDate) return false;
+          }
         }
+
         if(options.period){
           const saleDate=s.sale_date?new Date(s.sale_date+'T23:59:59'):null;
           if(saleDate){
@@ -2207,9 +2213,16 @@
             if(options.period!=='all'&&saleDate<periodStart) return false;
           } else if(options.period!=='all') return false;
         }
+
         if(options.type&&options.type!=='all'){
           const actual=(s.sale_type||'').trim().toLowerCase();
-          if(actual!==options.type.toLowerCase()) return false;
+          const typeAliases={
+            sale:['sale','sell','cash','cash/paid','paid','cash / paid'],
+            credit:['credit','credit agreement'],
+            sample:['sample','sample item','sample item (demo)']
+          };
+          const accepted=typeAliases[options.type.toLowerCase()]||[options.type.toLowerCase()];
+          if(!accepted.includes(actual)) return false;
         }
         return true;
       });
