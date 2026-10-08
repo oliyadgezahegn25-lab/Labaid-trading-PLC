@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
@@ -700,6 +701,47 @@
 
 /* Labaid Assistant — same visual style as the public website */
 .labaid-chat{position:fixed;right:24px;bottom:24px;z-index:1000;font-family:"Plus Jakarta Sans",sans-serif}.labaid-chat-toggle{display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:14px 19px;background:#071a25;color:#fff;font:800 12px "Plus Jakarta Sans";box-shadow:0 18px 50px rgba(7,26,37,.28);cursor:pointer;transition:.25s}.labaid-chat-toggle:hover{transform:translateY(-3px);background:#0c3443}.chat-pulse{width:8px;height:8px;border-radius:50%;background:#55decf;box-shadow:0 0 0 5px rgba(85,222,207,.12)}.chat-icon{color:#70e2d4;font-size:15px}.labaid-chat-panel{position:absolute;right:0;bottom:62px;width:min(390px,calc(100vw - 30px));height:560px;display:none;flex-direction:column;overflow:hidden;border:1px solid rgba(7,26,37,.12);border-radius:24px;background:#f7faf9;box-shadow:0 30px 90px rgba(7,26,37,.25)}.labaid-chat.open .labaid-chat-panel{display:flex}.chat-head{display:flex;justify-content:space-between;gap:20px;padding:22px;background:#071a25;color:#fff}.chat-head>div{display:grid;gap:4px}.chat-eyebrow{font:800 8px "Plus Jakarta Sans";letter-spacing:1.7px;color:#55decf}.chat-head strong{font:800 20px "Plus Jakarta Sans"}.chat-head small{color:#91aab1;font-size:10px}.chat-head button{width:30px;height:30px;border:1px solid rgba(255,255,255,.14);border-radius:50%;background:transparent;color:#fff;font-size:20px;cursor:pointer}.chat-messages{flex:1;padding:18px;overflow:auto}.chat-message{max-width:86%;padding:12px 14px;border-radius:15px;margin:0 0 10px;font-size:12px;line-height:1.6}.chat-message.bot{background:#fff;border:1px solid #dce7e7;color:#29414a}.chat-message.user{margin-left:auto;background:#0c8a82;color:#fff}.chat-quick{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0}.chat-quick button{border:1px solid #b9dcd8;background:#e5f5f2;color:#075f59;border-radius:999px;padding:8px 10px;font:700 9px "Plus Jakarta Sans";cursor:pointer}.chat-quick button:hover{background:#d2efeb}.chat-input{display:flex;gap:8px;padding:12px;border-top:1px solid #dce7e7;background:#fff}.chat-input input{flex:1;border:1px solid #d6e2e2;border-radius:12px;padding:11px 12px;outline:none;font-size:12px}.chat-input input:focus{border-color:#75cfc6}.chat-input button{width:42px;border:0;border-radius:12px;background:#071a25;color:#fff;font-size:19px;cursor:pointer}.chat-typing{opacity:.6;font-style:italic}@media(max-width:560px){.labaid-chat{right:15px;bottom:15px}.labaid-chat-toggle{padding:13px 16px}.labaid-chat-panel{right:-1px;bottom:58px;height:min(560px,calc(100vh - 110px));width:calc(100vw - 30px)}}
+
+/* === Excel export + sales intelligence === */
+.export-center-box{max-width:760px!important;background:linear-gradient(145deg,#0d1728,#0a1322)!important;border:1px solid rgba(56,189,248,.18)!important}
+.export-center-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;padding-bottom:17px;border-bottom:1px solid var(--border-light)}
+.export-eyebrow,.analytics-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:8px;font-weight:800;letter-spacing:1.7px;color:var(--accent-cyan);text-transform:uppercase}
+.export-center-head h3{margin:8px 0 5px;color:#f8fafc;font-size:22px}
+.export-center-head p{font-size:11px;line-height:1.65;color:var(--text-muted);max-width:520px;margin:0}
+.export-format-badge{width:72px;height:72px;border:1px solid rgba(16,185,129,.28);background:rgba(16,185,129,.08);border-radius:16px;display:grid;place-items:center;color:#6ee7b7;font-size:18px}
+.export-format-badge span{font:800 8px 'JetBrains Mono',monospace;letter-spacing:1px}
+.export-target-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:18px 0 13px}
+.export-target-card{border:1px solid var(--border-light);background:rgba(255,255,255,.035);color:#fff;border-radius:14px;padding:14px;text-align:left;cursor:pointer;min-height:102px;display:flex;flex-direction:column;justify-content:space-between;gap:8px;transition:.22s ease}
+.export-target-card:hover{transform:translateY(-2px);border-color:rgba(56,189,248,.35);background:rgba(56,189,248,.07)}
+.export-target-card.active{border-color:rgba(56,189,248,.65);background:linear-gradient(145deg,rgba(56,189,248,.12),rgba(99,102,241,.07));box-shadow:0 0 24px rgba(56,189,248,.08),inset 0 1px rgba(255,255,255,.08)}
+.export-target-card i{font-size:17px;color:var(--accent-cyan)}
+.export-target-card strong{font-size:12px}.export-target-card small{font-size:9px;line-height:1.45;color:var(--text-muted)}
+.export-preview{padding:12px 14px;border:1px solid rgba(56,189,248,.16);border-radius:12px;background:rgba(56,189,248,.045);margin:0 0 15px}
+.export-preview div{display:flex;align-items:center;gap:7px;font-size:10px;color:#7dd3fc;font-weight:800}.export-preview div i{font-size:9px}
+.export-preview strong{display:block;color:#cbd5e1;font-size:10px;line-height:1.5;margin-top:5px;font-weight:600}
+.export-import-block{margin-top:15px;padding:14px;border:1px dashed rgba(148,163,184,.16);border-radius:12px;background:rgba(0,0,0,.12)}
+.export-import-title{display:flex;align-items:center;gap:7px;color:#cbd5e1;font-weight:800;font-size:10px;text-transform:uppercase;letter-spacing:.7px}
+.export-import-block p{color:#6f8490;font-size:9px;margin:6px 0 9px}.export-import-block .form-control{margin-bottom:8px}
+.export-import-block .btn-action{width:100%;justify-content:center;color:#7dd3fc;background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.3)}
+.export-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:17px}.export-actions .btn-action{min-width:145px;justify-content:center}
+.sales-analytics-panel{background:linear-gradient(145deg,rgba(8,24,39,.98),rgba(8,18,31,.98));border:1px solid rgba(56,189,248,.16);border-radius:16px;padding:18px;box-shadow:0 18px 45px rgba(2,12,27,.25)}
+.sales-analytics-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;margin-bottom:16px}
+.sales-analytics-head h3{font-size:20px;color:#f8fafc;margin:7px 0 3px}.sales-analytics-head p{margin:0;color:#718b95;font-size:10px}
+.sales-analytics-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sales-analytics-controls .form-control{min-width:145px}
+.sales-custom-range{display:flex;align-items:center;gap:7px}.sales-custom-range .form-control{min-width:140px}.sales-custom-range span{color:#718b95;font-size:9px}
+.sales-metrics-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.sales-metric{min-height:108px;padding:13px;border-radius:12px;border:1px solid rgba(56,189,248,.13);background:rgba(56,189,248,.035);display:flex;flex-direction:column;justify-content:space-between}
+.sales-metric.emerald{border-color:rgba(16,185,129,.15);background:rgba(16,185,129,.04)}.sales-metric.purple{border-color:rgba(168,85,247,.15);background:rgba(168,85,247,.04)}.sales-metric.amber{border-color:rgba(245,158,11,.15);background:rgba(245,158,11,.04)}.sales-metric.blue{border-color:rgba(99,102,241,.15);background:rgba(99,102,241,.04)}.sales-metric.rose{border-color:rgba(244,63,94,.15);background:rgba(244,63,94,.04)}
+.sales-metric span{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#708993;font-weight:800}.sales-metric strong{font-size:18px;color:#f8fafc;line-height:1.05;word-break:break-word}.sales-metric small{font-size:8px;color:#607983}
+.sales-insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.sales-insight-card,.sales-trend-card{border:1px solid rgba(148,163,184,.10);border-radius:12px;background:rgba(255,255,255,.025);padding:14px}
+.sales-insight-title{font-size:9px;text-transform:uppercase;letter-spacing:1.1px;color:#87a2aa;font-weight:800;margin-bottom:10px}.sales-insight-title i{color:#55d7ca;margin-right:5px}
+.sales-breakdown-row{display:grid;grid-template-columns:1fr 70px 100px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.055);font-size:9px}.sales-breakdown-row:last-child{border-bottom:0}.sales-breakdown-row b{color:#dce9ec}.sales-breakdown-row span,.sales-breakdown-row strong{text-align:right}.sales-breakdown-row span{color:#8ea7ae}.sales-breakdown-row strong{color:#55d7ca}
+.sales-top-row{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.055);font-size:9px}.sales-top-row:last-child{border-bottom:0}.sales-top-rank{color:#55d7ca;font-weight:800}.sales-top-row b{color:#dce9ec}.sales-top-row span{color:#8ea7ae;text-align:right}
+.sales-trend-card{margin-top:10px}.sales-trend-wrap{height:235px;position:relative}.sales-empty-state{text-align:center;color:#647d86;font-size:10px;padding:24px 10px}
+@media(max-width:1000px){.sales-metrics-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.export-target-grid{grid-template-columns:1fr 1fr}.export-center-head,.sales-analytics-head{flex-direction:column;align-items:flex-start}.sales-insight-grid{grid-template-columns:1fr}.sales-metrics-grid{grid-template-columns:1fr 1fr}.sales-custom-range{width:100%}.sales-custom-range .form-control{min-width:0;flex:1}.export-format-badge{display:none}}
+@media(max-width:520px){.export-target-grid{grid-template-columns:1fr}.sales-metrics-grid{grid-template-columns:1fr}.export-actions{flex-direction:column}.export-actions .btn-action{width:100%}}
+
 </style>
 </head>
 <body>
@@ -964,6 +1006,51 @@
             <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> Items with stock count ≤ 5</div>
           </div>
         </div>
+        <section class="sales-analytics-panel" id="salesAnalyticsPanel">
+          <div class="sales-analytics-head">
+            <div>
+              <span class="analytics-eyebrow"><i class="fa-solid fa-chart-column"></i> SALES INTELLIGENCE</span>
+              <h3>Sales performance</h3>
+              <p id="sales-analytics-period-label">This Week</p>
+            </div>
+            <div class="sales-analytics-controls">
+              <select id="sales-analytics-period" class="form-control" onchange="handleSalesAnalyticsPeriodChange()">
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="year">This Year</option>
+                <option value="all">All Time</option>
+                <option value="custom">Custom Range</option>
+              </select>
+              <div id="sales-custom-range" class="sales-custom-range" style="display:none;">
+                <input type="date" id="sales-analytics-start" class="form-control" onchange="renderSalesAnalytics()">
+                <span>to</span>
+                <input type="date" id="sales-analytics-end" class="form-control" onchange="renderSalesAnalytics()">
+              </div>
+            </div>
+          </div>
+          <div class="sales-metrics-grid">
+            <div class="sales-metric"><span>Units sold</span><strong id="sales-metric-units">0</strong><small>Total quantity dispatched</small></div>
+            <div class="sales-metric emerald"><span>Sales revenue</span><strong id="sales-metric-revenue">0.00 ETB</strong><small>Recorded transaction value</small></div>
+            <div class="sales-metric purple"><span>Transactions</span><strong id="sales-metric-transactions">0</strong><small>Completed sales records</small></div>
+            <div class="sales-metric amber"><span>Average sale</span><strong id="sales-metric-average">0.00 ETB</strong><small>Revenue per transaction</small></div>
+            <div class="sales-metric blue"><span>Unique clients</span><strong id="sales-metric-clients">0</strong><small>Distinct destinations</small></div>
+            <div class="sales-metric rose"><span>Top item</span><strong id="sales-metric-top-item">—</strong><small>Highest units sold</small></div>
+          </div>
+          <div class="sales-insight-grid">
+            <div class="sales-insight-card">
+              <div class="sales-insight-title"><i class="fa-solid fa-ranking-star"></i> Category performance</div>
+              <div id="sales-category-breakdown"></div>
+            </div>
+            <div class="sales-insight-card">
+              <div class="sales-insight-title"><i class="fa-solid fa-arrow-trend-up"></i> Top selling items</div>
+              <div id="sales-top-items"></div>
+            </div>
+          </div>
+          <div class="sales-trend-card">
+            <div class="sales-insight-title"><i class="fa-solid fa-chart-line"></i> Revenue trend</div>
+            <div class="sales-trend-wrap"><canvas id="salesTrendChart"></canvas></div>
+          </div>
+        </section>
         <div class="table-container">
           <div style="padding: 16px; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--border-light); font-weight: 700; color: var(--accent-purple); display: flex; align-items: center; gap: 8px;">
             <i class="fa-solid fa-robot"></i> Automated Enterprise Reorder & Tender Readiness Recommendations
@@ -1081,35 +1168,60 @@
 
   <!-- EXPORT / IMPORT MODAL -->
   <div class="modal-overlay" id="export-modal">
-    <div class="modal-box">
-      <h3 style="color: var(--accent-cyan); margin-bottom: 12px; font-size: 16px;"><i class="fa-solid fa-file-csv"></i> Data Export & Import Center</h3>
-      <div class="form-group"><label>Target Dataset</label>
-        <select class="form-control" id="export-target" onchange="toggleExportFilterOptions()">
-          <option value="inventory">Entire Inventory Directory</option>
-          <option value="sales">Past Sales History</option>
-        </select>
-      </div>
-      <div class="form-group" id="export-sales-filter-group" style="display: none;">
-        <label>Time Period Filter for Past Sales</label>
-        <select class="form-control" id="export-sales-timeframe">
-          <option value="all">All-Time Past Sales</option>
-          <option value="week">Past Week</option>
-          <option value="month">Past Month</option>
-          <option value="year">Past Year</option>
-        </select>
-      </div>
-      
-      <div style="margin: 16px 0; padding-top: 14px; border-top: 1px dashed var(--border-light);">
-        <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Bulk CSV Import</label>
-        <input type="file" id="import-csv-file" accept=".csv" class="form-control" style="margin-top: 6px;">
-        <button type="button" class="btn-action" style="width: 100%; margin-top: 8px; justify-content: center; background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan);" onclick="processCSVImport()">
-          <i class="fa-solid fa-file-import"></i> Upload & Import CSV Stock
-        </button>
+    <div class="modal-box export-center-box">
+      <div class="export-center-head">
+        <div>
+          <span class="export-eyebrow">DATA WORKSPACE</span>
+          <h3><i class="fa-solid fa-file-excel"></i> Export & Import Center</h3>
+          <p>Export inventory by category, or export the complete inventory as one Excel workbook with three separate sheets.</p>
+        </div>
+        <div class="export-format-badge"><i class="fa-solid fa-table-cells-large"></i><span>XLSX</span></div>
       </div>
 
-      <div style="display: flex; gap: 10px; margin-top: 18px;">
-        <button class="btn-action" style="flex:1; justify-content: center;" onclick="closeExportModal()">Cancel</button>
-        <button class="btn-action" style="flex:1; justify-content: center; background: var(--accent-cyan); color: #020617;" onclick="processExportRequest()">Download CSV</button>
+      <div class="export-target-grid">
+        <button type="button" class="export-target-card active" data-export-target="inventory_all" onclick="setExportTarget('inventory_all')">
+          <i class="fa-solid fa-layer-group"></i><strong>All inventory</strong><small>3 sheets: Laboratory · Discs · Chemicals</small>
+        </button>
+        <button type="button" class="export-target-card" data-export-target="inventory_laboratory" onclick="setExportTarget('inventory_laboratory')">
+          <i class="fa-solid fa-microscope"></i><strong>Laboratory</strong><small>Laboratory equipment & supplies only</small>
+        </button>
+        <button type="button" class="export-target-card" data-export-target="inventory_discs" onclick="setExportTarget('inventory_discs')">
+          <i class="fa-solid fa-compact-disc"></i><strong>Discs</strong><small>Disc inventory only</small>
+        </button>
+        <button type="button" class="export-target-card" data-export-target="inventory_chemicals" onclick="setExportTarget('inventory_chemicals')">
+          <i class="fa-solid fa-flask"></i><strong>Chemicals</strong><small>Chemical inventory with expiry data</small>
+        </button>
+        <button type="button" class="export-target-card" data-export-target="sales" onclick="setExportTarget('sales')">
+          <i class="fa-solid fa-chart-line"></i><strong>Sales history</strong><small>Sales details + summary calculations</small>
+        </button>
+      </div>
+      <input type="hidden" id="export-target" value="inventory_all">
+
+      <div class="export-preview" id="inventory-export-preview">
+        <div><i class="fa-solid fa-check"></i><span id="export-preview-title">Full inventory workbook</span></div>
+        <strong id="export-preview-detail">Laboratory / Discs / Chemicals will be separated into individual sheets.</strong>
+      </div>
+
+      <div class="form-group" id="export-sales-filter-group" style="display:none;">
+        <label>Sales Period</label>
+        <select class="form-control" id="export-sales-timeframe">
+          <option value="all">All Time</option>
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+          <option value="year">This Year</option>
+        </select>
+      </div>
+
+      <div class="export-import-block">
+        <div class="export-import-title"><i class="fa-solid fa-file-arrow-up"></i><span>Bulk CSV Import</span></div>
+        <p>Keep the existing CSV import workflow for adding stock records.</p>
+        <input type="file" id="import-csv-file" accept=".csv" class="form-control">
+        <button type="button" class="btn-action" onclick="processCSVImport()"><i class="fa-solid fa-file-import"></i> Upload & Import CSV Stock</button>
+      </div>
+
+      <div class="export-actions">
+        <button class="btn-action" onclick="closeExportModal()">Cancel</button>
+        <button class="btn-action btn-primary" id="export-download-btn" onclick="processExportRequest()"><i class="fa-solid fa-file-excel"></i> Download Inventory Excel</button>
       </div>
     </div>
   </div>
@@ -1173,7 +1285,7 @@
       { targetId: 'tour-step-2-target', title: 'Step 3: Asset Registration Sidebar', desc: 'Register new equipment, supplies, or chemicals directly into cloud storage.' },
       { targetId: 'tour-step-3-target', title: 'Step 4: Category Selector', desc: 'Select categories like Equipment or Chemicals.' },
       { targetId: 'tour-step-4-target', title: 'Step 5: Sales History Drawer', desc: 'Track completed university and institutional dispatches with item-level breakdowns.' },
-      { targetId: 'tour-step-5-target', title: 'Step 6: Data Export & Import Center', desc: 'Download full inventory CSVs or import new batch inventory datasets.' },
+      { targetId: 'tour-step-5-target', title: 'Step 6: Data Export & Import Center', desc: 'Export Laboratory, Discs or Chemicals separately, or download one Excel workbook with all three inventory sheets.' },
       { targetId: 'tour-step-6-target', title: 'Step 7: System Audit Logs', desc: 'Monitor workstation activity and administrative changes in real time.' },
       { targetId: 'tour-step-7-target', title: 'Step 8: Security Settings', desc: 'Update your account credentials and workstation access keys.' },
       { targetId: 'tour-step-8-target', title: 'Step 9: Intelligence Analytics Deck', desc: 'Live cards displaying total volume, active sectors, and chemical expiration warnings.' },
@@ -1181,7 +1293,7 @@
       { targetId: 'tour-step-10-target', title: 'Step 11: Page View Control', desc: 'Quickly access Lab Equipment, Chemicals, Visuals, and Intelligence Hub pages.' },
       { targetId: 'tour-step-11-target', title: 'Step 12: Sector Page Switcher', desc: 'Switch between Equipment, Chemicals, Visuals, and Intelligence Hub pages seamlessly.' },
       { targetId: 'tour-step-12-target', title: 'Step 13: Item Matrix & Quick Actions', desc: 'Edit asset records, adjust quantities instantly (+/-), trigger sales, or manage stock.' },
-      { targetId: 'tab-hub', title: 'Step 14: Intelligence Hub Replenishment Page', desc: 'Explore portfolio valuation metrics and automated low-stock reorder recommendations.' }
+      { targetId: 'tab-hub', title: 'Step 14: Intelligence Hub Replenishment Page', desc: 'Review portfolio valuation, low-stock recommendations, and sales performance calculations for week, month, year or custom periods.' }
     ];
 
     // TOAST SYSTEM
@@ -1340,7 +1452,15 @@
           salesData = res.data || [];
         } catch(e) { salesData = []; }
       }
-      salesHistory = [...salesData, ...JSON.parse(localStorage.getItem('local_sales_fallback') || '[]')];
+      const localSales = JSON.parse(localStorage.getItem('local_sales_fallback') || '[]');
+      const mergedSales = [...salesData, ...localSales];
+      const seenSales = new Set();
+      salesHistory = mergedSales.filter((sale, idx) => {
+        const key = sale.id != null ? String(sale.id) : JSON.stringify([sale.item_name, sale.sale_date, sale.quantity, sale.total_price, idx]);
+        if (seenSales.has(key)) return false;
+        seenSales.add(key);
+        return true;
+      });
       
       updateAnalyticsDeck();
       renderCharts();
@@ -1348,6 +1468,7 @@
       renderHubData();
       renderEnterpriseTable(enterpriseItems);
       renderSalesHistoryDrawer();
+      renderSalesAnalytics();
     }
 
     function updateAnalyticsDeck() {
@@ -2007,87 +2128,282 @@
     }
 
     function openExportModal() {
-      document.getElementById('export-target').value = 'inventory';
-      toggleExportFilterOptions();
-      document.getElementById('export-modal').classList.add('active');
+      const modal=document.getElementById('export-modal');
+      document.getElementById('export-target').value='inventory_all';
+      setExportTarget('inventory_all');
+      if(modal)modal.classList.add('active');
     }
-    function closeExportModal() { document.getElementById('export-modal').classList.remove('active'); }
-    function toggleExportFilterOptions() {
-      const target = document.getElementById('export-target').value;
-      document.getElementById('export-sales-filter-group').style.display = target === 'sales' ? 'block' : 'none';
-    }
+    function closeExportModal(){document.getElementById('export-modal').classList.remove('active');}
 
-    function processCSVImport() {
-      const fileInput = document.getElementById('import-csv-file');
-      if (!fileInput.files.length) { showToast("Please select a CSV file first.", "error"); return; }
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const text = e.target.result;
-        const lines = text.split('\n');
-        let importedCount = 0;
-        let localItems = JSON.parse(localStorage.getItem('local_items_fallback') || '[]');
+    const exportTargetInfo={
+      inventory_all:{title:'Full inventory workbook',detail:'Laboratory / Discs / Chemicals will be separated into individual sheets.'},
+      inventory_laboratory:{title:'Laboratory inventory only',detail:'Exports all inventory except Discs and Chemicals into one Laboratory sheet.'},
+      inventory_discs:{title:'Discs inventory only',detail:'Exports only records classified as Discs.'},
+      inventory_chemicals:{title:'Chemical inventory only',detail:'Exports chemicals with CAS number, expiry date, expiry status, quantity and stock value.'},
+      sales:{title:'Sales history workbook',detail:'Exports selected sales plus a summary sheet containing the calculated metrics for the selected period.'}
+    };
 
-        for (let i = 1; i < lines.length; i++) {
-          if (!lines[i].trim()) continue;
-          const cols = lines[i].split(',').map(c => c.replace(/^"|"$/g, '').trim());
-          if (cols.length >= 2) {
-            const newItem = {
-              id: Date.now() + i,
-              category: cols[0] || 'Equipment',
-              item_name: cols[1] || 'Imported Asset',
-              brand: cols[2] || '',
-              model: cols[3] || '',
-              quantity: parseInt(cols[4]) || 1,
-              price: parseFloat(cols[5]) || 0,
-              unit_of_measure: 'Pcs'
-            };
-            localItems.unshift(newItem);
-            if (db) { try { db.from('items').insert([newItem]); } catch(err){} }
-            importedCount++;
-          }
-        }
-        localStorage.setItem('local_items_fallback', JSON.stringify(localItems));
-        showToast(`Successfully imported ${importedCount} assets!`, "success");
-        addAuditEntry("CSV Import", `Imported ${importedCount} items from CSV`);
-        closeExportModal();
-        loadEnterpriseData();
-      };
-      reader.readAsText(file);
-    }
-
-    function processExportRequest() {
-      const target = document.getElementById('export-target').value;
-      let csv = "data:text/csv;charset=utf-8,";
-      let filename = target === 'inventory' ? "inventory_export.csv" : "sales_export.csv";
-
-      if (target === 'inventory') {
-        csv += "Category,Item Name,Brand,Model,Quantity,Price (ETB),Catalog Link\r\n";
-        enterpriseItems.forEach(i => { csv += `"${i.category}","${i.item_name}","${i.brand || ''}","${i.model || ''}",${i.quantity},${i.price},"${i.catalog_link || ''}"\r\n`; });
-      } else {
-        const timeframe = document.getElementById('export-sales-timeframe').value;
-        const now = new Date();
-        let filteredSales = salesHistory.filter(s => {
-          if (!s.sale_date) return timeframe === 'all';
-          const sDate = new Date(s.sale_date);
-          const diffDays = (now - sDate) / (1000 * 60 * 60 * 24);
-          if (timeframe === 'week') return diffDays <= 7;
-          if (timeframe === 'month') return diffDays <= 30;
-          if (timeframe === 'year') return diffDays <= 365;
-          return true;
-        });
-        filename = `sales_export_${timeframe}.csv`;
-        csv += "Item Name,Sale Type,Client Name,Quantity,Unit Price,Total,Date\r\n";
-        filteredSales.forEach(s => { csv += `"${s.item_name}","${s.sale_type}","${s.client_name}",${s.quantity},${s.unit_price},${s.total_price},"${s.sale_date}"\r\n`; });
+    function setExportTarget(target){
+      const input=document.getElementById('export-target'); if(input)input.value=target;
+      document.querySelectorAll('.export-target-card').forEach(btn=>btn.classList.toggle('active',btn.dataset.exportTarget===target));
+      const salesGroup=document.getElementById('export-sales-filter-group');
+      const preview=document.getElementById('inventory-export-preview');
+      const info=exportTargetInfo[target]||exportTargetInfo.inventory_all;
+      if(salesGroup)salesGroup.style.display=target==='sales'?'block':'none';
+      if(preview){
+        document.getElementById('export-preview-title').textContent=info.title;
+        document.getElementById('export-preview-detail').textContent=info.detail;
       }
+      const button=document.getElementById('export-download-btn');
+      if(button)button.innerHTML=target==='sales'
+        ? '<i class="fa-solid fa-file-excel"></i> Download Sales Excel'
+        : '<i class="fa-solid fa-file-excel"></i> Download Inventory Excel';
+    }
+    function toggleExportFilterOptions(){setExportTarget(document.getElementById('export-target').value);}
 
-      const link = document.createElement("a");
-      link.setAttribute("href", encodeURI(csv));
-      link.setAttribute("download", filename);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      showToast("Data export downloaded!", "success");
+    function toNumber(value){const n=parseFloat(value);return Number.isFinite(n)?n:0;}
+    function money(value){return toNumber(value).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' ETB';}
+
+    function getInventoryBuckets(){
+      const laboratory=[],discs=[],chemicals=[];
+      enterpriseItems.forEach(item=>{
+        if(item.category==='Chemicals')chemicals.push(item);
+        else if(item.category==='Discs')discs.push(item);
+        else laboratory.push(item);
+      });
+      return {laboratory,discs,chemicals};
+    }
+
+    function inventoryCommonRow(item){
+      return {
+        'Item Name':item.item_name||'',
+        'Brand':item.brand||'',
+        'Model':item.model||'',
+        'Unit':item.unit_of_measure||'',
+        'Quantity':toNumber(item.quantity),
+        'Unit Price (ETB)':toNumber(item.price),
+        'Stock Value (ETB)':toNumber(item.quantity)*toNumber(item.price),
+        'Catalog Link':item.catalog_link||'',
+        'PDF Catalogue':item.pdf_url?'Available':'Not available'
+      };
+    }
+    function laboratoryRows(items){return items.map(inventoryCommonRow);}
+    function discRows(items){return items.map(inventoryCommonRow);}
+    function chemicalRows(items){return items.map(i=>({
+      'Item Name':i.item_name||'',
+      'CAS Number':i.cas_number||'',
+      'Unit':i.unit_of_measure||'',
+      'Quantity':toNumber(i.quantity),
+      'Unit Price (ETB)':toNumber(i.price),
+      'Stock Value (ETB)':toNumber(i.quantity)*toNumber(i.price),
+      'Expiry Date':i.expire_date||'',
+      'Expiry Status':getChemExpiryStatus(i.expire_date).replace(/_/g,' ')
+    }));}
+
+    function formatSheet(ws,rows){
+      if(!ws)return;
+      const keys=rows.length?Object.keys(rows[0]):['No records'];
+      ws['!cols']=keys.map(k=>{
+        let max=k.length;
+        rows.forEach(r=>max=Math.max(max,String(r[k]??'').length));
+        return {wch:Math.min(Math.max(max+2,12),42)};
+      });
+      if(ws['!ref'])ws['!autofilter']={ref:ws['!ref']};
+    }
+
+    function ensureXlsx(){
+      if(window.XLSX)return Promise.resolve(true);
+      return new Promise(resolve=>{
+        const current=document.querySelector('script[data-xlsx-loader]');
+        if(current){current.addEventListener('load',()=>resolve(!!window.XLSX),{once:true});current.addEventListener('error',()=>resolve(false),{once:true});return;}
+        const script=document.createElement('script');
+        script.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+        script.async=true;script.dataset.xlsxLoader='1';
+        script.onload=()=>resolve(!!window.XLSX);script.onerror=()=>resolve(false);
+        document.head.appendChild(script);
+      });
+    }
+
+    function buildInventoryWorkbook(mode){
+      const buckets=getInventoryBuckets();
+      const wb=XLSX.utils.book_new();
+      const addSheet=(name,rows)=>{
+        const ws=XLSX.utils.json_to_sheet(rows.length?rows:[{'No records':'No records found for this category.'}]);
+        formatSheet(ws,rows);
+        XLSX.utils.book_append_sheet(wb,ws,name);
+      };
+      if(mode==='inventory_all'){
+        addSheet('Laboratory',laboratoryRows(buckets.laboratory));
+        addSheet('Discs',discRows(buckets.discs));
+        addSheet('Chemicals',chemicalRows(buckets.chemicals));
+      }else if(mode==='inventory_laboratory')addSheet('Laboratory',laboratoryRows(buckets.laboratory));
+      else if(mode==='inventory_discs')addSheet('Discs',discRows(buckets.discs));
+      else if(mode==='inventory_chemicals')addSheet('Chemicals',chemicalRows(buckets.chemicals));
+      return wb;
+    }
+
+    function getSalesDate(sale){
+      const raw=sale.sale_date||sale.created_at; if(!raw)return null;
+      if(/^\d{4}-\d{2}-\d{2}$/.test(String(raw))){
+        const parts=String(raw).split('-').map(Number);
+        return new Date(parts[0],parts[1]-1,parts[2]);
+      }
+      const d=new Date(raw); return Number.isNaN(d.getTime())?null:d;
+    }
+
+    function getSalesAnalyticsBounds(period,startStr,endStr){
+      const now=new Date(); now.setHours(23,59,59,999);
+      let start=null,end=null,label='All Time';
+      if(period==='week'){
+        start=new Date(now);start.setHours(0,0,0,0);
+        const mondayOffset=(start.getDay()+6)%7;start.setDate(start.getDate()-mondayOffset);
+        end=new Date();
+      }else if(period==='month'){
+        start=new Date(now.getFullYear(),now.getMonth(),1);start.setHours(0,0,0,0);end=new Date();
+      }else if(period==='year'){
+        start=new Date(now.getFullYear(),0,1);start.setHours(0,0,0,0);end=new Date();
+      }else if(period==='custom'){
+        label='Custom Range';
+        if(startStr){const [y,m,d]=startStr.split('-').map(Number);start=new Date(y,m-1,d);start.setHours(0,0,0,0);}
+        if(endStr){const [y,m,d]=endStr.split('-').map(Number);end=new Date(y,m-1,d,23,59,59,999);}
+      }
+      if(period==='week')label='This Week';
+      if(period==='month')label='This Month';
+      if(period==='year')label='This Year';
+      return {start,end,label};
+    }
+
+    function salesForBounds(bounds){
+      return salesHistory.filter(s=>{
+        const d=getSalesDate(s);if(!d)return false;
+        if(bounds.start&&d<bounds.start)return false;
+        if(bounds.end&&d>bounds.end)return false;
+        return true;
+      });
+    }
+
+    function getSalesAnalytics(period,startStr,endStr){
+      const bounds=getSalesAnalyticsBounds(period,startStr,endStr);
+      const filtered=salesForBounds(bounds);
+      const revenue=filtered.reduce((sum,s)=>sum+toNumber(s.total_price||(toNumber(s.quantity)*toNumber(s.unit_price))),0);
+      const units=filtered.reduce((sum,s)=>sum+toNumber(s.quantity),0);
+      const clients=new Set(filtered.map(s=>(s.client_name||s.organization||'').trim()).filter(Boolean));
+      const itemMap=new Map(),categoryMap=new Map();
+      filtered.forEach(s=>{
+        const itemName=s.item_name||'Unnamed item';
+        const matched=enterpriseItems.find(i=>String(i.id)===String(s.item_id));
+        const category=matched?.category||'Unclassified';
+        const qty=toNumber(s.quantity),total=toNumber(s.total_price||(qty*toNumber(s.unit_price)));
+        const iv=itemMap.get(itemName)||{name:itemName,qty:0,revenue:0};iv.qty+=qty;iv.revenue+=total;itemMap.set(itemName,iv);
+        const cv=categoryMap.get(category)||{name:category,qty:0,revenue:0,transactions:0};cv.qty+=qty;cv.revenue+=total;cv.transactions+=1;categoryMap.set(category,cv);
+      });
+      const topItems=[...itemMap.values()].sort((a,b)=>b.qty-a.qty||b.revenue-a.revenue).slice(0,5);
+      const categories=[...categoryMap.values()].sort((a,b)=>b.revenue-a.revenue);
+      const largest=filtered.reduce((max,s)=>Math.max(max,toNumber(s.total_price||(toNumber(s.quantity)*toNumber(s.unit_price)))),0);
+      return {bounds,filtered,revenue,units,transactions:filtered.length,avgSale:filtered.length?revenue/filtered.length:0,clients:clients.size,topItems,categories,largest};
+    }
+
+    function renderSalesAnalytics(){
+      const panel=document.getElementById('salesAnalyticsPanel');if(!panel)return;
+      const period=document.getElementById('sales-analytics-period')?.value||'week';
+      const startStr=document.getElementById('sales-analytics-start')?.value||'';
+      const endStr=document.getElementById('sales-analytics-end')?.value||'';
+      const a=getSalesAnalytics(period,startStr,endStr);
+      const label=document.getElementById('sales-analytics-period-label');if(label)label.textContent=a.bounds.label;
+      const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
+      set('sales-metric-units',a.units.toLocaleString());
+      set('sales-metric-revenue',money(a.revenue));
+      set('sales-metric-transactions',a.transactions.toLocaleString());
+      set('sales-metric-average',money(a.avgSale));
+      set('sales-metric-clients',a.clients.toLocaleString());
+      set('sales-metric-top-item',a.topItems[0]?.name||'—');
+
+      const catBox=document.getElementById('sales-category-breakdown');
+      catBox.innerHTML=a.categories.length?a.categories.map(c=>'<div class="sales-breakdown-row"><b>'+c.name+'</b><span>'+c.qty.toLocaleString()+' units</span><strong>'+money(c.revenue)+'</strong></div>').join(''):'<div class="sales-empty-state">No sales recorded for this period.</div>';
+      const topBox=document.getElementById('sales-top-items');
+      topBox.innerHTML=a.topItems.length?a.topItems.map((x,i)=>'<div class="sales-top-row"><span class="sales-top-rank">0'+(i+1)+'</span><b>'+x.name+'</b><span>'+x.qty.toLocaleString()+' units</span></div>').join(''):'<div class="sales-empty-state">No sales recorded for this period.</div>';
+      renderSalesTrendChart(a.filtered,period,startStr,endStr);
+    }
+
+    let salesTrendChartInstance=null;
+    function renderSalesTrendChart(records,period,startStr,endStr){
+      const canvas=document.getElementById('salesTrendChart');if(!canvas||typeof Chart==='undefined')return;
+      if(salesTrendChartInstance)salesTrendChartInstance.destroy();
+      if(!records.length){
+        salesTrendChartInstance=new Chart(canvas.getContext('2d'),{type:'bar',data:{labels:['No sales'],datasets:[{data:[0],backgroundColor:['#334155'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+        return;
+      }
+      const bounds=getSalesAnalyticsBounds(period,startStr,endStr);
+      const dates=records.map(getSalesDate).filter(Boolean);
+      const spanDays=bounds.start&&bounds.end?Math.max(1,Math.ceil((bounds.end-bounds.start)/86400000)):Math.max(1,Math.ceil((Math.max(...dates)-Math.min(...dates))/86400000));
+      const monthly=period==='year'||spanDays>90;
+      const groups=new Map();
+      records.forEach(s=>{
+        const d=getSalesDate(s);if(!d)return;
+        const key=monthly?d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'):d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+        groups.set(key,(groups.get(key)||0)+toNumber(s.total_price||(toNumber(s.quantity)*toNumber(s.unit_price))));
+      });
+      const keys=[...groups.keys()].sort();
+      const labels=keys.map(k=>monthly?new Date(k+'-01T00:00:00').toLocaleString(undefined,{month:'short',year:'numeric'}):new Date(k+'T00:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'}));
+      salesTrendChartInstance=new Chart(canvas.getContext('2d'),{type:'bar',data:{labels,datasets:[{label:'Revenue (ETB)',data:keys.map(k=>groups.get(k)||0),backgroundColor:'#38bdf8',borderRadius:5,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#78909a',font:{size:9}},grid:{color:'rgba(148,163,184,.06)'}},y:{ticks:{color:'#78909a',font:{size:9}},grid:{color:'rgba(148,163,184,.08)'}}}}});
+    }
+
+    function handleSalesAnalyticsPeriodChange(){
+      const period=document.getElementById('sales-analytics-period')?.value||'week';
+      const custom=document.getElementById('sales-custom-range');if(custom)custom.style.display=period==='custom'?'flex':'none';
+      renderSalesAnalytics();
+    }
+
+    function salesExportRows(records){
+      return records.map(s=>{
+        const item=enterpriseItems.find(i=>String(i.id)===String(s.item_id));
+        return {
+          'Item Name':s.item_name||'',
+          'Category':item?.category||'Unclassified',
+          'Invoice Number':s.invoice_number||'',
+          'Sale Type':s.sale_type||'',
+          'Client / Destination':s.client_name||s.organization||'',
+          'Quantity':toNumber(s.quantity),
+          'Unit Price (ETB)':toNumber(s.unit_price),
+          'Total (ETB)':toNumber(s.total_price||toNumber(s.quantity)*toNumber(s.unit_price)),
+          'Sale Date':s.sale_date||''
+        };
+      });
+    }
+
+    async function processExportRequest(){
+      const target=document.getElementById('export-target').value;
+      const ok=await ensureXlsx();
+      if(!ok){showToast('Excel export library could not be loaded. Check the internet connection and try again.','error');return;}
+
+      if(target==='sales'){
+        const timeframe=document.getElementById('export-sales-timeframe').value;
+        const a=getSalesAnalytics(timeframe);
+        const wb=XLSX.utils.book_new();
+        const summaryRows=[
+          {'Metric':'Period','Value':a.bounds.label},
+          {'Metric':'Units Sold','Value':a.units},
+          {'Metric':'Sales Revenue (ETB)','Value':a.revenue},
+          {'Metric':'Transactions','Value':a.transactions},
+          {'Metric':'Average Sale (ETB)','Value':a.avgSale},
+          {'Metric':'Unique Clients','Value':a.clients},
+          {'Metric':'Top Selling Item','Value':a.topItems[0]?.name||''},
+          {'Metric':'Largest Transaction (ETB)','Value':a.largest}
+        ];
+        const summarySheet=XLSX.utils.json_to_sheet(summaryRows);formatSheet(summarySheet,summaryRows);XLSX.utils.book_append_sheet(wb,summarySheet,'Sales Summary');
+        const details=salesExportRows(a.filtered);const detailSheet=XLSX.utils.json_to_sheet(details.length?details:[{'Item Name':'No sales records'}]);formatSheet(detailSheet,details);XLSX.utils.book_append_sheet(wb,detailSheet,'Sales Details');
+        XLSX.writeFile(wb,'Labaid_Sales_'+timeframe+'.xlsx',{bookType:'xlsx',compression:true});
+        showToast('Sales workbook downloaded.','success');
+        addAuditEntry('Export Generated','Downloaded sales Excel workbook ('+timeframe+')');
+      }else{
+        const wb=buildInventoryWorkbook(target);
+        const name={inventory_all:'Labaid_Inventory_All',inventory_laboratory:'Labaid_Laboratory',inventory_discs:'Labaid_Discs',inventory_chemicals:'Labaid_Chemicals'}[target]||'Labaid_Inventory';
+        XLSX.writeFile(wb,name+'.xlsx',{bookType:'xlsx',compression:true});
+        const b=getInventoryBuckets();
+        const count=target==='inventory_all'?enterpriseItems.length:target==='inventory_laboratory'?b.laboratory.length:target==='inventory_discs'?b.discs.length:b.chemicals.length;
+        showToast('Excel export downloaded ('+count+' records).','success');
+        addAuditEntry('Export Generated','Downloaded '+(exportTargetInfo[target]?.title||'inventory')+' Excel workbook');
+      }
       closeExportModal();
     }
 </script>
