@@ -134,9 +134,25 @@
     /* AUTH OVERLAY */
     #auth-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, #090d16 65%, #030508 100%);
+      /* Microscope image stays behind the login UI; dark glass tint preserves text contrast. */
+      background-image:
+        linear-gradient(115deg, rgba(3, 8, 20, .78), rgba(5, 12, 28, .48) 48%, rgba(7, 10, 28, .72)),
+        url("Modern%20Microscope%20in%20a%20Bright%20Laboratory.png");
+      background-color: #07090e;
+      background-repeat: no-repeat, no-repeat;
+      background-size: cover, 112% auto;
+      background-position: center, 48% 52%;
+      animation: microscopeBackgroundDrift 32s ease-in-out infinite alternate;
       display: flex; justify-content: center; align-items: center; z-index: 9999;
       overflow: hidden; padding: 20px;
+    }
+    @keyframes microscopeBackgroundDrift {
+      0% { background-position: center, 42% 46%; }
+      50% { background-position: center, 55% 52%; }
+      100% { background-position: center, 47% 58%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #auth-overlay { animation: none; }
     }
     #auth-overlay::before {
       content: ''; position: absolute; width: 600px; height: 600px;
