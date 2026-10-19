@@ -787,7 +787,23 @@
 @keyframes salesHistoryCalcPulse{0%{box-shadow:0 0 0 rgba(85,222,207,0)}45%{box-shadow:0 0 28px rgba(85,222,207,.14)}100%{box-shadow:0 12px 25px rgba(0,0,0,.14)}}
 @media(max-width:700px){.sales-history-calc-row{grid-template-columns:1fr}.sales-history-calc-status{white-space:normal}.sales-history-calc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sales-history-calc-panel{padding:10px}}
 
-</style>
+
+    /* SALES TAX DOCUMENT TRACKING */
+    .sales-tax-docs{margin-top:12px;padding:13px;border:1px solid rgba(56,189,248,.18);border-radius:12px;background:rgba(8,20,36,.62)}
+    .sales-tax-docs-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px;color:#dff6ff;font-size:11px;font-weight:800}
+    .sales-tax-doc-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid rgba(148,163,184,.12)}
+    .sales-tax-doc-name{font-size:11px;font-weight:700;color:#e2e8f0}
+    .sales-tax-doc-state{display:block;margin-top:4px;font-size:10px;color:#fbbf24}
+    .sales-tax-doc-state.received{color:#6ee7b7}
+    .sales-tax-doc-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .sales-tax-doc-btn{border:1px solid rgba(56,189,248,.32);border-radius:8px;padding:7px 9px;background:rgba(56,189,248,.10);color:#bae6fd;font-size:10px;font-weight:800;cursor:pointer}
+    .sales-tax-doc-btn.received{border-color:rgba(16,185,129,.35);background:rgba(16,185,129,.12);color:#6ee7b7}
+    .sales-tax-doc-verify{display:flex;gap:5px;align-items:center;color:#a7f3d0;font-size:10px;white-space:nowrap}
+    .sales-tax-doc-verify input{accent-color:#10b981}
+    .sales-tax-doc-note{font-size:9px;color:#94a3b8;line-height:1.5;margin-top:7px}
+    @media(max-width:520px){.sales-tax-doc-row{grid-template-columns:1fr}.sales-tax-doc-actions{justify-content:flex-start}}
+
+  </style>
 </head>
 <body>
   <!-- TOAST CONTAINER -->
@@ -1298,6 +1314,11 @@
         <select id="sales-history-date" class="form-control" onchange="renderSalesHistoryDrawer()">
           <option value="all">All dates</option><option value="today">Today</option><option value="week">This Week</option>
           <option value="month">This Month</option><option value="year">This Year</option>
+        </select>
+        <select id="sales-history-doc-filter" class="form-control" onchange="renderSalesHistoryDrawer()" title="Filter by tax document status">
+          <option value="all">All document statuses</option><option value="pending">Any documents pending</option>
+          <option value="withholding">Withholding pending</option><option value="vat">VAT documents pending</option>
+          <option value="complete">Both received</option>
         </select>
         <div id="sales-history-count" style="display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:10px;border:1px solid var(--border-light);border-radius:8px;padding:8px;">0 records</div>
       </div>
@@ -2330,11 +2351,83 @@
     }
 
 
+    function renderSaleTaxDocumentRow(s,kind){
+      const isW=kind==='withholding';
+      const statusKey=isW?'withholding_doc_status':'vat_doc_status';
+      const receivedKey=isW?'withholding_doc_received_at':'vat_doc_received_at';
+      const verifiedKey=isW?'withholding_doc_verified':'vat_doc_verified';
+      const received=s[statusKey]==='Received';
+      const verified=s[verifiedKey]===true;
+      const label=isW?'Withholding tax certificate':'VAT documentation';
+      const statusText=received?'Received'+(s[receivedKey]?' · '+new Date(s[receivedKey]).toLocaleDateString():''):'Pending — not yet received';
+      const sid=String(s.id??'');
+      return '<div class="sales-tax-doc-row"><div><div class="sales-tax-doc-name">'+label+'</div><span class="sales-tax-doc-state '+(received?'received':'')+'">'+statusText+'</span></div><div class="sales-tax-doc-actions"><button type="button" class="sales-tax-doc-btn '+(received?'received':'')+'" onclick="event.stopPropagation();setSaleTaxDocumentStatus(\''+sid+'\',\''+kind+'\','+(received?'false':'true')+')">'+(received?'Mark pending':'Mark received')+'</button>'+(received?'<label class="sales-tax-doc-verify"><input type="checkbox" '+(verified?'checked':'')+' onchange="event.stopPropagation();setSaleTaxDocumentVerified(\''+sid+'\',\''+kind+'\',this.checked)"> Verified</label>':'')+'</div></div>';
+    }
+
+    async function persistSaleTaxDocumentChange(sale,patch,description){
+      const saleId=sale.id;
+      let savedInDatabase=false;
+      if(db&&saleId!==null&&saleId!==undefined&&String(saleId)!==''){
+        const {data,error}=await db.from('sales_log').update(patch).eq('id',saleId).select('id').maybeSingle();
+        if(error) throw error;
+        savedInDatabase=!!data;
+      }
+      if(!savedInDatabase){
+        const localSales=JSON.parse(localStorage.getItem('local_sales_fallback')||'[]');
+        const match=localSales.find(x=>String(x.id)===String(saleId));
+        if(!match) throw new Error('This record could not be saved in the shared database or local records. Refresh sales history and try again.');
+        Object.assign(match,patch);
+        localStorage.setItem('local_sales_fallback',JSON.stringify(localSales));
+      }
+      Object.assign(sale,patch);
+      addAuditEntry('Sales tax documents',description+' · '+(sale.invoice_number||sale.item_name||('Sale '+saleId)));
+      renderSalesHistoryDrawer();
+      showToast('Document tracking updated.','success');
+    }
+
+    async function setSaleTaxDocumentStatus(saleId,kind,received){
+      const sale=salesHistory.find(x=>String(x.id)===String(saleId));
+      if(!sale){showToast('Sale record not found. Refresh and try again.','error');return;}
+      const isW=kind==='withholding';
+      const statusKey=isW?'withholding_doc_status':'vat_doc_status';
+      const dateKey=isW?'withholding_doc_received_at':'vat_doc_received_at';
+      const verifiedKey=isW?'withholding_doc_verified':'vat_doc_verified';
+      const patch={
+        [statusKey]:received?'Received':'Pending',
+        [dateKey]:received?new Date().toISOString():null,
+        [verifiedKey]:false
+      };
+      try{
+        await persistSaleTaxDocumentChange(sale,patch,(isW?'Withholding certificate':'VAT documentation')+' marked '+(received?'received':'pending'));
+      }catch(err){
+        console.error('Sales document status update failed:',err);
+        showToast('Could not save this change. Check database permissions and try again.','error');
+      }
+    }
+
+    async function setSaleTaxDocumentVerified(saleId,kind,verified){
+      const sale=salesHistory.find(x=>String(x.id)===String(saleId));
+      if(!sale){showToast('Sale record not found. Refresh and try again.','error');return;}
+      const isW=kind==='withholding';
+      const statusKey=isW?'withholding_doc_status':'vat_doc_status';
+      const verifiedKey=isW?'withholding_doc_verified':'vat_doc_verified';
+      if(sale[statusKey]!=='Received'){
+        showToast('Mark the document received before verifying it.','error');renderSalesHistoryDrawer();return;
+      }
+      try{
+        await persistSaleTaxDocumentChange(sale,{[verifiedKey]:!!verified},(isW?'Withholding certificate':'VAT document')+(verified?' verified':' verification removed'));
+      }catch(err){
+        console.error('Sales document verification update failed:',err);
+        showToast('Could not save verification. Check database permissions and try again.','error');
+      }
+    }
+
     function renderSalesHistoryDrawer() {
       const c=document.getElementById('sales-history-container');
       const search=(document.getElementById('sales-history-search')?.value||'').trim().toLowerCase();
       const sort=document.getElementById('sales-history-sort')?.value||'date-desc';
       const dateFilter=document.getElementById('sales-history-date')?.value||'all';
+      const docFilter=document.getElementById('sales-history-doc-filter')?.value||'all';
       const now=new Date(), startDate=new Date(now);
       if(dateFilter==='today') startDate.setHours(0,0,0,0);
       if(dateFilter==='week') startDate.setDate(now.getDate()-7);
@@ -2348,6 +2441,12 @@
           if(dateFilter==='today'&&d.toDateString()!==now.toDateString()) return false;
           if(dateFilter!=='today'&&d<startDate) return false;
         }
+        const w=(s.withholding_doc_status||'Pending')==='Received';
+        const v=(s.vat_doc_status||'Pending')==='Received';
+        if(docFilter==='pending'&&w&&v)return false;
+        if(docFilter==='withholding'&&w)return false;
+        if(docFilter==='vat'&&v)return false;
+        if(docFilter==='complete'&&!(w&&v))return false;
         return true;
       });
       records.sort((a,b)=>{
@@ -2379,6 +2478,12 @@
               <div class="sale-detail-box"><div class="sale-detail-label">Transaction Date</div><div class="sale-detail-value">${s.sale_date||'N/A'}</div></div>
             </div>
             <div class="sale-invoice-mini"><div class="sale-invoice-mini-head"><span>Description</span><span>Qty</span><span>Amount</span></div><div class="sale-invoice-mini-row"><strong>${s.item_name||'N/A'}</strong><span>${qty}</span><strong>${total.toLocaleString()} ETB</strong></div></div>
+            <div class="sales-tax-docs" onclick="event.stopPropagation()">
+              <div class="sales-tax-docs-head"><span><i class="fa-solid fa-file-circle-check"></i> VAT & withholding documents</span><span style="font-size:9px;color:#94a3b8;font-weight:600;">Track receipt separately</span></div>
+              ${renderSaleTaxDocumentRow(s,'withholding')}
+              ${renderSaleTaxDocumentRow(s,'vat')}
+              <div class="sales-tax-doc-note">Only mark a document received after it has arrived. Receipt and verification are separate; pending is the default for older records.</div>
+            </div>
             <div class="sale-email-box"><div><i class="fa-solid fa-envelope"></i> <strong>Email notification</strong></div><div style="margin-top:5px;font-size:10.5px;">Automatic sale notification destination: <strong>oliyadgezahegn25@gmail.com</strong></div><div style="margin-top:5px;font-size:10px;color:#64748b;">The email contains the invoice, item, quantity, price, total, destination, transaction type, and sale date.</div></div>
             <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:10px;color:#64748b;"><span><i class="fa-solid fa-circle-check" style="color:var(--accent-emerald);"></i> Recorded & Dispatched</span><span>Click to collapse</span></div>
           </div>
@@ -2643,7 +2748,13 @@
           'Transaction Type':type==='sell'?'Cash / Paid':(type==='credit'?'Credit':(type==='sample'?'Sample':s.sale_type||'')),
           'Quantity':toNumber(s.quantity),
           'Unit Price (ETB)':toNumber(s.unit_price),
-          'Total (ETB)':toNumber(s.total_price||toNumber(s.quantity)*toNumber(s.unit_price))
+          'Total (ETB)':toNumber(s.total_price||toNumber(s.quantity)*toNumber(s.unit_price)),
+          'Withholding Certificate Status':s.withholding_doc_status||'Pending',
+          'Withholding Certificate Received At':s.withholding_doc_received_at||'',
+          'Withholding Certificate Verified':s.withholding_doc_verified===true?'Yes':'No',
+          'VAT Documentation Status':s.vat_doc_status||'Pending',
+          'VAT Documentation Received At':s.vat_doc_received_at||'',
+          'VAT Documentation Verified':s.vat_doc_verified===true?'Yes':'No'
         };
       });
     }
