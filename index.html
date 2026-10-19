@@ -2366,15 +2366,16 @@
 
     async function persistSaleTaxDocumentChange(sale,patch,description){
       const saleId=sale.id;
-      const isDatabaseId=saleId!==null&&saleId!==undefined&&String(saleId)!==''&&Number(saleId)<1000000000000;
-      if(isDatabaseId&&db){
+      let savedInDatabase=false;
+      if(db&&saleId!==null&&saleId!==undefined&&String(saleId)!==''){
         const {data,error}=await db.from('sales_log').update(patch).eq('id',saleId).select('id').maybeSingle();
         if(error) throw error;
-        if(!data) throw new Error('No matching database sales record was updated.');
-      } else {
+        savedInDatabase=!!data;
+      }
+      if(!savedInDatabase){
         const localSales=JSON.parse(localStorage.getItem('local_sales_fallback')||'[]');
         const match=localSales.find(x=>String(x.id)===String(saleId));
-        if(!match) throw new Error('This record is not available for local saving. Refresh sales history and try again.');
+        if(!match) throw new Error('This record could not be saved in the shared database or local records. Refresh sales history and try again.');
         Object.assign(match,patch);
         localStorage.setItem('local_sales_fallback',JSON.stringify(localSales));
       }
