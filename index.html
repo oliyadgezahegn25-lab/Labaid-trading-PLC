@@ -2220,7 +2220,6 @@
     function getSalesHistoryFilteredRecords(options={}){
       const search=(document.getElementById('sales-history-search')?.value||'').trim().toLowerCase();
       const dateFilter=document.getElementById('sales-history-date')?.value||'all';
-      const docFilter=document.getElementById('sales-history-doc-filter')?.value||'all';
       const now=new Date(), startDate=new Date(now);
       if(dateFilter==='today') startDate.setHours(0,0,0,0);
       if(dateFilter==='week') startDate.setDate(now.getDate()-7);
@@ -2427,6 +2426,7 @@
       const search=(document.getElementById('sales-history-search')?.value||'').trim().toLowerCase();
       const sort=document.getElementById('sales-history-sort')?.value||'date-desc';
       const dateFilter=document.getElementById('sales-history-date')?.value||'all';
+      const docFilter=document.getElementById('sales-history-doc-filter')?.value||'all';
       const now=new Date(), startDate=new Date(now);
       if(dateFilter==='today') startDate.setHours(0,0,0,0);
       if(dateFilter==='week') startDate.setDate(now.getDate()-7);
